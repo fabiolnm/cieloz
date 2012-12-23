@@ -21,7 +21,7 @@ class SpreeCielo::Base
           x.tag! dash(attr) do
             value_attrs.each do |vattr|
               attr_value = value.instance_variable_get "@#{vattr}"
-              x.tag! dash(vattr), attr_value
+              x.tag!(dash(vattr), attr_value) unless attr_value.nil?
             end
           end
         end

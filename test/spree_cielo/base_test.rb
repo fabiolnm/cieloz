@@ -25,39 +25,52 @@ describe SpreeCielo::Base do
     assert_equal expected_xml, subject.to_xml
   end
 
-  let(:ec) { MiniTest::Mock.new }
+  describe "value attributes" do
+    it "serializes" do
+      campo_livre = "Informações Extras"
+      subject.campo_livre = campo_livre
 
-  it "seralizes attributes" do
-    numero, chave = 123, "M3str4"
-    attributes = { numero: numero, chave: chave }
+      xml = expected_xml { "<campo-livre>#{campo_livre}</campo-livre>" }
+      assert_equal xml, subject.to_xml
+    end
 
-    ec.expect :nil?, false
-    ec.expect :instance_variables, attributes.keys
-    attributes.each { |k,v|
-      ec.expect :instance_variable_get, v, ["@#{k}"]
+    it "ignores nils" do
+      subject.campo_livre = nil
+      assert_equal expected_xml, subject.to_xml
+    end
+  end
+
+  describe "complex attributes" do
+    let(:numero)      { 123 }
+    let(:chave)       { "M3str4" }
+    let(:attributes)  { { numero: numero, chave: chave } }
+    let(:ec)          {
+      ec = MiniTest::Mock.new
+      ec.expect :nil?, false
+      ec.expect :instance_variables, attributes.keys
+      attributes.each { |k,v|
+        ec.expect :instance_variable_get, v, ["@#{k}"]
+      }
+      ec
     }
-
-    subject.dados_ec = ec
-
-    xml = expected_xml {
-      "<dados-ec>" +
+    let(:xml) {
+      expected_xml {
+        "<dados-ec>" +
         "<numero>#{numero}</numero>" +
         "<chave>#{chave}</chave>" +
-      "</dados-ec>"
+        "</dados-ec>"
+      }
     }
-    assert_equal xml, subject.to_xml
-  end
 
-  it "serializes value attributes" do
-    campo_livre = "Informações Extras"
-    subject.campo_livre = campo_livre
+    it "serializes" do
+      subject.dados_ec = ec
+      assert_equal xml, subject.to_xml
+    end
 
-    xml = expected_xml { "<campo-livre>#{campo_livre}</campo-livre>" }
-    assert_equal xml, subject.to_xml
-  end
-
-  it "ignores nil value attributes" do
-    subject.campo_livre = nil
-    assert_equal expected_xml, subject.to_xml
+    it "ignores nils" do
+      attributes.merge! ignore_me: nil
+      subject.dados_ec = ec
+      assert_equal xml, subject.to_xml
+    end
   end
 end
