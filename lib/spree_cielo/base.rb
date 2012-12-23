@@ -11,6 +11,8 @@ class SpreeCielo::Base
     x.tag! name.underscore.dasherize, id: id, versao: versao do
       (instance_variables - [:@id, :@versao]).each { |attr|
         value = instance_variable_get attr
+        next if value.nil?
+
         value_attrs = value.instance_variables
 
         if value_attrs.empty?

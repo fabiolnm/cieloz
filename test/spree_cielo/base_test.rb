@@ -31,6 +31,7 @@ describe SpreeCielo::Base do
     numero, chave = 123, "M3str4"
     attributes = { numero: numero, chave: chave }
 
+    ec.expect :nil?, false
     ec.expect :instance_variables, attributes.keys
     attributes.each { |k,v|
       ec.expect :instance_variable_get, v, ["@#{k}"]
@@ -53,5 +54,10 @@ describe SpreeCielo::Base do
 
     xml = expected_xml { "<campo-livre>#{campo_livre}</campo-livre>" }
     assert_equal xml, subject.to_xml
+  end
+
+  it "ignores nil value attributes" do
+    subject.campo_livre = nil
+    assert_equal expected_xml, subject.to_xml
   end
 end
