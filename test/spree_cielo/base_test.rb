@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 describe SpreeCielo::Base do
   subject { SpreeCielo::Base.new }
 
@@ -42,6 +44,14 @@ describe SpreeCielo::Base do
         "<chave>#{chave}</chave>" +
       "</dados-ec>"
     }
+    assert_equal xml, subject.to_xml
+  end
+
+  it "serializes value attributes" do
+    campo_livre = "Informações Extras"
+    subject.campo_livre = campo_livre
+
+    xml = expected_xml { "<campo-livre>#{campo_livre}</campo-livre>" }
     assert_equal xml, subject.to_xml
   end
 end
