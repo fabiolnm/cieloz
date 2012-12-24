@@ -11,8 +11,8 @@ module SpreeCielo
 
   module Helpers
     module ClassMethods
-      def hattr_writer attrs
-        [attrs].flatten.each { |attr|
+      def hattr_writer *attrs
+        attrs.each { |attr|
           define_method "#{attr}=" do |value|
             value = eval(attr.to_s.constantize).new(value) if value.is_a? Hash
             instance_variable_set "@#{attr}", value
