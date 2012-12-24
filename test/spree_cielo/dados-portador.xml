@@ -1,0 +1,6 @@
+<dados-portador>
+  <numero><%= portador.numero %></numero>
+  <validade><%= portador.validade %></validade>
+  <codigo-seguranca><%= portador.codigo_seguranca %></codigo-seguranca>
+  <indicador><%= portador.indicador %></indicador>
+</dados-portador>
