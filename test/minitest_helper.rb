@@ -41,6 +41,6 @@ def render_template dir, filename, binding
   res.split("\n").collect {|line| line.strip }.join
 end
 
-def xml_ec dir, binding
-  render_template dir, "dados-ec.xml", binding
+def xml_for type, dir, binding
+  render_template dir, "dados-#{type}.xml", binding
 end
