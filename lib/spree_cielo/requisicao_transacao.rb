@@ -29,5 +29,12 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
       validade: 201805, codigo_seguranca: 123
   end
 
+  class DadosPedido
+    include SpreeCielo::Helpers
+
+    attr_accessor :numero, :valor, :moeda, :data_hora, :descricao, :idioma, :soft_descriptor
+  end
+
   hattr_writer(:dados_portador) { |p| p.indicador! }
+  hattr_writer :dados_pedido
 end
