@@ -8,6 +8,22 @@ require 'spree_cielo'
 require 'fakeweb'
 require 'erb'
 
+class MiniTest::Spec
+  class << self
+    alias :_create :create
+
+    def create name, desc
+      cls = _create name, desc
+      begin
+        c = eval name
+        cls.subject { c } if c.is_a? Class
+      rescue
+      end
+      cls
+    end
+  end
+end
+
 def expected_xml opts={}
   root, id, versao = opts[:root], opts[:id], opts[:versao]
 

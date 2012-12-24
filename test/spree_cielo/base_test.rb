@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 describe SpreeCielo::Base do
-  subject { SpreeCielo::Base.new }
-
+  let(:base)    { subject.new }
   let(:id)      { "1" }
   let(:versao)  { "1.2.0" }
   let(:opts)    { { root: "base", id: id, versao: versao } }
@@ -10,26 +9,26 @@ describe SpreeCielo::Base do
   let(:dir)     { File.dirname __FILE__ }
 
   before do
-    subject.id = id
-    subject.versao = versao
+    base.id = id
+    base.versao = versao
   end
 
   it "serializes" do
-    assert_equal expected_xml(opts), subject.to_xml
+    assert_equal expected_xml(opts), base.to_xml
   end
 
   describe "value attributes" do
     it "serializes" do
       campo_livre = "Informações Extras"
-      subject.campo_livre = campo_livre
+      base.campo_livre = campo_livre
 
       xml = expected_xml(opts) { "<campo-livre>#{campo_livre}</campo-livre>" }
-      assert_equal xml, subject.to_xml
+      assert_equal xml, base.to_xml
     end
 
     it "ignores nils" do
-      subject.campo_livre = nil
-      assert_equal expected_xml(opts), subject.to_xml
+      base.campo_livre = nil
+      assert_equal expected_xml(opts), base.to_xml
     end
   end
 
@@ -39,14 +38,14 @@ describe SpreeCielo::Base do
     let(:xml) { expected_xml(opts) { render_template dir, "dados-ec.xml", binding } }
 
     it "serializes" do
-      subject.dados_ec = ec
-      assert_equal xml, subject.to_xml
+      base.dados_ec = ec
+      assert_equal xml, base.to_xml
     end
 
     it "ignores nils" do
       attributes.merge! ignore_me: nil
-      subject.dados_ec = ec
-      assert_equal xml, subject.to_xml
+      base.dados_ec = ec
+      assert_equal xml, base.to_xml
     end
   end
 
@@ -60,7 +59,7 @@ describe SpreeCielo::Base do
     end
 
     it "sends to test web service" do
-      erro = subject.send
+      erro = base.send
       assert_equal err, erro.codigo
       assert_equal "Invalid", erro.mensagem
     end
