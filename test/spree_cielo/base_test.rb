@@ -3,26 +3,17 @@
 describe SpreeCielo::Base do
   subject { SpreeCielo::Base.new }
 
-  let(:id)          { "1" }
-  let(:versao)      { "1.2.0" }
-  let(:xml_header)  { '<?xml version="1.0" encoding="UTF-8"?>' }
+  let(:id)      { "1" }
+  let(:versao)  { "1.2.0" }
+  let(:opts)    { { root: "base", id: id, versao: versao } }
 
   before do
     subject.id = id
     subject.versao = versao
   end
 
-  def expected_xml opts={}
-    opts.reverse_merge! root: "base", id: id, versao: versao
-    root, id, versao = opts[:root], opts[:id], opts[:versao]
-
-    res = xml_header
-    res << %|<#{root} id="#{id}" versao="#{versao}">| +
-            "#{yield if block_given?}</#{root}>"
-  end
-
   it "serializes" do
-    assert_equal expected_xml, subject.to_xml
+    assert_equal expected_xml(opts), subject.to_xml
   end
 
   describe "value attributes" do
@@ -30,13 +21,13 @@ describe SpreeCielo::Base do
       campo_livre = "Informações Extras"
       subject.campo_livre = campo_livre
 
-      xml = expected_xml { "<campo-livre>#{campo_livre}</campo-livre>" }
+      xml = expected_xml(opts) { "<campo-livre>#{campo_livre}</campo-livre>" }
       assert_equal xml, subject.to_xml
     end
 
     it "ignores nils" do
       subject.campo_livre = nil
-      assert_equal expected_xml, subject.to_xml
+      assert_equal expected_xml(opts), subject.to_xml
     end
   end
 
@@ -54,7 +45,7 @@ describe SpreeCielo::Base do
       ec
     }
     let(:xml) {
-      expected_xml {
+      expected_xml(opts) {
         "<dados-ec>" +
         "<numero>#{numero}</numero>" +
         "<chave>#{chave}</chave>" +
@@ -75,14 +66,10 @@ describe SpreeCielo::Base do
   end
 
   describe "request posting" do
-    require 'erb'
-    require 'fakeweb'
-
     let(:err) { "101" }
     let(:msg) { "Invalid" }
     let(:dir) { File.dirname __FILE__ }
-    let(:template) { File.join dir, "erro.xml" }
-    let(:fake_response) { ERB.new(File.read(template)).result(binding) }
+    let(:fake_response) { render_template dir, "erro.xml", binding }
 
     before do
       FakeWeb.register_uri :post, SpreeCielo.test_url, body: fake_response
