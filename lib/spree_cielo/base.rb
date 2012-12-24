@@ -1,9 +1,10 @@
-require 'active_support/core_ext/string'
 require 'active_model'
 require 'net/http'
 require 'builder'
 
 class SpreeCielo::Base
+  include SpreeCielo::Helpers
+
   class Erro
     include ActiveModel::Serializers::Xml
     include SpreeCielo::Helpers
@@ -13,14 +14,7 @@ class SpreeCielo::Base
 
   attr_accessor :id, :versao, :campo_livre
   attr_reader :dados_ec
-
-  def dados_ec= value
-    unless value.is_a? Hash
-      @dados_ec = value
-    else
-      @dados_ec = SpreeCielo::DadosEc.new value
-    end
-  end
+  hattr_writer :dados_ec
 
   def to_xml
     x = Builder::XmlMarkup.new

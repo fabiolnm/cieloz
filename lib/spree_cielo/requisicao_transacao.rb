@@ -29,12 +29,5 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
       validade: 201805, codigo_seguranca: 123
   end
 
-  def dados_portador= value
-    unless value.is_a? Hash
-      @dados_portador = value
-    else
-      @dados_portador = DadosPortador.new value
-    end
-    @dados_portador.indicador!
-  end
+  hattr_writer(:dados_portador) { |p| p.indicador! }
 end

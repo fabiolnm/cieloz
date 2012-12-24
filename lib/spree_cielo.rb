@@ -1,4 +1,5 @@
-require "spree_cielo/version"
+require 'active_support/core_ext/string'
+require 'spree_cielo/version'
 
 module SpreeCielo
   TEST_HOST = "qasecommerce.cielo.com.br"
@@ -9,6 +10,22 @@ module SpreeCielo
   end
 
   module Helpers
+    module ClassMethods
+      def hattr_writer attrs
+        [attrs].flatten.each { |attr|
+          define_method "#{attr}=" do |value|
+            value = eval(attr.to_s.constantize).new(value) if value.is_a? Hash
+            instance_variable_set "@#{attr}", value
+            yield(value) if block_given?
+          end
+        }
+      end
+    end
+
+    def self.included base
+      base.extend ClassMethods
+    end
+
     def initialize attrs={}
       self.attributes = attrs
     end
