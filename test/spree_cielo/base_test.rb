@@ -75,10 +75,23 @@ describe SpreeCielo::Base do
   end
 
   describe "request posting" do
+    require 'erb'
+    require 'fakeweb'
+
+    let(:err) { "101" }
+    let(:msg) { "Invalid" }
+    let(:dir) { File.dirname __FILE__ }
+    let(:template) { File.join dir, "erro.xml" }
+    let(:fake_response) { ERB.new(File.read(template)).result(binding) }
+
+    before do
+      FakeWeb.register_uri :post, SpreeCielo.test_url, body: fake_response
+    end
+
     it "sends to test web service" do
       erro = subject.send
-      assert_equal "001", erro.codigo
-      assert_match /Invalid/, erro.mensagem
+      assert_equal err, erro.codigo
+      assert_equal "Invalid", erro.mensagem
     end
   end
 end

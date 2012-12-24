@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<erro xmlns="http://ecommerce.cbmp.com.br">
+  <codigo><%= err %></codigo>
+  <mensagem><![CDATA[<%= msg %>]]></mensagem>
+</erro>

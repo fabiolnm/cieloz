@@ -14,9 +14,6 @@ class SpreeCielo::Base
     end
   end
 
-  TEST_HOST = "qasecommerce.cielo.com.br"
-  WS_PATH   = "/servicos/ecommwsec.do"
-
   attr_accessor :id, :versao, :dados_ec, :campo_livre
 
   def to_xml
@@ -44,13 +41,13 @@ class SpreeCielo::Base
     end
   end
 
-  def send host=TEST_HOST
+  def send host=SpreeCielo::TEST_HOST
     http = Net::HTTP.new host, 443
     http.use_ssl = true
     http.open_timeout = 5 * 1000
     http.read_timeout = 30 * 1000
 
-    res = http.post WS_PATH, "mensagem=#{to_xml}"
+    res = http.post SpreeCielo::WS_PATH, "mensagem=#{to_xml}"
     parse res.body
   end
 

@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_development_dependency "turn"
+  gem.add_development_dependency "fakeweb"
   gem.add_development_dependency "debugger"
   gem.add_development_dependency "activesupport"
   gem.add_development_dependency "activemodel"
