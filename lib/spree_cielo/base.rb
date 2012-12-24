@@ -6,12 +6,9 @@ require 'builder'
 class SpreeCielo::Base
   class Erro
     include ActiveModel::Serializers::Xml
+    include SpreeCielo::Helpers
 
     attr_accessor :codigo, :mensagem
-
-    def attributes= attrs
-      attrs.each {|k,v| send("#{k}=", v) if respond_to? k }
-    end
   end
 
   attr_accessor :id, :versao, :dados_ec, :campo_livre
