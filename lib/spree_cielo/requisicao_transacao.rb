@@ -35,6 +35,12 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
     attr_accessor :numero, :valor, :moeda, :data_hora, :descricao, :idioma, :soft_descriptor
   end
 
+  class FormaPagamento
+    include SpreeCielo::Helpers
+
+    attr_accessor :bandeira, :produto, :parcelas
+  end
+
   hattr_writer(:dados_portador) { |p| p.indicador! }
-  hattr_writer :dados_pedido
+  hattr_writer :dados_pedido, :forma_pagamento
 end

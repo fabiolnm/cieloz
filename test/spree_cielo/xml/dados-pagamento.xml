@@ -1,0 +1,5 @@
+<forma-pagamento>
+  <bandeira><%= pagamento.bandeira %></bandeira>
+  <produto><%= pagamento.produto %></produto>
+  <parcelas><%= pagamento.parcelas %></parcelas>
+</forma-pagamento>

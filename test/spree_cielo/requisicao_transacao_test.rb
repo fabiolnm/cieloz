@@ -11,6 +11,7 @@ describe SpreeCielo::RequisicaoTransacao do
     subject::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
       data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "soft test"
   }
+  let(:pagamento)  { subject::FormaPagamento.new bandeira: "visa", produto: 1, parcelas: 1 }
 
   it "serializes dados-ec" do
     txn.dados_ec = ec
@@ -25,5 +26,10 @@ describe SpreeCielo::RequisicaoTransacao do
   it "serializes dados-pedido" do
     txn.dados_pedido = pedido
     assert_equal expected_xml(opts) { xml_for :pedido, dir, binding }, txn.to_xml
+  end
+
+  it "serializes forma-pagamento" do
+    txn.forma_pagamento = pagamento
+    assert_equal expected_xml(opts) { xml_for :pagamento, dir, binding }, txn.to_xml
   end
 end
