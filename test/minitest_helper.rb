@@ -34,7 +34,7 @@ def expected_xml opts={}
 end
 
 def render_template dir, filename, binding
-  template = File.join dir, filename
+  template = File.join dir, [ "xml", filename ]
   file = File.read template
   erb = ERB.new file
   res = erb.result binding
