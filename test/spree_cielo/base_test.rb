@@ -73,4 +73,12 @@ describe SpreeCielo::Base do
       assert_equal xml, subject.to_xml
     end
   end
+
+  describe "request posting" do
+    it "sends to test web service" do
+      erro = subject.send
+      assert_equal "001", erro.codigo
+      assert_match /Invalid/, erro.mensagem
+    end
+  end
 end
