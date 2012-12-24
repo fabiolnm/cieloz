@@ -34,9 +34,7 @@ describe SpreeCielo::Base do
   end
 
   describe "complex attributes" do
-    let(:numero)      { 123 }
-    let(:chave)       { "M3str4" }
-    let(:attributes)  { { numero: numero, chave: chave } }
+    let(:attributes)  { { numero: 123, chave: "M3str4" } }
     let(:ec)          { SpreeCielo::DadosEc.new attributes }
     let(:xml) { expected_xml(opts) { render_template dir, "dados-ec.xml", binding } }
 

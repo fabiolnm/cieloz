@@ -1,4 +1,4 @@
 <dados-ec>
-  <numero><%= numero %></numero>
-  <chave><%= chave %></chave>
+  <numero><%= ec.numero %></numero>
+  <chave><%= ec.chave %></chave>
 </dados-ec>

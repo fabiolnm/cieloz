@@ -24,3 +24,7 @@ def render_template dir, filename, binding
   res = erb.result binding
   res.split("\n").collect {|line| line.strip }.join
 end
+
+def xml_ec dir, binding
+  render_template dir, "dados-ec.xml", binding
+end
