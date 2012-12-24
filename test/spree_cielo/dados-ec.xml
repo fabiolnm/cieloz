@@ -1,0 +1,4 @@
+<dados-ec>
+  <numero><%= numero %></numero>
+  <chave><%= chave %></chave>
+</dados-ec>

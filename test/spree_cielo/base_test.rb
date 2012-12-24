@@ -7,6 +7,8 @@ describe SpreeCielo::Base do
   let(:versao)  { "1.2.0" }
   let(:opts)    { { root: "base", id: id, versao: versao } }
 
+  let(:dir)     { File.dirname __FILE__ }
+
   before do
     subject.id = id
     subject.versao = versao
@@ -44,14 +46,7 @@ describe SpreeCielo::Base do
       }
       ec
     }
-    let(:xml) {
-      expected_xml(opts) {
-        "<dados-ec>" +
-        "<numero>#{numero}</numero>" +
-        "<chave>#{chave}</chave>" +
-        "</dados-ec>"
-      }
-    }
+    let(:xml) { expected_xml(opts) { render_template dir, "dados-ec.xml", binding } }
 
     it "serializes" do
       subject.dados_ec = ec
@@ -68,7 +63,6 @@ describe SpreeCielo::Base do
   describe "request posting" do
     let(:err) { "101" }
     let(:msg) { "Invalid" }
-    let(:dir) { File.dirname __FILE__ }
     let(:fake_response) { render_template dir, "erro.xml", binding }
 
     before do

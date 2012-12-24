@@ -21,5 +21,6 @@ def render_template dir, filename, binding
   template = File.join dir, filename
   file = File.read template
   erb = ERB.new file
-  erb.result binding
+  res = erb.result binding
+  res.split("\n").collect {|line| line.strip }.join
 end
