@@ -17,6 +17,12 @@ module SpreeCielo
       attrs.each {|k,v| send("#{k}=", v) if respond_to? k }
     end
   end
+
+  class DadosEc
+    include Helpers
+
+    attr_accessor :numero, :chave
+  end
 end
 
 require "spree_cielo/base"

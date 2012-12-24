@@ -11,7 +11,16 @@ class SpreeCielo::Base
     attr_accessor :codigo, :mensagem
   end
 
-  attr_accessor :id, :versao, :dados_ec, :campo_livre
+  attr_accessor :id, :versao, :campo_livre
+  attr_reader :dados_ec
+
+  def dados_ec= value
+    unless value.is_a? Hash
+      @dados_ec = value
+    else
+      @dados_ec = SpreeCielo::DadosEc.new value
+    end
+  end
 
   def to_xml
     x = Builder::XmlMarkup.new
@@ -29,7 +38,7 @@ class SpreeCielo::Base
         else
           x.tag! dash(attr) do
             value_attrs.each do |vattr|
-              attr_value = value.instance_variable_get "@#{vattr}"
+              attr_value = value.instance_variable_get vattr
               x.tag!(dash(vattr), attr_value) unless attr_value.nil?
             end
           end
