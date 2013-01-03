@@ -1,0 +1,4 @@
+<url-retorno><%= txn.url_retorno %></url-retorno>
+<autorizar><%= txn.autorizar %></autorizar>
+<capturar><%= txn.capturar %></capturar>
+<campo-livre><%= txn.campo_livre %></campo-livre>

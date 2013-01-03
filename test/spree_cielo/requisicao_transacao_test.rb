@@ -32,4 +32,12 @@ describe SpreeCielo::RequisicaoTransacao do
     txn.forma_pagamento = pagamento
     assert_equal expected_xml(opts) { xml_for :pagamento, dir, binding }, txn.to_xml
   end
+
+  it "serializes simple attributes" do
+    txn.url_retorno = "http://callback.acti.on"
+    txn.somente_autenticar
+    txn.capturar = true
+    txn.campo_livre = "I want to break free"
+    assert_equal expected_xml(opts) { xml_for :simple_attrs, dir, binding }, txn.to_xml
+  end
 end

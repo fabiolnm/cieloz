@@ -41,6 +41,15 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
     attr_accessor :bandeira, :produto, :parcelas
   end
 
+  SOMENTE_AUTENTICAR = 0
+
   hattr_writer(:dados_portador) { |p| p.indicador! }
   hattr_writer :dados_pedido, :forma_pagamento
+
+  attr_reader :autorizar
+  attr_accessor :capturar
+
+  def somente_autenticar
+    @autorizar = SOMENTE_AUTENTICAR
+  end
 end

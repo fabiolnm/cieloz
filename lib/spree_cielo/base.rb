@@ -12,7 +12,7 @@ class SpreeCielo::Base
     attr_accessor :codigo, :mensagem
   end
 
-  attr_accessor :id, :versao, :campo_livre
+  attr_accessor :id, :versao, :campo_livre, :url_retorno
   attr_reader :dados_ec
   hattr_writer :dados_ec
 
