@@ -5,8 +5,17 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
     attr_accessor :numero, :validade, :codigo_seguranca
     attr_reader :indicador
 
-    def indicador!
-      @indicador = 1
+    def indicador
+      1
+    end
+
+    def attributes
+      {
+        numero:           @numero,
+        validade:         @validade,
+        codigo_seguranca: @codigo_seguranca,
+        indicador:        indicador
+      }
     end
 
     TEST_VISA   = new numero: 4012001037141112,
@@ -33,17 +42,37 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
     include SpreeCielo::Helpers
 
     attr_accessor :numero, :valor, :moeda, :data_hora, :descricao, :idioma, :soft_descriptor
+
+    def attributes
+      {
+        numero:           @numero,
+        valor:            @valor,
+        moeda:            @moeda,
+        data_hora:        @data_hora,
+        descricao:        @descricao,
+        idioma:           @idioma,
+        soft_descriptor:  @soft_descriptor
+      }
+    end
   end
 
   class FormaPagamento
     include SpreeCielo::Helpers
 
     attr_accessor :bandeira, :produto, :parcelas
+
+    def attributes
+      {
+        bandeira: @bandeira,
+        produto:  @produto,
+        parcelas: @parcelas
+      }
+    end
   end
 
   SOMENTE_AUTENTICAR = 0
 
-  hattr_writer(:dados_portador) { |p| p.indicador! }
+  hattr_writer :dados_portador
   hattr_writer :dados_pedido, :forma_pagamento
 
   attr_reader :autorizar
@@ -51,5 +80,18 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
 
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR
+  end
+
+  def attributes
+    {
+      dados_ec:         @dados_ec,
+      dados_portador:   @dados_portador,
+      dados_pedido:     @dados_pedido,
+      forma_pagamento:  @forma_pagamento,
+      url_retorno:      @url_retorno,
+      autorizar:        @autorizar,
+      capturar:         @capturar,
+      campo_livre:      @campo_livre
+    }
   end
 end

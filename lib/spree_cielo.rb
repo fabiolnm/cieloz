@@ -39,6 +39,10 @@ module SpreeCielo
     include Helpers
     attr_accessor :numero, :chave
 
+    def attributes
+      { numero: @numero, chave: @chave }
+    end
+
     TEST_MOD_CIELO  = new numero: "1001734898",
       chave: "e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832"
 

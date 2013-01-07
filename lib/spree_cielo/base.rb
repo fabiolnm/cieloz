@@ -16,24 +16,28 @@ class SpreeCielo::Base
   attr_reader :dados_ec
   hattr_writer :dados_ec
 
+  def attributes
+    {
+      dados_ec:     @dados_ec,
+      url_retorno:  @url_retorno,
+      campo_livre:  @campo_livre
+    }
+  end
+
   def to_xml
     x = Builder::XmlMarkup.new
     x.instruct!
     name = self.class.name.demodulize
     x.tag! name.underscore.dasherize, id: id, versao: versao do
-      (instance_variables - [:@id, :@versao]).each { |attr|
-        value = instance_variable_get attr
+      attributes.each { |attr, value|
         next if value.nil?
 
-        value_attrs = value.instance_variables
-
-        if value_attrs.empty?
+        unless value.respond_to? :attributes
           x.tag! dash(attr), value
         else
           x.tag! dash(attr) do
-            value_attrs.each do |vattr|
-              attr_value = value.instance_variable_get vattr
-              x.tag!(dash(vattr), attr_value) unless attr_value.nil?
+            value.attributes.each do |attr, value|
+              x.tag!(dash(attr), value) unless value.nil?
             end
           end
         end
