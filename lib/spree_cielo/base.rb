@@ -51,7 +51,7 @@ class SpreeCielo::Base
     root = Nokogiri::XML(xml).root
     response_class =  case root.name
     when 'erro'       then SpreeCielo::Erro
-    when 'transacao'  then debugger ; SpreeCielo::Transacao
+    when 'transacao'  then SpreeCielo::Transacao
     end
     response_class.new.from_xml xml
   end
