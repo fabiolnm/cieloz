@@ -63,5 +63,9 @@ describe SpreeCielo::Base do
       assert_equal err, erro.codigo
       assert_equal "Invalid", erro.mensagem
     end
+
+    after do
+      FakeWeb.clean_registry
+    end
   end
 end

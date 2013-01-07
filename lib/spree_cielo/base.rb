@@ -1,16 +1,8 @@
-require 'active_model'
 require 'net/http'
 require 'builder'
 
 class SpreeCielo::Base
   include SpreeCielo::Helpers
-
-  class Erro
-    include ActiveModel::Serializers::Xml
-    include SpreeCielo::Helpers
-
-    attr_accessor :codigo, :mensagem
-  end
 
   attr_accessor :id, :versao, :campo_livre, :url_retorno
   attr_reader :dados_ec
@@ -56,7 +48,12 @@ class SpreeCielo::Base
   end
 
   def parse xml
-    Erro.new.from_xml xml
+    root = Nokogiri::XML(xml).root
+    response_class =  case root.name
+    when 'erro'       then SpreeCielo::Erro
+    when 'transacao'  then debugger ; SpreeCielo::Transacao
+    end
+    response_class.new.from_xml xml
   end
 
   private

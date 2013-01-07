@@ -1,5 +1,7 @@
 require 'active_support/core_ext/string'
 require 'spree_cielo/version'
+require 'active_model'
+require 'nokogiri'
 
 module SpreeCielo
   TEST_HOST = "qasecommerce.cielo.com.br"
@@ -48,6 +50,20 @@ module SpreeCielo
 
     TEST_MOD_LOJA   = new numero: "1006993069",
       chave: "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3"
+  end
+
+  class Erro
+    include ActiveModel::Serializers::Xml
+    include SpreeCielo::Helpers
+
+    attr_accessor :codigo, :mensagem
+  end
+
+  class Transacao
+    include ActiveModel::Serializers::Xml
+    include SpreeCielo::Helpers
+
+    attr_accessor :tid, :status, :url_autenticacao
   end
 end
 

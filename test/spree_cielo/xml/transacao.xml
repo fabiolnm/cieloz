@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<transacao versao="1.2.0" id="468c1608-4ec7-4acd-b7ea-d7bf96e135f5" xmlns="http://ecommerce.cbmp.com.br">
+  <tid><%= tid %></tid>
+  <dados-pedido>
+    <numero><%= pedido.numero %></numero>
+    <valor><%= pedido.valor %></valor>
+    <moeda><%= pedido.moeda %></moeda>
+    <data-hora><%= pedido.data_hora %></data-hora>
+    <descricao><%= pedido.descricao %></descricao>
+    <idioma><%= pedido.idioma %></idioma>
+  </dados-pedido>
+  <forma-pagamento>
+    <bandeira><%= pagamento.bandeira %></bandeira>
+    <produto><%= pagamento.produto %></produto>
+    <parcelas><%= pagamento.parcelas %></parcelas>
+  </forma-pagamento>
+  <status><%= status_txn %></status>
+  <url-autenticacao><%= url_cielo %></url-autenticacao>
+</transacao>
