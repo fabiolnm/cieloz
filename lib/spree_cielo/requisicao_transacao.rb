@@ -2,7 +2,7 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
   class DadosPortador
     include SpreeCielo::Helpers
 
-    attr_accessor :numero, :validade, :codigo_seguranca
+    attr_accessor :numero, :nome_portador, :validade, :codigo_seguranca
     attr_reader :indicador
 
     def indicador
@@ -13,8 +13,9 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
       {
         numero:           @numero,
         validade:         @validade,
+        indicador:        indicador,
         codigo_seguranca: @codigo_seguranca,
-        indicador:        indicador
+        nome_portador:    @nome_portador
       }
     end
 
