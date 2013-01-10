@@ -5,7 +5,7 @@ require 'cieloz/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "cieloz"
-  gem.version       = SpreeCielo::VERSION
+  gem.version       = Cieloz::VERSION
   gem.authors       = ["Fábio Luiz Nery de Miranda"]
   gem.email         = ["fabio@miranti.net.br"]
   gem.description   = %q{A utility gem for Spree Gateway gem}

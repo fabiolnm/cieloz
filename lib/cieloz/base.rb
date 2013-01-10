@@ -1,8 +1,8 @@
 require 'net/http'
 require 'builder'
 
-class SpreeCielo::Base
-  include SpreeCielo::Helpers
+class Cieloz::Base
+  include Cieloz::Helpers
 
   attr_accessor :id, :versao, :campo_livre, :url_retorno
   attr_reader :dados_ec
@@ -37,21 +37,21 @@ class SpreeCielo::Base
     end
   end
 
-  def send host=SpreeCielo::TEST_HOST
+  def send host=Cieloz::TEST_HOST
     http = Net::HTTP.new host, 443
     http.use_ssl = true
     http.open_timeout = 5 * 1000
     http.read_timeout = 30 * 1000
 
-    res = http.post SpreeCielo::WS_PATH, "mensagem=#{to_xml}"
+    res = http.post Cieloz::WS_PATH, "mensagem=#{to_xml}"
     parse res.body
   end
 
   def parse xml
     root = Nokogiri::XML(xml).root
     response_class =  case root.name
-    when 'erro'       then SpreeCielo::Erro
-    when 'transacao'  then SpreeCielo::Transacao
+    when 'erro'       then Cieloz::Erro
+    when 'transacao'  then Cieloz::Transacao
     end
     response_class.new.from_xml xml
   end

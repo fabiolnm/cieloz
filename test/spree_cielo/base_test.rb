@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-describe SpreeCielo::Base do
+describe Cieloz::Base do
   let(:base)    { subject.new }
   let(:id)      { "1" }
   let(:versao)  { "1.2.0" }
@@ -34,7 +34,7 @@ describe SpreeCielo::Base do
 
   describe "complex attributes" do
     let(:attributes)  { { numero: 123, chave: "M3str4" } }
-    let(:ec)          { SpreeCielo::DadosEc.new attributes }
+    let(:ec)          { Cieloz::DadosEc.new attributes }
     let(:xml) { expected_xml(opts) { xml_for :ec, dir, binding } }
 
     it "serializes" do
@@ -55,7 +55,7 @@ describe SpreeCielo::Base do
     let(:fake_response) { render_template dir, "erro.xml", binding }
 
     before do
-      FakeWeb.register_uri :post, SpreeCielo.test_url, body: fake_response
+      FakeWeb.register_uri :post, Cieloz.test_url, body: fake_response
     end
 
     it "sends to test web service" do

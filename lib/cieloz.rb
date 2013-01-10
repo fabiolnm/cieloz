@@ -3,7 +3,7 @@ require 'cieloz/version'
 require 'active_model'
 require 'nokogiri'
 
-module SpreeCielo
+module Cieloz
   TEST_HOST = "qasecommerce.cielo.com.br"
   WS_PATH   = "/servicos/ecommwsec.do"
 
@@ -54,14 +54,14 @@ module SpreeCielo
 
   class Erro
     include ActiveModel::Serializers::Xml
-    include SpreeCielo::Helpers
+    include Cieloz::Helpers
 
     attr_accessor :codigo, :mensagem
   end
 
   class Transacao
     include ActiveModel::Serializers::Xml
-    include SpreeCielo::Helpers
+    include Cieloz::Helpers
 
     attr_accessor :tid, :status, :url_autenticacao
   end

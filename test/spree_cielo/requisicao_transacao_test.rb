@@ -1,9 +1,9 @@
-describe SpreeCielo::RequisicaoTransacao do
+describe Cieloz::RequisicaoTransacao do
   let(:txn)   { subject.new }
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-transacao" } }
 
-  let(:ec)        { SpreeCielo::DadosEc::TEST_MOD_CIELO }
+  let(:ec)        { Cieloz::DadosEc::TEST_MOD_CIELO }
   let(:portador)  { subject::DadosPortador::TEST_VISA }
 
   let(:now)       { Time.now.strftime "%Y-%m-%dT%H:%M:%S" }
@@ -51,7 +51,7 @@ describe SpreeCielo::RequisicaoTransacao do
 
     before do
       portador.nome_portador = "Jose da Silva"
-      FakeWeb.register_uri :post, SpreeCielo.test_url, body: fake_response
+      FakeWeb.register_uri :post, Cieloz.test_url, body: fake_response
     end
 
     after do
@@ -71,7 +71,7 @@ describe SpreeCielo::RequisicaoTransacao do
       txn.campo_livre = "debug"
 
       res = txn.send
-      assert_equal SpreeCielo::Transacao, res.class
+      assert_equal Cieloz::Transacao, res.class
       assert_equal tid,         res.tid
       assert_equal status_txn,  res.status
       assert_equal url_cielo,   res.url_autenticacao

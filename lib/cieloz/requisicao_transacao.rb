@@ -1,6 +1,6 @@
-class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
+class Cieloz::RequisicaoTransacao < Cieloz::Base
   class DadosPortador
-    include SpreeCielo::Helpers
+    include Cieloz::Helpers
 
     attr_accessor :numero, :nome_portador, :validade, :codigo_seguranca
     attr_reader :indicador
@@ -40,7 +40,7 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
   end
 
   class DadosPedido
-    include SpreeCielo::Helpers
+    include Cieloz::Helpers
 
     attr_accessor :numero, :valor, :moeda, :data_hora, :descricao, :idioma, :soft_descriptor
 
@@ -58,7 +58,7 @@ class SpreeCielo::RequisicaoTransacao < SpreeCielo::Base
   end
 
   class FormaPagamento
-    include SpreeCielo::Helpers
+    include Cieloz::Helpers
 
     attr_accessor :bandeira, :produto, :parcelas
 
