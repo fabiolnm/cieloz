@@ -1,5 +1,5 @@
 require 'active_support/core_ext/string'
-require 'spree_cielo/version'
+require 'cieloz/version'
 require 'active_model'
 require 'nokogiri'
 
@@ -67,5 +67,5 @@ module SpreeCielo
   end
 end
 
-require "spree_cielo/base"
-require "spree_cielo/requisicao_transacao"
+require "cieloz/base"
+require "cieloz/requisicao_transacao"

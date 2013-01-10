@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'spree_cielo/version'
+require 'cieloz/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "spree_cielo"
+  gem.name          = "cieloz"
   gem.version       = SpreeCielo::VERSION
   gem.authors       = ["Fábio Luiz Nery de Miranda"]
   gem.email         = ["fabio@miranti.net.br"]
-  gem.description   = %q{A Spree Gateway for Cielo}
+  gem.description   = %q{A utility gem for Spree Gateway gem}
   gem.summary       = %q{}
-  gem.homepage      = "https://github.com/fabiolnm/spree_cielo"
+  gem.homepage      = "https://github.com/fabiolnm/cieloz"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

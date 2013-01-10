@@ -1,12 +1,12 @@
-# SpreeCielo
+# Cieloz
 
-A Spree Gateway to provide Cielo Integration
+A utility gem for SpreeCielo Gateway gem
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'spree_cielo'
+    gem 'cieloz'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install spree_cielo
+    $ gem install cieloz
 
 ## Usage
 

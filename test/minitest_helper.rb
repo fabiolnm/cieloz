@@ -4,7 +4,7 @@ require 'minitest/autorun'
 require 'debugger'
 require 'turn/autorun'
 
-require 'spree_cielo'
+require 'cieloz'
 require 'fakeweb'
 require 'erb'
 
