@@ -56,7 +56,7 @@ class Cieloz::Base
     when 'erro'       then Cieloz::Erro
     when 'transacao'  then Cieloz::Transacao
     end
-    response_class.new.from_xml xml
+    response_class.from xml
   end
 
   private

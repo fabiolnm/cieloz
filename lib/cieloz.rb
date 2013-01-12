@@ -57,6 +57,13 @@ module Cieloz
     include Cieloz::Helpers
 
     attr_accessor :codigo, :mensagem
+    attr_reader :xml
+
+    def self.from xml
+      obj = new.from_xml xml
+      obj.instance_variable_set :@xml, xml
+      obj
+    end
   end
 
   class Transacao
@@ -64,6 +71,13 @@ module Cieloz
     include Cieloz::Helpers
 
     attr_accessor :tid, :status, :url_autenticacao
+    attr_reader :xml
+
+    def self.from xml
+      obj = new.from_xml xml
+      obj.instance_variable_set :@xml, xml
+      obj
+    end
   end
 end
 
