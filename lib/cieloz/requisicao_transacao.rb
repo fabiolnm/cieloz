@@ -81,7 +81,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   hattr_writer :dados_pedido, :forma_pagamento
 
   attr_reader :autorizar
-  attr_accessor :capturar
+  attr_reader :capturar
 
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR
@@ -101,6 +101,14 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   def recorrente
     @autorizar = RECORRENTE
+  end
+
+  def capturar_automaticamente
+    @capturar = true
+  end
+
+  def nao_capturar_automaticamente
+    @capturar = false
   end
 
   def attributes

@@ -35,8 +35,8 @@ describe Cieloz::RequisicaoTransacao do
 
   it "serializes simple attributes" do
     txn.url_retorno = "http://callback.acti.on"
-    txn.somente_autenticar
-    txn.capturar = true
+    txn.autorizacao_direta
+    txn.capturar_automaticamente
     txn.campo_livre = "I want to break free"
     assert_equal expected_xml(opts) { xml_for :simple_attrs, dir, binding }, txn.to_xml
   end
@@ -66,8 +66,8 @@ describe Cieloz::RequisicaoTransacao do
       txn.dados_pedido    = pedido
       txn.forma_pagamento = pagamento
       txn.url_retorno = "http://localhost:3000/cielo/callback"
-      txn.somente_autenticar
-      txn.capturar = true
+      txn.autorizacao_direta
+      txn.capturar_automaticamente
       txn.campo_livre = "debug"
 
       res = txn.submit
