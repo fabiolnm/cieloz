@@ -59,7 +59,7 @@ describe Cieloz::Base do
     end
 
     it "sends to test web service" do
-      erro = base.send
+      erro = base.submit
       assert_equal err, erro.codigo
       assert_equal "Invalid", erro.mensagem
     end

@@ -70,7 +70,7 @@ describe Cieloz::RequisicaoTransacao do
       txn.capturar = true
       txn.campo_livre = "debug"
 
-      res = txn.send
+      res = txn.submit
       assert_equal Cieloz::Transacao, res.class
       assert_equal tid,         res.tid
       assert_equal status_txn,  res.status

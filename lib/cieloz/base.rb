@@ -37,7 +37,7 @@ class Cieloz::Base
     end
   end
 
-  def send host=Cieloz::TEST_HOST
+  def submit host=Cieloz::TEST_HOST
     http = Net::HTTP.new host, 443
     http.use_ssl = true
     http.open_timeout = 5 * 1000
