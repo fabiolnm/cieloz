@@ -71,7 +71,11 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     end
   end
 
-  SOMENTE_AUTENTICAR = 0
+  SOMENTE_AUTENTICAR        = 0
+  AUTORIZAR_SE_AUTENTICADA  = 1
+  AUTORIZAR_NAO_AUTENTICADA = 2
+  AUTORIZACAO_DIRETA        = 3
+  RECORRENTE                = 4
 
   hattr_writer :dados_portador
   hattr_writer :dados_pedido, :forma_pagamento
@@ -81,6 +85,22 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR
+  end
+
+  def requer_autenticacao
+    @autorizar = AUTORIZAR_SE_AUTENTICADA
+  end
+
+  def nao_requer_autenticacao
+    @autorizar = AUTORIZAR_NAO_AUTENTICADA
+  end
+
+  def autorizacao_direta
+    @autorizar = AUTORIZACAO_DIRETA
+  end
+
+  def recorrente
+    @autorizar = RECORRENTE
   end
 
   def attributes
