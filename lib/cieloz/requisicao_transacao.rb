@@ -49,7 +49,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
         numero:           @numero,
         valor:            @valor,
         moeda:            @moeda,
-        data_hora:        @data_hora,
+        data_hora:        @data_hora.strftime("%Y-%m-%dT%H:%M:%S"),
         descricao:        @descricao,
         idioma:           @idioma,
         soft_descriptor:  @soft_descriptor

@@ -6,7 +6,7 @@ describe Cieloz::RequisicaoTransacao do
   let(:ec)        { Cieloz::DadosEc::TEST_MOD_CIELO }
   let(:portador)  { subject::DadosPortador::TEST_VISA }
 
-  let(:now)       { Time.now.strftime "%Y-%m-%dT%H:%M:%S" }
+  let(:now)       { Time.now }
   let(:pedido)    {
     subject::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
       data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "13letterstest"

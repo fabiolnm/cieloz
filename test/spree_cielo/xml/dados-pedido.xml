@@ -2,7 +2,7 @@
   <numero><%= pedido.numero %></numero>
   <valor><%= pedido.valor %></valor>
   <moeda><%= pedido.moeda %></moeda>
-  <data-hora><%= pedido.data_hora %></data-hora>
+  <data-hora><%= pedido.attributes[:data_hora] %></data-hora>
   <descricao><%= pedido.descricao %></descricao>
   <idioma><%= pedido.idioma %></idioma>
   <soft-descriptor><%= pedido.soft_descriptor %></soft-descriptor>
