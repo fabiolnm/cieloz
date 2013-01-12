@@ -43,6 +43,9 @@ class Cieloz::Base
     http.open_timeout = 5 * 1000
     http.read_timeout = 30 * 1000
 
+    self.id     = SecureRandom.uuid if id.blank?
+    self.versao = "1.2.0"           if versao.blank?
+
     res = http.post Cieloz::WS_PATH, "mensagem=#{to_xml}"
     parse res.body
   end
