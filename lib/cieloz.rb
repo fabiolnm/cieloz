@@ -79,6 +79,19 @@ module Cieloz
       obj
     end
   end
+
+  MAX_INSTALLMENTS = 3
+
+  module Bandeiras
+    VISA        = "visa"
+    MASTER_CARD = "mastercard"
+    AMEX        = "amex"
+    ELO         = "elo"
+    DINERS      = "diners"
+    DISCOVER    = "discover"
+
+    SUPPORTED_FLAGS = [ VISA, MASTER_CARD, AMEX, ELO, DINERS, DISCOVER ]
+  end
 end
 
 require "cieloz/base"

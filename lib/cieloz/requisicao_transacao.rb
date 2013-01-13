@@ -60,7 +60,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   class FormaPagamento
     include Cieloz::Helpers
 
-    attr_accessor :bandeira, :produto, :parcelas
+    attr_accessor :bandeira
+    attr_reader :produto, :parcelas
 
     def attributes
       {
@@ -68,6 +69,42 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
         produto:  @produto,
         parcelas: @parcelas
       }
+    end
+
+    def debito
+      if @bandeira == Cieloz::Bandeiras::VISA || @bandeira == Cieloz::Bandeiras::MASTERCARD
+        @produto  = "A"
+        @parcelas = 1
+      else
+        raise "Operacao de debito disponivel apenas para VISA e MasterCard"
+      end
+    end
+
+    def credito_a_vista
+      @produto  = 1
+      @parcelas = 1
+    end
+
+    def parcelado_loja parcelas
+      raise "Parcelas invalidas: #{parcelas}" if parcelas.to_i <= 0
+      raise "Nao suportado pela bandeira DISCOVER" if @bandeira == Cieloz::Bandeiras::DISCOVER
+      if parcelas == 1
+        credito_a_vista
+      else
+        @produto  = 2
+        @parcelas = parcelas
+      end
+    end
+
+    def parcelado_adm parcelas
+      raise "Parcelas invalidas: #{parcelas}" if parcelas.to_i <= 0
+      raise "Nao suportado pela bandeira DISCOVER" if @bandeira == Cieloz::Bandeiras::DISCOVER
+      if parcelas == 1
+        credito_a_vista
+      else
+        @produto  = 3
+        @parcelas = parcelas
+      end
     end
   end
 
