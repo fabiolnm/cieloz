@@ -90,7 +90,7 @@ module Cieloz
     DINERS      = "diners"
     DISCOVER    = "discover"
 
-    SUPPORTED_FLAGS = [ VISA, MASTER_CARD, AMEX, ELO, DINERS, DISCOVER ]
+    ALL = [ VISA, MASTER_CARD, AMEX, ELO, DINERS, DISCOVER ]
   end
 end
 
