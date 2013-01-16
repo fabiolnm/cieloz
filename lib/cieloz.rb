@@ -64,6 +64,10 @@ module Cieloz
       obj.instance_variable_set :@xml, xml
       obj
     end
+
+    def success?
+      false
+    end
   end
 
   class Transacao
@@ -77,6 +81,10 @@ module Cieloz
       obj = new.from_xml xml
       obj.instance_variable_set :@xml, xml
       obj
+    end
+
+    def success?
+      true
     end
   end
 
