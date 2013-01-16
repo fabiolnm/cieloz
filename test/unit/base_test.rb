@@ -18,16 +18,27 @@ describe Cieloz::Base do
   end
 
   describe "value attributes" do
-    it "serializes" do
-      campo_livre = "Informações Extras"
-      base.campo_livre = campo_livre
+    before do
+      subject.class_eval do
+        attr_accessor :foo
 
-      xml = expected_xml(opts) { "<campo-livre>#{campo_livre}</campo-livre>" }
+        def attributes
+          { foo: @foo }
+        end
+      end
+    end
+
+    let(:foo) { "Informações Extras" }
+
+    it "serializes" do
+      base.foo = foo
+
+      xml = expected_xml(opts) { "<foo>#{foo}</foo>" }
       assert_equal xml, base.to_xml
     end
 
     it "ignores nils" do
-      base.campo_livre = nil
+      base.foo = nil
       assert_equal expected_xml(opts), base.to_xml
     end
   end

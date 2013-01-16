@@ -4,16 +4,12 @@ require 'builder'
 class Cieloz::Base
   include Cieloz::Helpers
 
-  attr_accessor :id, :versao, :campo_livre, :url_retorno
+  attr_accessor :id, :versao
   attr_reader :dados_ec
   hattr_writer :dados_ec
 
   def attributes
-    {
-      dados_ec:     @dados_ec,
-      url_retorno:  @url_retorno,
-      campo_livre:  @campo_livre
-    }
+    { dados_ec: @dados_ec }
   end
 
   def to_xml

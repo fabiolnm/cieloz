@@ -117,6 +117,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   hattr_writer :dados_portador
   hattr_writer :dados_pedido, :forma_pagamento
 
+  attr_accessor :campo_livre, :url_retorno
   attr_reader :autorizar
   attr_reader :capturar
 
