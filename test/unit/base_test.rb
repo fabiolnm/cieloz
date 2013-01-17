@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 describe Cieloz::Base do
-  let(:base)    { subject.new }
   let(:id)      { "1" }
   let(:versao)  { "1.2.0" }
   let(:opts)    { { root: "base", id: id, versao: versao } }
@@ -9,12 +8,12 @@ describe Cieloz::Base do
   let(:dir)     { File.dirname __FILE__ }
 
   before do
-    base.id = id
-    base.versao = versao
+    subject.id = id
+    subject.versao = versao
   end
 
   it "serializes" do
-    assert_equal expected_xml(opts), base.to_xml
+    assert_equal expected_xml(opts), subject.to_xml
   end
 
   describe "value attributes" do
@@ -31,15 +30,15 @@ describe Cieloz::Base do
     let(:foo) { "Informações Extras" }
 
     it "serializes" do
-      base.foo = foo
+      subject.foo = foo
 
       xml = expected_xml(opts) { "<foo>#{foo}</foo>" }
-      assert_equal xml, base.to_xml
+      assert_equal xml, subject.to_xml
     end
 
     it "ignores nils" do
-      base.foo = nil
-      assert_equal expected_xml(opts), base.to_xml
+      subject.foo = nil
+      assert_equal expected_xml(opts), subject.to_xml
     end
   end
 
@@ -49,14 +48,14 @@ describe Cieloz::Base do
     let(:xml) { expected_xml(opts) { xml_for :ec, dir, binding } }
 
     it "serializes" do
-      base.dados_ec = ec
-      assert_equal xml, base.to_xml
+      subject.dados_ec = ec
+      assert_equal xml, subject.to_xml
     end
 
     it "ignores nils" do
       attributes.merge! ignore_me: nil
-      base.dados_ec = ec
-      assert_equal xml, base.to_xml
+      subject.dados_ec = ec
+      assert_equal xml, subject.to_xml
     end
   end
 
@@ -70,7 +69,7 @@ describe Cieloz::Base do
     end
 
     it "sends to test web service" do
-      erro = base.submit
+      erro = subject.submit
       assert_equal err, erro.codigo
       assert_equal "Invalid", erro.mensagem
     end

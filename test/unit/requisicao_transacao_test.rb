@@ -1,48 +1,47 @@
 describe Cieloz::RequisicaoTransacao do
-  let(:txn)   { subject.new }
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-transacao" } }
 
   let(:ec)        { Cieloz::DadosEc::TEST_MOD_CIELO }
-  let(:portador)  { subject::DadosPortador::TEST_VISA }
+  let(:portador)  { subject.class::DadosPortador::TEST_VISA }
 
   let(:now)       { Time.now }
   let(:pedido)    {
-    subject::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
+    subject.class::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
       data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "13letterstest"
   }
   let(:pagamento)  {
-    pg = subject::FormaPagamento.new bandeira: "visa"
+    pg = subject.class::FormaPagamento.new bandeira: "visa"
     pg.credito_a_vista
     pg
   }
 
   it "serializes dados-ec" do
-    txn.dados_ec = ec
-    assert_equal expected_xml(opts) { xml_for :ec, dir, binding }, txn.to_xml
+    subject.dados_ec = ec
+    assert_equal expected_xml(opts) { xml_for :ec, dir, binding }, subject.to_xml
   end
 
   it "serializes dados-portador" do
-    txn.dados_portador = portador
-    assert_equal expected_xml(opts) { xml_for :portador, dir, binding }, txn.to_xml
+    subject.dados_portador = portador
+    assert_equal expected_xml(opts) { xml_for :portador, dir, binding }, subject.to_xml
   end
 
   it "serializes dados-pedido" do
-    txn.dados_pedido = pedido
-    assert_equal expected_xml(opts) { xml_for :pedido, dir, binding }, txn.to_xml
+    subject.dados_pedido = pedido
+    assert_equal expected_xml(opts) { xml_for :pedido, dir, binding }, subject.to_xml
   end
 
   it "serializes forma-pagamento" do
-    txn.forma_pagamento = pagamento
-    assert_equal expected_xml(opts) { xml_for :pagamento, dir, binding }, txn.to_xml
+    subject.forma_pagamento = pagamento
+    assert_equal expected_xml(opts) { xml_for :pagamento, dir, binding }, subject.to_xml
   end
 
   it "serializes simple attributes" do
-    txn.url_retorno = "http://callback.acti.on"
-    txn.autorizacao_direta
-    txn.capturar_automaticamente
-    txn.campo_livre = "I want to break free"
-    assert_equal expected_xml(opts) { xml_for :simple_attrs, dir, binding }, txn.to_xml
+    subject.url_retorno = "http://callback.acti.on"
+    subject.autorizacao_direta
+    subject.capturar_automaticamente
+    subject.campo_livre = "I want to break free"
+    assert_equal expected_xml(opts) { xml_for :simple_attrs, dir, binding }, subject.to_xml
   end
 
   describe "request posting" do
@@ -63,18 +62,18 @@ describe Cieloz::RequisicaoTransacao do
     end
 
     it "sends to test web service" do
-      txn.id              = SecureRandom.uuid
-      txn.versao          = "1.2.0"
-      txn.dados_ec        = ec
+      subject.id              = SecureRandom.uuid
+      subject.versao          = "1.2.0"
+      subject.dados_ec        = ec
       # txn.dados_portador  = portador # buy page loja only!
-      txn.dados_pedido    = pedido
-      txn.forma_pagamento = pagamento
-      txn.url_retorno = "http://localhost:3000/cielo/callback"
-      txn.autorizacao_direta
-      txn.capturar_automaticamente
-      txn.campo_livre = "debug"
+      subject.dados_pedido    = pedido
+      subject.forma_pagamento = pagamento
+      subject.url_retorno = "http://localhost:3000/cielo/callback"
+      subject.autorizacao_direta
+      subject.capturar_automaticamente
+      subject.campo_livre = "debug"
 
-      res = txn.submit
+      res = subject.submit
       assert_equal Cieloz::Transacao, res.class
       assert_equal tid,         res.tid
       assert_equal status_txn,  res.status
