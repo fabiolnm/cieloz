@@ -104,3 +104,4 @@ end
 
 require "cieloz/base"
 require "cieloz/requisicao_transacao"
+require "cieloz/requisicao_tid"
