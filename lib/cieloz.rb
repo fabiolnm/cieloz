@@ -54,7 +54,7 @@ module Cieloz
 
   class Erro
     include ActiveModel::Serializers::Xml
-    include Cieloz::Helpers
+    include Helpers
 
     attr_accessor :codigo, :mensagem
     attr_reader :xml
@@ -72,7 +72,7 @@ module Cieloz
 
   class Transacao
     include ActiveModel::Serializers::Xml
-    include Cieloz::Helpers
+    include Helpers
 
     attr_accessor :tid, :status, :url_autenticacao
     attr_reader :xml
