@@ -8,6 +8,8 @@ class Cieloz::Base
   attr_reader :dados_ec
   hattr_writer :dados_ec
 
+  validates :id, :versao, :dados_ec, presence: true
+
   def attributes
     { dados_ec: @dados_ec }
   end

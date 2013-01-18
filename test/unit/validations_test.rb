@@ -21,3 +21,9 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
   it { must validate_presence_of :produto }
   it { must validate_presence_of :parcelas }
 end
+
+describe Cieloz::Base do
+  it { must validate_presence_of :id }
+  it { must validate_presence_of :versao }
+  it { must validate_presence_of :dados_ec }
+end
