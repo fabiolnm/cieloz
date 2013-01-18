@@ -26,6 +26,7 @@ module Cieloz
 
     def self.included base
       base.extend ClassMethods
+      base.send :include, ActiveModel::Validations
     end
 
     def initialize attrs={}
@@ -39,7 +40,9 @@ module Cieloz
 
   class DadosEc
     include Helpers
+
     attr_accessor :numero, :chave
+    validates :numero, :chave, presence: true
 
     def attributes
       { numero: @numero, chave: @chave }

@@ -1,5 +1,4 @@
-require 'minitest/spec'
-require 'minitest/autorun'
+require 'minitest-activemodel'
 
 require 'debugger'
 require 'turn/autorun'
@@ -9,6 +8,8 @@ require 'fakeweb'
 require 'erb'
 
 class MiniTest::Spec
+  include Minitest::Matchers::ActiveModel
+
   class << self
     alias :_create :create
 
