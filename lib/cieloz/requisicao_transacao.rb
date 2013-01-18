@@ -67,6 +67,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     attr_accessor :bandeira
     attr_reader :produto, :parcelas
 
+    validates :bandeira, :produto, :parcelas, presence: true
+
     def attributes
       {
         bandeira: @bandeira,

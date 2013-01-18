@@ -15,3 +15,9 @@ describe Cieloz::RequisicaoTransacao::DadosPedido do
   it { must validate_presence_of :moeda }
   it { must validate_presence_of :data_hora }
 end
+
+describe Cieloz::RequisicaoTransacao::FormaPagamento do
+  it { must validate_presence_of :bandeira }
+  it { must validate_presence_of :produto }
+  it { must validate_presence_of :parcelas }
+end
