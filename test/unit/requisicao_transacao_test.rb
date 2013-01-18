@@ -10,7 +10,7 @@ describe Cieloz::RequisicaoTransacao do
     subject.class::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
       data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "13letterstest"
   }
-  let(:pagamento)  { subject.class::FormaPagamento.new.credito_a_vista "visa" }
+  let(:pagamento)  { subject.class::FormaPagamento.new.credito "visa" }
 
   it "serializes dados-ec" do
     subject.dados_ec = ec

@@ -17,13 +17,15 @@ describe Cieloz::RequisicaoTransacao::DadosPedido do
 end
 
 describe Cieloz::RequisicaoTransacao::FormaPagamento do
+  let(:all_flags) { Cieloz::Bandeiras::ALL }
+
   describe "debito validation" do
     let(:supported_flags) {
       [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD ]
     }
 
     it "raises error if bandeira is not VISA or MASTERCARD" do
-      (Cieloz::Bandeiras::ALL - supported_flags).each { |flag|
+      (all_flags - supported_flags).each { |flag|
         assert_raises(RuntimeError,
           /Operacao disponivel apenas para VISA e MasterCard/) {
           subject.debito flag
@@ -39,6 +41,15 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
         assert_equal 1,     subject.parcelas
       }
     end
+  end
+
+  it "validates credito" do
+    all_flags.each { |flag|
+      subject.credito flag
+      assert_equal subject.class::CREDITO, subject.produto
+      assert_equal flag,  subject.bandeira
+      assert_equal 1,     subject.parcelas
+    }
   end
 end
 

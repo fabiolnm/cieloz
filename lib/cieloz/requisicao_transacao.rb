@@ -63,7 +63,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   class FormaPagamento
     DEBITO          = "A"
-    CREDITO_VISTA   = 1
+    CREDITO         = 1
     PARCELADO_LOJA  = 2
     PARCELADO_CIELO = 3
 
@@ -89,8 +89,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
       set_attrs bandeira, DEBITO, 1
     end
 
-    def credito_a_vista bandeira
-      set_attrs bandeira, CREDITO_VISTA, 1
+    def credito bandeira
+      set_attrs bandeira, CREDITO, 1
     end
 
     def parcelado_loja bandeira, parcelas
