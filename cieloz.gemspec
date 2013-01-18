@@ -17,10 +17,11 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
+  gem.add_dependency "nokogiri"
+  gem.add_dependency "activesupport"
+  gem.add_dependency "activemodel"
+
   gem.add_development_dependency "turn"
   gem.add_development_dependency "fakeweb"
-  gem.add_development_dependency "nokogiri"
   gem.add_development_dependency "debugger"
-  gem.add_development_dependency "activesupport"
-  gem.add_development_dependency "activemodel"
 end
