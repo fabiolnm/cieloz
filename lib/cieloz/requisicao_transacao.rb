@@ -46,6 +46,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
     attr_accessor :numero, :valor, :moeda, :data_hora, :descricao, :idioma, :soft_descriptor
 
+    validates :numero, :valor, :moeda, :data_hora, presence: true
+
     def attributes
       {
         numero:           @numero,
