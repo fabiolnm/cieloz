@@ -75,6 +75,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     validates :parcelas, numericality: {
       only_integer: true, greater_than: 0, less_than_or_equal_to: 3
     }
+    validate :operacao_nao_especificada
 
     def attributes
       {
@@ -118,6 +119,13 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
         credito bandeira
       else
         set_attrs bandeira, produto, parcelas
+      end
+    end
+
+    def operacao_nao_especificada
+      if @bandeira.nil? or @produto.nil? or @parcelas.nil?
+        errors.add :estado_invalido, %{#{attributes.to_s} - execute
+          alguma das operacoes de debito, credito ou parcelamento}
       end
     end
   end

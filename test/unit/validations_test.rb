@@ -105,6 +105,11 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
       refute subject.parcelado_loja(flag, 1.234).valid?
       refute subject.parcelado_loja(flag, "abc").valid?
     end
+
+    it "requires an operation to be called" do
+      refute subject.valid?
+      assert subject.errors.has_key? :estado_invalido
+    end
   end
 end
 
