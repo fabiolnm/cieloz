@@ -24,5 +24,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "turn"
   gem.add_development_dependency "fakeweb"
   gem.add_development_dependency "debugger"
-  gem.add_development_dependency "minitest-activemodel"
+  gem.add_development_dependency "shoulda-matchers"
+  gem.add_development_dependency "minitest-matchers"
 end

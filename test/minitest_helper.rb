@@ -1,14 +1,17 @@
-require 'minitest-activemodel'
-
 require 'debugger'
+require 'cieloz'
+
+require 'minitest/autorun'
 require 'turn/autorun'
 
-require 'cieloz'
+require 'minitest/matchers'
+require 'shoulda/matchers'
+
 require 'fakeweb'
 require 'erb'
 
 class MiniTest::Spec
-  include Minitest::Matchers::ActiveModel
+  include Shoulda::Matchers::ActiveModel
 
   class << self
     alias :_create :create
