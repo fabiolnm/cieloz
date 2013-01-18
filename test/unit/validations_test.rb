@@ -17,9 +17,29 @@ describe Cieloz::RequisicaoTransacao::DadosPedido do
 end
 
 describe Cieloz::RequisicaoTransacao::FormaPagamento do
-  it { must validate_presence_of :bandeira }
-  it { must validate_presence_of :produto }
-  it { must validate_presence_of :parcelas }
+  describe "debito validation" do
+    let(:supported_flags) {
+      [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD ]
+    }
+
+    it "raises error if bandeira is not VISA or MASTERCARD" do
+      (Cieloz::Bandeiras::ALL - supported_flags).each { |flag|
+        assert_raises(RuntimeError,
+          /Operacao disponivel apenas para VISA e MasterCard/) {
+          subject.debito flag
+        }
+      }
+    end
+
+    it "accepts payment for VISA or MASTERCARD" do
+      supported_flags.each { |flag|
+        subject.debito flag
+        assert_equal subject.class::DEBITO, subject.produto
+        assert_equal flag,  subject.bandeira
+        assert_equal 1,     subject.parcelas
+      }
+    end
+  end
 end
 
 describe Cieloz::Base do

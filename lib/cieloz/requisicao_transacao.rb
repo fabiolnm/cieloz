@@ -62,10 +62,14 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   end
 
   class FormaPagamento
+    DEBITO          = "A"
+    CREDITO_VISTA   = 1
+    PARCELADO_LOJA  = 2
+    PARCELADO_CIELO = 3
+
     include Cieloz::Helpers
 
-    attr_accessor :bandeira
-    attr_reader :produto, :parcelas
+    attr_reader :bandeira, :produto, :parcelas
 
     validates :bandeira, :produto, :parcelas, presence: true
 
@@ -77,40 +81,44 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
       }
     end
 
-    def debito
-      if @bandeira == Cieloz::Bandeiras::VISA || @bandeira == Cieloz::Bandeiras::MASTERCARD
-        @produto  = "A"
-        @parcelas = 1
-      else
-        raise "Operacao de debito disponivel apenas para VISA e MasterCard"
-      end
+    def debito bandeira
+      raise "Operacao disponivel apenas para VISA e MasterCard" unless [
+        Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD
+      ].include? bandeira
+
+      set_attrs bandeira, DEBITO, 1
     end
 
-    def credito_a_vista
-      @produto  = 1
-      @parcelas = 1
+    def credito_a_vista bandeira
+      set_attrs bandeira, CREDITO_VISTA, 1
     end
 
-    def parcelado_loja parcelas
+    def parcelado_loja bandeira, parcelas
       raise "Parcelas invalidas: #{parcelas}" if parcelas.to_i <= 0
       raise "Nao suportado pela bandeira DISCOVER" if @bandeira == Cieloz::Bandeiras::DISCOVER
       if parcelas == 1
-        credito_a_vista
+        credito_a_vista bandeira
       else
-        @produto  = 2
-        @parcelas = parcelas
+        set_attrs bandeira, PARCELADO_LOJA, parcelas
       end
     end
 
-    def parcelado_adm parcelas
+    def parcelado_adm bandeira, parcelas
       raise "Parcelas invalidas: #{parcelas}" if parcelas.to_i <= 0
       raise "Nao suportado pela bandeira DISCOVER" if @bandeira == Cieloz::Bandeiras::DISCOVER
       if parcelas == 1
-        credito_a_vista
+        credito_a_vista bandeira
       else
-        @produto  = 3
-        @parcelas = parcelas
+        set_attrs bandeira, PARCELADO_CIELO, parcelas
       end
+    end
+
+    private
+    def set_attrs bandeira, produto, parcelas
+      @bandeira = bandeira
+      @produto  = produto
+      @parcelas = parcelas
+      self
     end
   end
 
