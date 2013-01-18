@@ -5,6 +5,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     attr_accessor :numero, :nome_portador, :validade, :codigo_seguranca
     attr_reader :indicador
 
+    validates :numero, :validade, :indicador, presence: true
+
     def indicador
       1
     end
