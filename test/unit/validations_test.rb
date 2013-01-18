@@ -51,6 +51,61 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
       assert_equal 1,     subject.parcelas
     }
   end
+
+  describe "validates parcelamento" do
+    it "is not supported by DISCOVER" do
+      assert_raises(RuntimeError, /Nao suportado pela bandeira DISCOVER/) {
+        subject.parcelado_adm Cieloz::Bandeiras::DISCOVER, 1
+      }
+      assert_raises(RuntimeError, /Nao suportado pela bandeira DISCOVER/) {
+        subject.parcelado_loja Cieloz::Bandeiras::DISCOVER, 1
+      }
+      # nothing is expected to be raised for other flags
+      (all_flags - [Cieloz::Bandeiras::DISCOVER]).each { |flag|
+        refute_nil subject.parcelado_adm flag, 1
+        refute_nil subject.parcelado_loja flag, 1
+      }
+    end
+
+    let(:flag) { all_flags.first }
+
+    it "converts 1 installment to CREDITO" do
+      pg = subject.parcelado_adm flag, 1
+      assert_equal subject.class::CREDITO, pg.produto
+
+      pg = subject.parcelado_loja flag, 1
+      assert_equal subject.class::CREDITO, pg.produto
+    end
+
+    it "creates a PARCELADO_LOJA payment" do
+      pg = subject.parcelado_loja flag, 2
+      assert_equal subject.class::PARCELADO_LOJA, pg.produto
+      assert_equal flag, pg.bandeira
+      assert_equal 2, pg.parcelas
+    end
+
+    it "creates a PARCELADO_ADM payment" do
+      pg = subject.parcelado_adm flag, 2
+      assert_equal subject.class::PARCELADO_ADM, pg.produto
+      assert_equal flag, pg.bandeira
+      assert_equal 2, pg.parcelas
+    end
+
+    it "validates parcelas in range 1..3" do
+      (1..3).each { |i|
+        assert subject.parcelado_loja(flag, i).valid?
+      }
+      (-10..0).each { |i|
+        refute subject.parcelado_loja(flag, i).valid?
+      }
+      (4..10).each { |i|
+        refute subject.parcelado_loja(flag, i).valid?
+      }
+      # refute not integers
+      refute subject.parcelado_loja(flag, 1.234).valid?
+      refute subject.parcelado_loja(flag, "abc").valid?
+    end
+  end
 end
 
 describe Cieloz::Base do

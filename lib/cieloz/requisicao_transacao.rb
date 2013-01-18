@@ -65,13 +65,16 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     DEBITO          = "A"
     CREDITO         = 1
     PARCELADO_LOJA  = 2
-    PARCELADO_CIELO = 3
+    PARCELADO_ADM   = 3
 
     include Cieloz::Helpers
 
     attr_reader :bandeira, :produto, :parcelas
 
     validates :bandeira, :produto, :parcelas, presence: true
+    validates :parcelas, numericality: {
+      only_integer: true, greater_than: 0, less_than_or_equal_to: 3
+    }
 
     def attributes
       {
@@ -94,23 +97,11 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     end
 
     def parcelado_loja bandeira, parcelas
-      raise "Parcelas invalidas: #{parcelas}" if parcelas.to_i <= 0
-      raise "Nao suportado pela bandeira DISCOVER" if @bandeira == Cieloz::Bandeiras::DISCOVER
-      if parcelas == 1
-        credito_a_vista bandeira
-      else
-        set_attrs bandeira, PARCELADO_LOJA, parcelas
-      end
+      parcelar bandeira, parcelas, PARCELADO_LOJA
     end
 
     def parcelado_adm bandeira, parcelas
-      raise "Parcelas invalidas: #{parcelas}" if parcelas.to_i <= 0
-      raise "Nao suportado pela bandeira DISCOVER" if @bandeira == Cieloz::Bandeiras::DISCOVER
-      if parcelas == 1
-        credito_a_vista bandeira
-      else
-        set_attrs bandeira, PARCELADO_CIELO, parcelas
-      end
+      parcelar bandeira, parcelas, PARCELADO_ADM
     end
 
     private
@@ -119,6 +110,15 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
       @produto  = produto
       @parcelas = parcelas
       self
+    end
+
+    def parcelar bandeira, parcelas, produto
+      raise "Nao suportado pela bandeira DISCOVER" if bandeira == Cieloz::Bandeiras::DISCOVER
+      if parcelas == 1
+        credito bandeira
+      else
+        set_attrs bandeira, produto, parcelas
+      end
     end
   end
 
