@@ -5,8 +5,28 @@ end
 
 describe Cieloz::RequisicaoTransacao::DadosPortador do
   it { must validate_presence_of :numero }
+  it { must ensure_length_of(:numero).is_equal_to 16 }
+  it { must validate_numericality_of(:numero).only_integer }
+
   it { must validate_presence_of :validade }
-  it { must validate_presence_of :indicador }
+  it { must ensure_length_of(:validade).is_equal_to 6 }
+  it { must validate_numericality_of(:validade).only_integer }
+
+  it "validates validade as yyyymm" do
+    yyyy = 2013
+    (1..12).each { |i|
+      mm = '%02d' % i
+      must validate_format_of(:validade).with("#{yyyy}#{mm}")
+    }
+    ((13..19).to_a + (20..100).step(10).to_a).each { |i|
+      mm = '%02d' % (i % 100)
+      must validate_format_of(:validade).not_with("#{yyyy}#{mm}")
+    }
+    must validate_format_of(:validade).not_with("199911")
+  end
+
+  describe "indicador validation" do
+  end
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPedido do

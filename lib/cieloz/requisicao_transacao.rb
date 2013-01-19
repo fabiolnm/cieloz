@@ -7,6 +7,14 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
     validates :numero, :validade, :indicador, presence: true
 
+    validates :numero, length: { is: 16 }
+
+    validates :validade, length: { is: 6 }
+    validates :validade, format: { with: /2\d{3}(0[1-9]|1[012])/ }
+
+    validates :numero,    numericality: { only_integer: true }
+    validates :validade,  numericality: { only_integer: true }
+
     def indicador
       1
     end
