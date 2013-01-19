@@ -13,26 +13,28 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     validates :numero, :validade, :indicador, presence: true
 
     validates :numero, length: { is: 16 }
+    validates :numero, numericality: { only_integer: true }
 
     validates :validade, length: { is: 6 }
     validates :validade, format: { with: /2\d{3}(0[1-9]|1[012])/ }
+    validates :validade, numericality: { only_integer: true }
 
-    validates :numero,    numericality: { only_integer: true }
-    validates :validade,  numericality: { only_integer: true }
+    validates :codigo_seguranca, length: { in: 3..4 }
+    validates :codigo_seguranca, numericality: { only_integer: true }
 
     def initialize attrs={}
       super
       indicador_nao_informado!
     end
 
+    def codigo_seguranca= codigo
+      @indicador = INDICADOR_INFORMADO
+      @codigo_seguranca = codigo
+    end
+
     def indicador_nao_informado!
       @indicador = INDICADOR_NAO_INFORMADO
       @codigo_seguranca = nil
-    end
-
-    def indicador_informado! codigo
-      @indicador = INDICADOR_INFORMADO
-      @codigo_seguranca = codigo
     end
 
     def indicador_ilegivel!
@@ -68,7 +70,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
       constants.each { |c|
         flag = const_get c
         flag.validade = 201805
-        flag.indicador_informado! 123
+        flag.codigo_seguranca = 123
       }
     end
   end

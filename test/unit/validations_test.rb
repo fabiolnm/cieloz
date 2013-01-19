@@ -12,6 +12,11 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   it { must ensure_length_of(:validade).is_equal_to 6 }
   it { must validate_numericality_of(:validade).only_integer }
 
+  it { must ensure_length_of(:codigo_seguranca)
+                              .is_at_least(3)
+                              .is_at_most(4) }
+  it { must validate_numericality_of(:codigo_seguranca).only_integer }
+
   it "validates validade as yyyymm" do
     yyyy = 2013
     (1..12).each { |i|
@@ -40,8 +45,8 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
       assert_nil subject.codigo_seguranca
     end
 
-    it "sets codigo_seguranca when code is set" do
-      subject.indicador_informado! code
+    it "sets indicador when codigo_seguranca is set" do
+      subject.codigo_seguranca = code
       assert_equal _::INDICADOR_INFORMADO, subject.indicador
       assert_equal code, subject.codigo_seguranca
     end
