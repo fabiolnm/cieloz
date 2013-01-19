@@ -19,17 +19,16 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
                               .is_at_most(4) }
   it { must validate_numericality_of(:codigo_seguranca).only_integer }
 
-  it "validates validade as yyyymm" do
+  def mm_values range
     yyyy = 2013
-    (1..12).each { |i|
-      mm = '%02d' % i
-      must validate_format_of(:validade).with("#{yyyy}#{mm}")
-    }
-    ((13..19).to_a + (20..100).step(10).to_a).each { |i|
-      mm = '%02d' % (i % 100)
-      must validate_format_of(:validade).not_with("#{yyyy}#{mm}")
-    }
-    must validate_format_of(:validade).not_with("199911")
+    range.map { |i| mm = '%02d' % (i % 100) ; "#{yyyy}#{mm}" }
+  end
+
+  it "validates validade as yyyymm" do
+    must allow_value(*mm_values(1..12)).for(:validade)
+
+    values = mm_values(13..100) << "199911"
+    wont allow_value(*values).for(:validade)
   end
 
   describe "indicador and codigo_seguranca validation" do
