@@ -4,6 +4,8 @@ describe Cieloz::DadosEc do
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPortador do
+  it { must ensure_length_of(:nome_portador).is_at_most(50) }
+
   it { must validate_presence_of :numero }
   it { must ensure_length_of(:numero).is_equal_to 16 }
   it { must validate_numericality_of(:numero).only_integer }

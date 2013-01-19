@@ -10,6 +10,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     attr_accessor :numero, :nome_portador, :validade
     attr_reader :indicador, :codigo_seguranca
 
+    validates :nome_portador, length: { in: 0..50 }
+
     validates :numero, :validade, :indicador, presence: true
 
     validates :numero, length: { is: 16 }
