@@ -25,7 +25,44 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
     must validate_format_of(:validade).not_with("199911")
   end
 
-  describe "indicador validation" do
+  describe "indicador and codigo_seguranca validation" do
+    let(:_) { subject.class }
+    let(:code) { 123 }
+
+    before do
+      subject.instance_variable_set :@codigo_seguranca, code
+      refute_nil subject.codigo_seguranca
+    end
+
+    it "sets indicador nao informado" do
+      subject.indicador_nao_informado!
+      assert_equal _::INDICADOR_NAO_INFORMADO, subject.indicador
+      assert_nil subject.codigo_seguranca
+    end
+
+    it "sets codigo_seguranca when code is set" do
+      subject.indicador_informado! code
+      assert_equal _::INDICADOR_INFORMADO, subject.indicador
+      assert_equal code, subject.codigo_seguranca
+    end
+
+    it "sets indicador ilegivel" do
+      subject.indicador_ilegivel!
+      assert_equal _::INDICADOR_ILEGIVEL, subject.indicador
+      assert_nil subject.codigo_seguranca
+    end
+
+    it "sets indicador inexistente" do
+      subject.indicador_inexistente!
+      assert_equal _::INDICADOR_INEXISTENTE, subject.indicador
+      assert_nil subject.codigo_seguranca
+    end
+
+    it "defaults to NAO_INFORMADO" do
+      subject = _.new
+      assert_equal _::INDICADOR_NAO_INFORMADO, subject.indicador
+      assert_nil subject.codigo_seguranca
+    end
   end
 end
 

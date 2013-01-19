@@ -3,7 +3,7 @@ describe Cieloz::RequisicaoTransacao do
   let(:opts)  { { root: "requisicao-transacao" } }
 
   let(:ec)        { Cieloz::DadosEc::TEST_MOD_CIELO }
-  let(:portador)  { subject.class::DadosPortador::TEST_VISA }
+  let(:portador)  { subject.class::DadosPortador::TEST::VISA }
 
   let(:now)       { Time.now }
   let(:pedido)    {
