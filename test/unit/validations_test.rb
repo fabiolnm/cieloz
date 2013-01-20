@@ -97,20 +97,16 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
   let(:all_flags) { Cieloz::Bandeiras::ALL }
 
   describe "debito validation" do
-    let(:supported_flags) {
-      [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD ]
-    }
+    let(:supported_flags) { subject.class::BANDEIRAS_DEBITO }
 
-    it "raises error if bandeira is not VISA or MASTERCARD" do
-      (all_flags - supported_flags).each { |flag|
-        assert_raises(RuntimeError,
-          /Operacao disponivel apenas para VISA e MasterCard/) {
-          subject.debito flag
-        }
+    it "validates bandeira is VISA or MASTERCARD" do
+      supported_flags.each { |flag|
+        subject.debito flag
+        must ensure_inclusion_of(:bandeira).in_array(supported_flags)
       }
     end
 
-    it "accepts payment for VISA or MASTERCARD" do
+    it "accepts payment for VISA and MASTERCARD" do
       supported_flags.each { |flag|
         subject.debito flag
         assert_equal subject.class::DEBITO, subject.produto
@@ -181,11 +177,6 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
       # refute not integers
       refute subject.parcelado_loja(flag, 1.234).valid?
       refute subject.parcelado_loja(flag, "abc").valid?
-    end
-
-    it "requires an operation to be called" do
-      refute subject.valid?
-      assert subject.errors.has_key? :estado_invalido
     end
   end
 end

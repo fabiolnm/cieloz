@@ -114,15 +114,19 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     PARCELADO_LOJA  = 2
     PARCELADO_ADM   = 3
 
+    BANDEIRAS_DEBITO = [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD ]
+
     include Cieloz::Helpers
 
     attr_reader :bandeira, :produto, :parcelas
 
     validates :bandeira, :produto, :parcelas, presence: true
+
     validates :parcelas, numericality: {
       only_integer: true, greater_than: 0, less_than_or_equal_to: 3
     }
-    validate :operacao_nao_especificada
+
+    validates :bandeira, inclusion: { in: BANDEIRAS_DEBITO }, if: "@produto == DEBITO"
 
     def attributes
       {
@@ -133,10 +137,6 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     end
 
     def debito bandeira
-      raise "Operacao disponivel apenas para VISA e MasterCard" unless [
-        Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD
-      ].include? bandeira
-
       set_attrs bandeira, DEBITO, 1
     end
 
@@ -166,13 +166,6 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
         credito bandeira
       else
         set_attrs bandeira, produto, parcelas
-      end
-    end
-
-    def operacao_nao_especificada
-      if @bandeira.nil? or @produto.nil? or @parcelas.nil?
-        errors.add :estado_invalido, %{#{attributes.to_s} - execute
-          alguma das operacoes de debito, credito ou parcelamento}
       end
     end
   end

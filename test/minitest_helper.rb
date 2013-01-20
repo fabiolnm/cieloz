@@ -28,6 +28,19 @@ class MiniTest::Spec
   end
 end
 
+module Shoulda::Matchers::ActiveModel
+  class AllowValueMatcher
+    def matches? instance
+      @instance = instance
+      @values_to_match.none? do |value|
+        @value = value
+        @instance.instance_variable_set "@#{@attribute}", @value
+        errors_match?
+      end
+    end
+  end
+end
+
 def expected_xml opts={}
   root, id, versao = opts[:root], opts[:id], opts[:versao]
 
