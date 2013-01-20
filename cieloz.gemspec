@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "activesupport"
   gem.add_dependency "activemodel"
 
+  gem.add_development_dependency "rake"
   gem.add_development_dependency "turn"
   gem.add_development_dependency "fakeweb"
   gem.add_development_dependency "debugger"
