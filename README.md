@@ -1,4 +1,4 @@
-{<img src="https://secure.travis-ci.org/fabiolnm/cieloz.png"/>}[http://travis-ci.org/fabiolnm/cieloz]
+[<img src="https://secure.travis-ci.org/fabiolnm/cieloz.png"/>](http://travis-ci.org/fabiolnm/cieloz)
 
 # Cieloz
 
