@@ -1,3 +1,5 @@
+{<img src="https://secure.travis-ci.org/fabiolnm/cieloz.png"/>}[http://travis-ci.org/fabiolnm/cieloz]
+
 # Cieloz
 
 A utility gem for SpreeCielo Gateway gem
