@@ -134,17 +134,13 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
 
   describe "validates parcelamento" do
     it "is not supported by DISCOVER" do
-      assert_raises(RuntimeError, /Nao suportado pela bandeira DISCOVER/) {
-        subject.parcelado_adm Cieloz::Bandeiras::DISCOVER, 1
-      }
-      assert_raises(RuntimeError, /Nao suportado pela bandeira DISCOVER/) {
-        subject.parcelado_loja Cieloz::Bandeiras::DISCOVER, 1
-      }
-      # nothing is expected to be raised for other flags
-      (all_flags - [Cieloz::Bandeiras::DISCOVER]).each { |flag|
-        refute_nil subject.parcelado_adm flag, 1
-        refute_nil subject.parcelado_loja flag, 1
-      }
+      supported_flags = subject.class::BANDEIRAS_PARCELAMENTO
+
+      subject.parcelado_adm Cieloz::Bandeiras::DISCOVER, 2
+      must ensure_inclusion_of(:bandeira).in_array(supported_flags)
+
+      subject.parcelado_loja Cieloz::Bandeiras::DISCOVER, 2
+      must ensure_inclusion_of(:bandeira).in_array(supported_flags)
     end
 
     let(:flag) { all_flags.first }
@@ -173,13 +169,13 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
 
     it "validates parcelas in range 1..3" do
       (1..3).each { |i|
-        assert subject.parcelado_loja(flag, i).valid?
+        assert subject.parcelado_loja(flag, i).valid?, subject.errors.messages
       }
       (-10..0).each { |i|
-        refute subject.parcelado_loja(flag, i).valid?
+        refute subject.parcelado_loja(flag, i).valid?, subject.errors.messages
       }
       (4..10).each { |i|
-        refute subject.parcelado_loja(flag, i).valid?
+        refute subject.parcelado_loja(flag, i).valid?, subject.errors.messages
       }
       # refute not integers
       refute subject.parcelado_loja(flag, 1.234).valid?

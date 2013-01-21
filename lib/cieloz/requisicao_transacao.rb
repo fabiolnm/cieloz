@@ -115,6 +115,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     PARCELADO_ADM   = 3
 
     BANDEIRAS_DEBITO = [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD ]
+    BANDEIRAS_PARCELAMENTO = Cieloz::Bandeiras::ALL - [Cieloz::Bandeiras::DISCOVER]
 
     include Cieloz::Helpers
 
@@ -128,6 +129,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
     validates :bandeira, inclusion: { in: BANDEIRAS_DEBITO }, if: "@produto == DEBITO"
     validates :bandeira, inclusion: { in: Cieloz::Bandeiras::ALL }, if: "@produto == CREDITO"
+    validates :bandeira, inclusion: { in: BANDEIRAS_PARCELAMENTO },
+      if: "[ PARCELADO_LOJA, PARCELADO_ADM ].include? @produto"
 
     def attributes
       {
@@ -162,7 +165,6 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     end
 
     def parcelar bandeira, parcelas, produto
-      raise "Nao suportado pela bandeira DISCOVER" if bandeira == Cieloz::Bandeiras::DISCOVER
       if parcelas == 1
         credito bandeira
       else
