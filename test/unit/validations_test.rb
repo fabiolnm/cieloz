@@ -116,7 +116,14 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
     end
   end
 
-  it "validates credito" do
+  it "validates bandeiras for credito" do
+    all_flags.each { |flag|
+      subject.credito flag
+      must ensure_inclusion_of(:bandeira).in_array(all_flags)
+    }
+  end
+
+  it "accepts payment for credito" do
     all_flags.each { |flag|
       subject.credito flag
       assert_equal subject.class::CREDITO, subject.produto

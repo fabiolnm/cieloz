@@ -127,6 +127,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     }
 
     validates :bandeira, inclusion: { in: BANDEIRAS_DEBITO }, if: "@produto == DEBITO"
+    validates :bandeira, inclusion: { in: Cieloz::Bandeiras::ALL }, if: "@produto == CREDITO"
 
     def attributes
       {
