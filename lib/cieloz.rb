@@ -1,4 +1,5 @@
 require 'active_support/core_ext/string'
+require 'active_support/core_ext/object/with_options'
 require 'cieloz/version'
 require 'active_model'
 require 'nokogiri'

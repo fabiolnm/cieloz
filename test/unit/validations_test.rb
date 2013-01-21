@@ -189,3 +189,32 @@ describe Cieloz::Base do
   it { must validate_presence_of :versao }
   it { must validate_presence_of :dados_ec }
 end
+
+describe Cieloz::RequisicaoTransacao do
+  it "somente autenticar requires url_retorno" do
+    subject.somente_autenticar
+    must validate_presence_of :url_retorno
+  end
+
+  it "autorizar somente autenticada requires url_retorno" do
+    subject.autorizar_somente_autenticada
+    must validate_presence_of :url_retorno
+  end
+
+  it "autorizar nao autenticada requires url_retorno" do
+    subject.autorizar_nao_autenticada
+    must validate_presence_of :url_retorno
+  end
+
+  it "autorizacao direta doesnt require url_retorno" do
+    subject.autorizacao_direta
+    wont validate_presence_of :url_retorno
+  end
+
+  it { must ensure_length_of(:url_retorno).is_at_least(1).is_at_most(1024) }
+
+  it "doesnt validate url_retorno length for autorizacao direta" do
+    subject.autorizacao_direta
+    wont ensure_length_of(:url_retorno).is_at_least(1).is_at_most(1024)
+  end
+end

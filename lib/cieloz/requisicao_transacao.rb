@@ -186,15 +186,20 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   attr_reader :autorizar
   attr_reader :capturar
 
+  with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
+    txn.validates :url_retorno, presence: true
+    txn.validates :url_retorno, length: { in: 1..1024 }
+  end
+
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR
   end
 
-  def requer_autenticacao
+  def autorizar_somente_autenticada
     @autorizar = AUTORIZAR_SE_AUTENTICADA
   end
 
-  def nao_requer_autenticacao
+  def autorizar_nao_autenticada
     @autorizar = AUTORIZAR_NAO_AUTENTICADA
   end
 
