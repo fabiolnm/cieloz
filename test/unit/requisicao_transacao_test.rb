@@ -58,6 +58,7 @@ describe Cieloz::RequisicaoTransacao do
     end
 
     it "sends to test web service" do
+      Cieloz.reset_mode!
       subject.id              = SecureRandom.uuid
       subject.versao          = "1.2.0"
       subject.dados_ec        = ec
@@ -70,6 +71,7 @@ describe Cieloz::RequisicaoTransacao do
       subject.campo_livre = "debug"
 
       res = subject.submit
+      assert_equal({}, subject.errors.messages)
       assert_equal Cieloz::Transacao, res.class
       assert_equal tid,         res.tid
       assert_equal status_txn,  res.status

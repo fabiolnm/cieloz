@@ -36,16 +36,18 @@ class Cieloz::Base
   end
 
   def submit host=Cieloz::TEST_HOST
-    http = Net::HTTP.new host, 443
-    http.use_ssl = true
-    http.open_timeout = 5 * 1000
-    http.read_timeout = 30 * 1000
+    @id     = SecureRandom.uuid if id.blank?
+    @versao = "1.2.0"           if versao.blank?
 
-    self.id     = SecureRandom.uuid if id.blank?
-    self.versao = "1.2.0"           if versao.blank?
+    if valid?
+      http = Net::HTTP.new host, 443
+      http.use_ssl = true
+      http.open_timeout = 5 * 1000
+      http.read_timeout = 30 * 1000
 
-    res = http.post Cieloz::WS_PATH, "mensagem=#{to_xml}"
-    parse res.body
+      res = http.post Cieloz::WS_PATH, "mensagem=#{to_xml}"
+      parse res.body
+    end
   end
 
   def parse xml

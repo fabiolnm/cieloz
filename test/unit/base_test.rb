@@ -69,7 +69,9 @@ describe Cieloz::Base do
     end
 
     it "sends to test web service" do
+      subject.dados_ec = Cieloz::DadosEc::TEST_MOD_CIELO
       erro = subject.submit
+      assert_equal({}, subject.errors.messages)
       assert_equal err, erro.codigo
       assert_equal "Invalid", erro.mensagem
     end
