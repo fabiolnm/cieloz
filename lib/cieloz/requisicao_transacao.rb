@@ -202,10 +202,11 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   attr_accessor :campo_livre, :url_retorno
 
-  attr_reader :dados_portador
+  attr_reader :dados_portador, :dados_pedido, :forma_pagamento
   attr_reader :autorizar, :capturar
 
   validates :dados_portador, presence: true, if: "Cieloz.store_mode?"
+  validates :dados_pedido, :forma_pagamento, presence: true
 
   with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
     txn.validates :url_retorno, presence: true
@@ -225,6 +226,20 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     inclusion: { in: ["true", "false"] }
 
   validates :campo_livre, length: { maximum: 128 }
+
+  validate :nested_validations
+
+  def nested_validations
+    nested_attrs = [ :dados_ec, :dados_pedido, :forma_pagamento ]
+    nested_attrs << :dados_portador if Cieloz.store_mode?
+
+    nested_attrs.each { |attr|
+      attr_value = instance_variable_get "@#{attr}"
+      if not attr_value.nil? and not attr_value.valid?
+        errors.add attr, attr_value.errors
+      end
+    }
+  end
 
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR

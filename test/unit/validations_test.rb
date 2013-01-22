@@ -1,6 +1,12 @@
 describe Cieloz::DadosEc do
   it { must validate_presence_of :numero }
   it { must validate_presence_of :chave }
+
+  it "is validated inside RequisicaoTransacao" do
+    txn = Cieloz::RequisicaoTransacao.new dados_ec: subject
+    refute txn.valid?
+    refute txn.errors[:dados_ec].empty?
+  end
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPortador do
@@ -70,6 +76,13 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
       assert_nil subject.codigo_seguranca
     end
   end
+
+  it "is validated inside RequisicaoTransacao" do
+    Cieloz.store_mode!
+    txn = Cieloz::RequisicaoTransacao.new dados_portador: subject
+    refute txn.valid?
+    refute txn.errors[:dados_portador].empty?
+  end
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPedido do
@@ -91,6 +104,12 @@ describe Cieloz::RequisicaoTransacao::DadosPedido do
   it { must ensure_length_of(:soft_descriptor).is_at_most(13) }
 
   it { must ensure_inclusion_of(:idioma).in_array(subject.class::IDIOMAS) }
+
+  it "is validated inside RequisicaoTransacao" do
+    txn = Cieloz::RequisicaoTransacao.new dados_pedido: subject
+    refute txn.valid?
+    refute txn.errors[:dados_pedido].empty?
+  end
 end
 
 describe Cieloz::RequisicaoTransacao::FormaPagamento do
@@ -182,6 +201,12 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
       refute subject.parcelado_loja(flag, "abc").valid?
     end
   end
+
+  it "is validated inside RequisicaoTransacao" do
+    txn = Cieloz::RequisicaoTransacao.new forma_pagamento: subject
+    refute txn.valid?
+    refute txn.errors[:forma_pagamento].empty?
+  end
 end
 
 describe Cieloz::Base do
@@ -191,6 +216,10 @@ describe Cieloz::Base do
 end
 
 describe Cieloz::RequisicaoTransacao do
+  it { must validate_presence_of :dados_ec }
+  it { must validate_presence_of :dados_pedido }
+  it { must validate_presence_of :forma_pagamento }
+
   it "somente autenticar requires url_retorno" do
     subject.somente_autenticar
     must validate_presence_of :url_retorno
