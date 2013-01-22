@@ -338,4 +338,16 @@ describe Cieloz::RequisicaoTransacao do
       wont validate_presence_of :dados_portador
     end
   end
+
+  it "validates parcela minima is R$ 5,00" do
+    subject.dados_pedido = subject.class::DadosPedido.new numero: 123,
+      valor: 1400, idioma: "PT", moeda: "986", data_hora: Time.now
+
+    subject.forma_pagamento = subject.class::FormaPagamento
+              .new.parcelado_adm Cieloz::Bandeiras::VISA, 3
+
+    refute subject.valid?
+    assert_equal "O valor minimo da parcela deve ser R$ 5,00",
+      subject.errors[:dados_pedido].first
+  end
 end

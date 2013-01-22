@@ -208,6 +208,9 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   validates :dados_portador, presence: true, if: "Cieloz.store_mode?"
   validates :dados_pedido, :forma_pagamento, presence: true
 
+  validate :parcela_minima?,
+    if: "not @dados_pedido.nil? and not @forma_pagamento.nil?"
+
   with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
     txn.validates :url_retorno, presence: true
     txn.validates :url_retorno, length: { in: 1..1024 }
@@ -239,6 +242,15 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
         errors.add attr, attr_value.errors
       end
     }
+  end
+
+  def parcela_minima?
+    if @dados_pedido.valid? and @forma_pagamento.valid?
+      if @dados_pedido.valor / @forma_pagamento.parcelas < 500
+        errors.add :dados_pedido,
+          "O valor minimo da parcela deve ser R$ 5,00"
+      end
+    end
   end
 
   def somente_autenticar
