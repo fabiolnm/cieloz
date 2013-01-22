@@ -299,7 +299,8 @@ describe Cieloz::RequisicaoTransacao do
   end
 
   describe "Buy Page Cielo" do
-    it "wont validate dados portador if mode is not explicitly set" do
+    it "wont validate dados portador if mode is nil" do
+      Cieloz.reset_mode!
       wont validate_presence_of :dados_portador
     end
 

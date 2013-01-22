@@ -5,6 +5,10 @@ require 'active_model'
 require 'nokogiri'
 
 module Cieloz
+  def self.reset_mode!
+    @mode = nil
+  end
+
   def self.store_mode!
     @mode = :store
   end
