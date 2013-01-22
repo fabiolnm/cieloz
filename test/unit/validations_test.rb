@@ -283,4 +283,13 @@ describe Cieloz::RequisicaoTransacao do
   it { must ensure_inclusion_of(:capturar).in_array(["true", "false"]) }
 
   it { must ensure_length_of(:campo_livre).is_at_most(128) }
+
+  it "extracts bin from DadosPortador" do
+    # no DadosPortador - bin should be nil
+    assert subject.attributes[:bin].nil?
+
+    p = subject.class::DadosPortador.new numero: 1234567887654321
+    subject.dados_portador = p
+    assert_equal "123456", subject.attributes[:bin]
+  end
 end

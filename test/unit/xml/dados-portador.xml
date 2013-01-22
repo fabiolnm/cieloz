@@ -4,3 +4,4 @@
   <indicador><%= portador.indicador %></indicador>
   <codigo-seguranca><%= portador.codigo_seguranca %></codigo-seguranca>
 </dados-portador>
+<bin><%= portador.numero.to_s[0..5] %></bin>

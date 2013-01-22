@@ -277,7 +277,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
       url_retorno:      @url_retorno,
       autorizar:        @autorizar,
       capturar:         @capturar,
-      campo_livre:      @campo_livre
+      campo_livre:      @campo_livre,
+      bin:              (@dados_portador.numero.to_s[0..5] unless @dados_portador.nil?)
     }
   end
 end
