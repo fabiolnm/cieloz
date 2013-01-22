@@ -221,6 +221,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   validates :capturar, presence: true,
     inclusion: { in: ["true", "false"] }
 
+  validates :campo_livre, length: { maximum: 128 }
+
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR
   end

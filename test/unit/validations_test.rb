@@ -281,4 +281,6 @@ describe Cieloz::RequisicaoTransacao do
 
   it { must validate_presence_of :capturar }
   it { must ensure_inclusion_of(:capturar).in_array(["true", "false"]) }
+
+  it { must ensure_length_of(:campo_livre).is_at_most(128) }
 end
