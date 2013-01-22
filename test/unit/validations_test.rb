@@ -217,4 +217,65 @@ describe Cieloz::RequisicaoTransacao do
     subject.autorizacao_direta
     wont ensure_length_of(:url_retorno).is_at_least(1).is_at_most(1024)
   end
+
+  it { must validate_presence_of :autorizar }
+  it { must ensure_inclusion_of(:autorizar).in_array(subject.class::CODIGOS_AUTORIZACAO) }
+
+  it "doesnt support autorizacao_direta on debito operations" do
+    pg = subject.class::FormaPagamento.new
+    pg.debito Cieloz::Bandeiras::VISA
+    subject.forma_pagamento = pg
+
+    subject.autorizacao_direta
+
+    refute subject.valid?
+    assert_equal "Autorizacao Direta disponivel apenas em operacoes de credito",
+      subject.errors[:autorizacao].first
+  end
+
+  def refute_authentication_supported
+    refute subject.valid?
+    assert_equal "Bandeira nao possui programa de autenticacao",
+      subject.errors[:autorizacao].first
+  end
+
+  it "refute authentication support for DINERS, DISCOVER, ELO and AMEX" do
+    (Cieloz::Bandeiras::ALL - subject.class::FormaPagamento::SUPORTAM_AUTENTICACAO).each { |b|
+      pg = subject.class::FormaPagamento.new
+      pg.credito b
+      subject.forma_pagamento = pg
+
+      subject.somente_autenticar
+      refute_authentication_supported
+
+      subject.autorizar_somente_autenticada
+      refute_authentication_supported
+
+      subject.autorizar_nao_autenticada
+      refute_authentication_supported
+
+      subject.recorrente
+      refute_authentication_supported
+    }
+  end
+
+  it "has authentication support for VISA and MASTERCARD" do
+    subject.class::FormaPagamento::SUPORTAM_AUTENTICACAO.each { |b|
+      pg = subject.class::FormaPagamento.new
+      pg.credito b
+      subject.forma_pagamento = pg
+
+      subject.somente_autenticar
+      assert subject.errors[:autorizacao].empty?
+
+      subject.autorizar_somente_autenticada
+      assert subject.errors[:autorizacao].empty?
+
+      subject.autorizar_nao_autenticada
+      assert subject.errors[:autorizacao].empty?
+
+      subject.recorrente
+      assert subject.errors[:autorizacao].empty?
+    }
+  end
 end

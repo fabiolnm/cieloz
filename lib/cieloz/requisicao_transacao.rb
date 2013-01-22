@@ -115,6 +115,8 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     PARCELADO_ADM   = 3
 
     BANDEIRAS_DEBITO = [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD ]
+    SUPORTAM_AUTENTICACAO = BANDEIRAS_DEBITO
+
     BANDEIRAS_PARCELAMENTO = Cieloz::Bandeiras::ALL - [Cieloz::Bandeiras::DISCOVER]
 
     include Cieloz::Helpers
@@ -140,8 +142,16 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
       }
     end
 
+    def suporta_autenticacao?
+      SUPORTAM_AUTENTICACAO.include? @bandeira
+    end
+
     def debito bandeira
       set_attrs bandeira, DEBITO, 1
+    end
+
+    def debito?
+      @produto == DEBITO
     end
 
     def credito bandeira
@@ -179,6 +189,14 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   AUTORIZACAO_DIRETA        = 3
   RECORRENTE                = 4
 
+  CODIGOS_AUTORIZACAO = [
+    SOMENTE_AUTENTICAR,
+    AUTORIZAR_SE_AUTENTICADA,
+    AUTORIZAR_NAO_AUTENTICADA,
+    AUTORIZACAO_DIRETA,
+    RECORRENTE
+  ]
+
   hattr_writer :dados_portador
   hattr_writer :dados_pedido, :forma_pagamento
 
@@ -189,6 +207,14 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
     txn.validates :url_retorno, presence: true
     txn.validates :url_retorno, length: { in: 1..1024 }
+  end
+
+  validates :autorizar, presence: true,
+    inclusion: { in: CODIGOS_AUTORIZACAO }
+
+  with_options unless: "@forma_pagamento.nil?" do |txn|
+    txn.validate :suporta_autorizacao_direta?
+    txn.validate :suporta_autenticacao?
   end
 
   def somente_autenticar
@@ -207,6 +233,10 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     @autorizar = AUTORIZACAO_DIRETA
   end
 
+  def autorizacao_direta?
+    @autorizar == AUTORIZACAO_DIRETA
+  end
+
   def recorrente
     @autorizar = RECORRENTE
   end
@@ -217,6 +247,19 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   def nao_capturar_automaticamente
     @capturar = false
+  end
+
+  def suporta_autorizacao_direta?
+    if autorizacao_direta? and @forma_pagamento.debito?
+      errors.add :autorizacao,
+        "Autorizacao Direta disponivel apenas em operacoes de credito"
+    end
+  end
+
+  def suporta_autenticacao?
+    if not autorizacao_direta? and not @forma_pagamento.suporta_autenticacao?
+      errors.add :autorizacao, "Bandeira nao possui programa de autenticacao"
+    end
   end
 
   def attributes
