@@ -292,4 +292,20 @@ describe Cieloz::RequisicaoTransacao do
     subject.dados_portador = p
     assert_equal "123456", subject.attributes[:bin]
   end
+
+  it "validates dados portador on mode Buy Page Loja" do
+    Cieloz.store_mode!
+    must validate_presence_of :dados_portador
+  end
+
+  describe "Buy Page Cielo" do
+    it "wont validate dados portador if mode is not explicitly set" do
+      wont validate_presence_of :dados_portador
+    end
+
+    it "wont validate dados portador on hosted mode" do
+      Cieloz.cielo_mode!
+      wont validate_presence_of :dados_portador
+    end
+  end
 end

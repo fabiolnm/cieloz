@@ -201,8 +201,11 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   hattr_writer :dados_pedido, :forma_pagamento
 
   attr_accessor :campo_livre, :url_retorno
-  attr_reader :autorizar
-  attr_reader :capturar
+
+  attr_reader :dados_portador
+  attr_reader :autorizar, :capturar
+
+  validates :dados_portador, presence: true, if: "Cieloz.store_mode?"
 
   with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
     txn.validates :url_retorno, presence: true

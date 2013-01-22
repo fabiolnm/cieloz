@@ -5,6 +5,22 @@ require 'active_model'
 require 'nokogiri'
 
 module Cieloz
+  def self.store_mode!
+    @mode = :store
+  end
+
+  def self.store_mode?
+    @mode == :store
+  end
+
+  def self.cielo_mode!
+    @mode = :cielo
+  end
+
+  def self.cielo_mode?
+    @mode.nil? or @mode == :cielo
+  end
+
   TEST_HOST = "qasecommerce.cielo.com.br"
   WS_PATH   = "/servicos/ecommwsec.do"
 
