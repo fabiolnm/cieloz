@@ -55,7 +55,10 @@ module Cieloz
     end
 
     def attributes= attrs
-      attrs.each {|k,v| send("#{k}=", v) if respond_to? k }
+      attrs.each {|k,v|
+        m = "#{k}="
+        send(m, v) if respond_to? m
+      }
     end
   end
 
