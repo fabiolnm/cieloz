@@ -278,4 +278,7 @@ describe Cieloz::RequisicaoTransacao do
       assert subject.errors[:autorizacao].empty?
     }
   end
+
+  it { must validate_presence_of :capturar }
+  it { must ensure_inclusion_of(:capturar).in_array(["true", "false"]) }
 end

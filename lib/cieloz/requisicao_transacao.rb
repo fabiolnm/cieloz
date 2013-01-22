@@ -217,6 +217,10 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     txn.validate :suporta_autenticacao?
   end
 
+  # validates string values because false.blank? is true, failing presence validation
+  validates :capturar, presence: true,
+    inclusion: { in: ["true", "false"] }
+
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR
   end
@@ -242,11 +246,11 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   end
 
   def capturar_automaticamente
-    @capturar = true
+    @capturar = "true"
   end
 
   def nao_capturar_automaticamente
-    @capturar = false
+    @capturar = "false"
   end
 
   def suporta_autorizacao_direta?
