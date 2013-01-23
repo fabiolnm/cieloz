@@ -1,3 +1,5 @@
+require_relative '../minitest_helper'
+
 describe "Integration test" do
   let(:_)         { Cieloz::RequisicaoTransacao }
   let(:ec)        { Cieloz::DadosEc::TEST_MOD_CIELO }
