@@ -74,11 +74,11 @@ describe "Integration test" do
   def post_credit_card_on_cielo_page url_cielo
     uri = URI(url_cielo)
 
-    http = Net::HTTP.new uri.host, 443
-    http.use_ssl = true
-
     # first, visit url_autenticacao
-    http.request Net::HTTP::Get.new uri.request_uri
+    Net::HTTP.start(uri.host, uri.port, use_ssl: true,
+                    verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+      http.request Net::HTTP::Get.new uri.request_uri
+    end
 
     # after, prepare post to verify
     uri.path = "/web/verify.cbmp"
@@ -94,7 +94,11 @@ describe "Integration test" do
       ano: portador.validade.to_s[2..3],
       codSeguranca: portador.codigo_seguranca
 
-    res = http.request post
+    res = Net::HTTP.start(uri.host, uri.port, use_ssl: true,
+                          verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+      http.request post
+    end
+
     assert_equal "302", res.code
     res
   end
