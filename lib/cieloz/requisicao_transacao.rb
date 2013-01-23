@@ -255,18 +255,22 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   def somente_autenticar
     @autorizar = SOMENTE_AUTENTICAR
+    self
   end
 
   def autorizar_somente_autenticada
     @autorizar = AUTORIZAR_SE_AUTENTICADA
+    self
   end
 
   def autorizar_nao_autenticada
     @autorizar = AUTORIZAR_NAO_AUTENTICADA
+    self
   end
 
   def autorizacao_direta
     @autorizar = AUTORIZACAO_DIRETA
+    self
   end
 
   def autorizacao_direta?
@@ -275,14 +279,17 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   def recorrente
     @autorizar = RECORRENTE
+    self
   end
 
   def capturar_automaticamente
     @capturar = "true"
+    self
   end
 
   def nao_capturar_automaticamente
     @capturar = "false"
+    self
   end
 
   def suporta_autorizacao_direta?
