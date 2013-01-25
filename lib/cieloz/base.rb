@@ -27,7 +27,7 @@ class Cieloz::Base
         else
           x.tag! dash(attr) do
             value.attributes.each do |attr, value|
-              x.tag!(dash(attr), value) unless value.nil?
+              x.tag!(dash(attr), value) unless value.blank?
             end
           end
         end

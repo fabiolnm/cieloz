@@ -21,9 +21,6 @@ describe "Integration test" do
     .autorizacao_direta
   }
 
-  let(:bandeira) { :visa }
-  let(:portador) { _::DadosPortador::TEST::VISA }
-
   it "Autoriza, Consulta, Captura e Cancela" do
     autorizacao.nao_capturar_automaticamente
 
@@ -31,7 +28,7 @@ describe "Integration test" do
     assert_equal({}, autorizacao.errors.messages)
     assert txn.criada?
 
-    post_credit_card_on_cielo_page txn.url_autenticacao
+    assert_equal "302", post_credit_card_on_cielo_page(txn.url_autenticacao).code
 
     params = { tid: txn.tid, dados_ec: ec }
 
@@ -58,7 +55,7 @@ describe "Integration test" do
     assert_equal({}, autorizacao.errors.messages)
     assert txn.criada?
 
-    post_credit_card_on_cielo_page txn.url_autenticacao
+    assert_equal "302", post_credit_card_on_cielo_page(txn.url_autenticacao).code
 
     params = { tid: txn.tid, dados_ec: ec }
 
@@ -73,10 +70,11 @@ describe "Integration test" do
     assert cnc.cancelada?
   end
 
-  def post_credit_card_on_cielo_page url_cielo
+  def post_credit_card_on_cielo_page url_cielo, bandeira=:visa,
+      portador=Cieloz::RequisicaoTransacao::DadosPortador::TEST::VISA
     uri = URI(url_cielo)
 
-    # first, visit url_autenticacao
+    # first, visit url_autenticacao - triggers em_andamento state
     Net::HTTP.start(uri.host, uri.port, use_ssl: true,
                     verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
       http.request Net::HTTP::Get.new uri.request_uri
@@ -86,22 +84,19 @@ describe "Integration test" do
     uri.path = "/web/verify.cbmp"
 
     params = Hash[*(uri.query.split("&").collect{ |param| param.split("=") }.flatten)]
-    uri.query = ""
 
     post = Net::HTTP::Post.new uri.path
     post.set_form_data id: params["id"],
+      bin: 0, cancelar: false,
       bandeira: bandeira,
       numeroCartao: portador.numero,
       mes: portador.validade.to_s[4..5],
       ano: portador.validade.to_s[2..3],
       codSeguranca: portador.codigo_seguranca
 
-    res = Net::HTTP.start(uri.host, uri.port, use_ssl: true,
+    Net::HTTP.start(uri.host, uri.port, use_ssl: true,
                           verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
       http.request post
     end
-
-    assert_equal "302", res.code
-    res
   end
 end
