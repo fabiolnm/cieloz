@@ -46,7 +46,7 @@ class Cieloz::Base
       http.read_timeout = 30 * 1000
 
       res = http.post Cieloz::WS_PATH, "mensagem=#{to_xml}"
-      parse res.body
+      parse res.body.force_encoding("ISO-8859-1").encode "UTF-8"
     end
   end
 
