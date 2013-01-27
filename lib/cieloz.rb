@@ -79,46 +79,9 @@ module Cieloz
       chave: "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3"
   end
 
-  class Erro
+  class Resposta
     include ActiveModel::Serializers::Xml
     include Helpers
-
-    attr_accessor :codigo, :mensagem
-    attr_reader :xml
-
-    def self.from xml
-      obj = new.from_xml xml
-      obj.instance_variable_set :@xml, xml
-      obj
-    end
-
-    def success?
-      false
-    end
-
-    Transacao::STATUSES.each do |_, status_type|
-      define_method "#{status_type}?" do
-        false
-      end
-    end
-  end
-
-  class Transacao
-    include ActiveModel::Serializers::Xml
-    include Helpers
-
-    attr_accessor :tid, :status, :url_autenticacao
-    attr_reader :xml
-
-    def self.from xml
-      obj = new.from_xml xml
-      obj.instance_variable_set :@xml, xml
-      obj
-    end
-
-    def success?
-      true
-    end
 
     STATUSES = {
       "0" => :criada,
@@ -133,10 +96,34 @@ module Cieloz
       "12" => :em_cancelamento
     }
 
+    attr_reader :xml
+
+    def self.from xml
+      obj = new.from_xml xml
+      obj.instance_variable_set :@xml, xml
+      obj
+    end
+
     STATUSES.each do |_, status_type|
       define_method "#{status_type}?" do
-        STATUSES[status] == status_type
+        success? and STATUSES[status] == status_type
       end
+    end
+  end
+
+  class Erro < Resposta
+    attr_accessor :codigo, :mensagem
+
+    def success?
+      false
+    end
+  end
+
+  class Transacao < Resposta
+    attr_accessor :tid, :status, :url_autenticacao
+
+    def success?
+      true
     end
   end
 
