@@ -95,6 +95,12 @@ module Cieloz
     def success?
       false
     end
+
+    Transacao::STATUSES.each do |_, status_type|
+      define_method "#{status_type}?" do
+        false
+      end
+    end
   end
 
   class Transacao
