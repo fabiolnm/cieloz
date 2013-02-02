@@ -65,7 +65,7 @@ a Callback URL provided by the store.
 Every payment starts with a TransactionRequest. In the Hosted Mode, its main data are:
  * Order Data (DadosPedido)
  * PaymentMethod (FormaPagamento)
- * Authorization Mode (wether it supports Authentication Programs)
+ * Authorization Mode (whether it supports Authentication Programs)
  * Capture Mode (can be util for fraud prevention)
 
 In Store Mode, it also should include Credit Card Data (DadosPortador).
@@ -73,8 +73,11 @@ In Store Mode, it also should include Credit Card Data (DadosPortador).
 ##### Authorization Modes
 
 Visa and Mastercard supports Authentication Programs. This means additional security, as the
-user is required to provide additional security credentials at his bank account to be able to
-have a transaction authorized for online payments.
+user is required to provide additional security credentials with his bank to be able to
+have a transaction authorized for online payments:
+
+ * [Verified by Visa](http://www.verifiedbyvisa.com.br/aspx/funciona/comofunciona.aspx)
+ * [MasterCard Secure Code](https://www.mycardsecure.com/vpas/certegy_mc/i18n/en_US/securecodedemo.swf)
 
 Additionaly, a specific authorization mode is available to enable recurrent payments, in the
 case they are supported by the Credit Card operator.
