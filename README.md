@@ -60,6 +60,13 @@ infrastructure. When the user is required to type his credit card data, he is re
 to a Cielo Hosted Buy Page. When the user submits his data, he's redirected back to
 a Callback URL provided by the store.
 
+
+#### Supported CreditCard operations
+
+The following diagram was extracted from Cielo Developer Guide v2.0.3, page 5.
+
+![Payment States](https://raw.github.com/fabiolnm/cieloz/master/readme/supported_products.png)
+
 #### TransactionRequest (RequisicaoTransacao)
 
 Every payment starts with a TransactionRequest. In the Hosted Mode, its main data are:
