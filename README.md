@@ -15,7 +15,7 @@ First, you should create your credentials at the following Cielo Page:
 Then a form will be presented to be filled with Store, Store's Owner, Store's Address* and Banking data.
 * address must be the same as the present at Store CNPJ!
 
-After the form is submitted, a receipt number is generated, and generally in one or two business days, 
+After the form is submitted, a receipt number is generated, and generally in one or two business days,
 Cielo sends an e-mail with detailed instructions and manuals:
 
  * [Email example](https://raw.github.com/fabiolnm/cieloz/master/readme/email_cielo.pdf)
@@ -24,14 +24,14 @@ Cielo sends an e-mail with detailed instructions and manuals:
  * [Preventive Tips for securing sales](https://raw.github.com/fabiolnm/cieloz/master/readme/dicas_preventivas_para_vendas_mais_seguras.pdf)
  * [Required documents for affiliation](https://raw.github.com/fabiolnm/cieloz/master/readme/lista_de_documentos_necessarios_para_afiliacao_de_vendas_pela_internet_pessoa_juridica.pdf)
  * [Risk Terms](https://raw.github.com/fabiolnm/cieloz/master/readme/termo_de_adesao_de_risco.pdf)
- 
+
 ##### NOTE
 These were the documents sent by Cielo at December 21, 2012, and are subject to changes according to the Cielo affiliation processs changes.
 If you notice any document is changed since then, and wants to collaborate on keeping this gem updated, please open an issue
 so our team can update this README.
 
 ##### Cielo Developer Kit
-Additionaly, the email provides a link where the Cielo Integration Kit can be downloaded: 
+Additionaly, the email provides a link where the Cielo Integration Kit can be downloaded:
 
   http://www.cielo.com.br/portal/kit-e-commerce-cielo.html
 
@@ -53,7 +53,7 @@ to Cielo Web Services, and valid test credit card numbers to be used at this env
 #### Hosted Buy Page versus Store Buy Page
 
 Credit Card data can be provided directly to a Store BuyPage, but this requires the Store
-Owner to handle with security issues. 
+Owner to handle with security issues.
 
 The simplest alternative to get started is using an environment provided by the Cielo
 infrastructure. When the user is required to type his credit card data, he is redirected
@@ -76,9 +76,9 @@ Visa and Mastercard supports Authentication Programs. This means additional secu
 user is required to provide additional security credentials with his bank to be able to
 have a transaction authorized for online payments:
 
- * [Verified by Visa](https://raw.github.com/fabiolnm/cieloz/master/readme/verified_by_visa.png), 
+ * [Verified by Visa](https://raw.github.com/fabiolnm/cieloz/master/readme/verified_by_visa.png),
    from this [source](http://www.verifiedbyvisa.com.br/aspx/funciona/comofunciona.aspx)
- * [MasterCard Secure Code](https://raw.github.com/fabiolnm/cieloz/master/readme/mastercard_securecodedemo.swf), 
+ * [MasterCard Secure Code](https://raw.github.com/fabiolnm/cieloz/master/readme/mastercard_securecodedemo.swf),
    from this [source](https://www.mycardsecure.com/vpas/certegy_mc/i18n/en_US/securecodedemo.swf)
 
 Additionaly, a specific authorization mode is available to enable recurrent payments, in the
@@ -86,28 +86,35 @@ case they are supported by the Credit Card operator.
 
 #### Transaction States and Web Service Operations
 
-When a TransactionRequest succeeds, it responds with a Transaction (Transacao). This response
-contains the Transaction ID (TID) with Status 0 - CREATED (Criada), and an Authentication URL 
-(url-autenticacao) where the user must be redirected to start the Authorization flow.
+The following diagram was extracted from Cielo Developer Guide v2.0.3, page 9.
 
-When the user visits this URL, the transaction assumes Status 1 - IN_PROGRESS (Em andamento).
+![Payment States](https://raw.github.com/fabiolnm/cieloz/master/readme/cielo_payment_states.png)
+
+When a TransactionRequest succeeds, it responds with a Transaction (Transacao) with Status 0 - CREATED.
+This response contains the Transaction ID (TID), and an Authentication URL (url-autenticacao)
+where the user must be redirected to start the Authorization flow.
+
+When the user visits this URL, the transaction assumes Status 1 - IN_PROGRESS.
 When the user submits its Credit Card data, the transaction can assume Authentication States,
-if supported.
+if supported by the selected credit card (Verified by Visa or MasterCard Secure Code programs).
 
-After all, it assumes the most important States: when the user has available credit, the 
+After authentication/authorization flow, if the user has available credit, the
 transaction assumes Status 4 - AUTHORIZED (Autorizada).
 
 When the transaction is at AUTHORIZED state, the Store Owner must capture this payment in the
 next five days. This can be done with a CaptureRequest (RequisicaoCaptura)
 
-The Store Owner also has the option to request automatic payment capture, directly at the
-TransactionRequest. After capture, the transaction assumes Status 5 - CAPTURED (Capturada).
+The Store Owner also has the option to request automatic payment capture, bypassing AUTHORIZED state.
+After capture, the transaction assumes Status 6 - CAPTURED (Capturada).
 
 * Manual Capture can be useful for fraud prevention, but it requires aditional Admin efforts.
 
-In the 90 days that follows the Authorization or Capture, the transaction can be fully or 
+In the 90 days that follows the Authorization or Capture, the transaction can be fully or
 partially cancelled, assuming state 9 - CANCELLED (Cancelada). This can be done with a
 CancelRequest (RequisicaoCancelamento).
+
+* At any time, a pending request can be expired at Cielo Gateway, that puts the transaction in CANCELLED state.
+* Each state has its own expire time, see the Developer Guide for detailed information.
 
 At any time, a QueryRequest (RequisicaoConsulta) can be made for a specific transaction
 (identified by its TID) to query about the state of the transaction.
@@ -117,7 +124,7 @@ At any time, a QueryRequest (RequisicaoConsulta) can be made for a specific tran
 This gem provides a Ruby integration solution that consumes Cielo Web Services.
 
 A developer just instantiates one of the available operations:
- 
+
  * RequisicaoTransacao
  * RequisicaoConsulta
  * RequisicaoCaptura
