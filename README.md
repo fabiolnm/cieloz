@@ -138,8 +138,8 @@ A developer just instantiates one of the available operations:
  * RequisicaoCancelamento
 
 Then populates them with appropriate data. This gem validates these request objects according to
-Cielo Specifications present at Developer Manual), so it makes error handling easier, before the
-request is sent to Cielo Web Service.
+Cielo Specifications present at Developer Guide (pages 10, 11, 26, 28 and 30), so it makes error
+handling easier, before the request is sent to Cielo Web Service.
 
 If the operation is valid, this gem serializes them as XML and submits to Cielo, parsing the
 response as a Transaction (Transacao) or Error (Erro) objects. Both keeps the original XML response
