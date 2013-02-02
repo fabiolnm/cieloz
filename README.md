@@ -18,18 +18,25 @@ Then a form will be presented to be filled with Store, Store's Owner, Store's Ad
 After the form is submitted, a receipt number is generated, and generally in one or two business days, 
 Cielo sends an e-mail with detailed instructions and manuals:
 
- * Email example
- * Security Guide
- * Affiliation Contract
- * Preventive Tips for securing sales
- * Required documents for affiliation
- * Risk Terms
+ * [Email example](https://raw.github.com/fabiolnm/cieloz/master/readme/email_cielo.pdf)
+ * [Security Guide](https://raw.github.com/fabiolnm/cieloz/master/readme/cielo_guia_seguranca_ecommerce.pdf)
+ * [Affiliation Contract](https://raw.github.com/fabiolnm/cieloz/master/readme/contrato_de_afiliacao_ao_sistema_cielo.pdf)
+ * [Preventive Tips for securing sales](https://raw.github.com/fabiolnm/cieloz/master/readme/dicas_preventivas_para_vendas_mais_seguras.pdf)
+ * [Required documents for affiliation](https://raw.github.com/fabiolnm/cieloz/master/readme/lista_de_documentos_necessarios_para_afiliacao_de_vendas_pela_internet_pessoa_juridica.pdf)
+ * [Risk Terms](https://raw.github.com/fabiolnm/cieloz/master/readme/termo_de_adesao_de_risco.pdf)
+ 
+##### NOTE
+These were the documents sent by Cielo at December 21, 2012, and are subject to changes according to the Cielo affiliation processs changes.
+If you notice any document is changed since then, and wants to collaborate on keeping this gem updated, please open an issue
+so our team can update this README.
 
+##### Cielo Developer Kit
 Additionaly, the email provides a link where the Cielo Integration Kit can be downloaded: 
 
   http://www.cielo.com.br/portal/kit-e-commerce-cielo.html
 
-This kit contais the API documentation that served as a basis to developing this gem (Cielo eCommerce - Manual do Desenvolvedor 2.0.3)
+This kit contais the API documentation that served as a basis to developing this gem:
+[Cielo e-commerce Developer Guide v2.0.3](https://raw.github.com/fabiolnm/cieloz/master/readme/cielo_developer_guide_2.0.3.pdf).
 
 ### The Test Environment
 
