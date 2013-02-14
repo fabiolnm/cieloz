@@ -209,7 +209,7 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
   end
 end
 
-describe Cieloz::Base do
+describe Cieloz::Requisicao do
   it { must validate_presence_of :id }
   it { must validate_presence_of :versao }
   it { must validate_presence_of :dados_ec }

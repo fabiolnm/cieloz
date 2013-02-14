@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-describe Cieloz::Base do
+describe Cieloz::Requisicao do
   let(:id)      { "1" }
   let(:versao)  { "1.2.0" }
-  let(:opts)    { { root: "base", id: id, versao: versao } }
+  let(:opts)    { { root: "requisicao", id: id, versao: versao } }
 
   let(:dir)     { File.dirname __FILE__ }
 

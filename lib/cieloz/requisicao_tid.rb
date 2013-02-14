@@ -1,5 +1,5 @@
 module Cieloz
-  class RequisicaoTid < Base
+  class RequisicaoTid < Requisicao
     attr_accessor :tid
 
     def attributes

@@ -1,4 +1,4 @@
-class Cieloz::RequisicaoTransacao < Cieloz::Base
+class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
   SOMENTE_AUTENTICAR        = 0
   AUTORIZAR_SE_AUTENTICADA  = 1
   AUTORIZAR_NAO_AUTENTICADA = 2

@@ -1,7 +1,7 @@
 require 'net/http'
 require 'builder'
 
-class Cieloz::Base
+class Cieloz::Requisicao
   include Cieloz::Helpers
 
   attr_accessor :id, :versao

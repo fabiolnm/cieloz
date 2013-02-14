@@ -144,7 +144,7 @@ module Cieloz
   end
 end
 
-require "cieloz/base"
+require "cieloz/requisicao"
 require "cieloz/requisicao_transacao"
 require "cieloz/requisicao_transacao/dados_portador"
 require "cieloz/requisicao_transacao/dados_pedido"
