@@ -1,12 +1,9 @@
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/object/with_options'
-require 'cieloz/version'
 require 'active_model'
 require 'nokogiri'
 
-DIR = File.dirname __FILE__
-I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
-
+require 'cieloz/version'
 require "cieloz/helpers"
 require "cieloz/bandeiras"
 require "cieloz/configuracao"
@@ -21,3 +18,6 @@ require "cieloz/requisicao_transacao/dados_portador"
 require "cieloz/requisicao_transacao/dados_pedido"
 require "cieloz/requisicao_transacao/forma_pagamento"
 require "cieloz/requisicao_tid"
+
+DIR = File.dirname __FILE__
+I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
