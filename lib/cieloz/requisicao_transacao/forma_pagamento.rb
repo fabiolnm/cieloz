@@ -5,7 +5,7 @@ class Cieloz::RequisicaoTransacao
     PARCELADO_LOJA  = 2
     PARCELADO_ADM   = 3
 
-    BANDEIRAS_DEBITO = [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTER_CARD ]
+    BANDEIRAS_DEBITO = [ Cieloz::Bandeiras::VISA, Cieloz::Bandeiras::MASTERCARD ]
     SUPORTAM_AUTENTICACAO = BANDEIRAS_DEBITO
 
     BANDEIRAS_PARCELAMENTO = Cieloz::Bandeiras::ALL - [Cieloz::Bandeiras::DISCOVER]

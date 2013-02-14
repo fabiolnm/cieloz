@@ -11,14 +11,8 @@ require "cieloz/helpers"
 
 module Cieloz
   module Bandeiras
-    VISA        = "visa"
-    MASTER_CARD = "mastercard"
-    AMEX        = "amex"
-    ELO         = "elo"
-    DINERS      = "diners"
-    DISCOVER    = "discover"
-
-    ALL = [ VISA, MASTER_CARD, AMEX, ELO, DINERS, DISCOVER ]
+    ALL = %w(amex diners discover elo mastercard visa)
+    AMEX, DINERS, DISCOVER, ELO, MASTERCARD, VISA = ALL
   end
 end
 
