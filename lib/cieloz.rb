@@ -10,8 +10,6 @@ I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
 require "cieloz/helpers"
 
 module Cieloz
-  MAX_INSTALLMENTS = 3
-
   module Bandeiras
     VISA        = "visa"
     MASTER_CARD = "mastercard"

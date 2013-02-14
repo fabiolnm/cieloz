@@ -2,6 +2,8 @@ module Cieloz
   module Configuracao
     WS_PATH = "/servicos/ecommwsec.do"
 
+    mattr_accessor :max_installments
+
     def self.reset_mode!
       @mode = nil
     end
