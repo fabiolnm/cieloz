@@ -216,6 +216,8 @@ describe Cieloz::Base do
 end
 
 describe Cieloz::RequisicaoTransacao do
+  let(:_) { subject.class }
+
   it { must validate_presence_of :dados_ec }
   it { must validate_presence_of :dados_pedido }
   it { must validate_presence_of :forma_pagamento }
@@ -248,7 +250,12 @@ describe Cieloz::RequisicaoTransacao do
   end
 
   it { must validate_presence_of :autorizar }
-  it { must ensure_inclusion_of(:autorizar).in_array(subject.class::CODIGOS_AUTORIZACAO) }
+  it {
+    must ensure_inclusion_of(:autorizar).in_array [
+      _::SOMENTE_AUTENTICAR, _::AUTORIZAR_SE_AUTENTICADA,
+      _::AUTORIZAR_NAO_AUTENTICADA, _::AUTORIZACAO_DIRETA, _::RECORRENTE
+    ]
+  }
 
   it "doesnt support autorizacao_direta on debito operations" do
     pg = subject.class::FormaPagamento.new

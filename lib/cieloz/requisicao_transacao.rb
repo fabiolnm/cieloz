@@ -5,14 +5,6 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   AUTORIZACAO_DIRETA        = 3
   RECORRENTE                = 4
 
-  CODIGOS_AUTORIZACAO = [
-    SOMENTE_AUTENTICAR,
-    AUTORIZAR_SE_AUTENTICADA,
-    AUTORIZAR_NAO_AUTENTICADA,
-    AUTORIZACAO_DIRETA,
-    RECORRENTE
-  ]
-
   hattr_writer  :dados_portador, :dados_pedido, :forma_pagamento
   attr_reader   :dados_portador, :dados_pedido, :forma_pagamento
   attr_reader   :autorizar, :capturar
@@ -31,7 +23,12 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   validate :parcela_minima?,
     if: "not @dados_pedido.nil? and not @forma_pagamento.nil?"
 
-  validates :autorizar, presence: true, inclusion: { in: CODIGOS_AUTORIZACAO }
+  validates :autorizar, presence: true, inclusion: {
+    in: [
+      SOMENTE_AUTENTICAR, AUTORIZAR_SE_AUTENTICADA,
+      AUTORIZAR_NAO_AUTENTICADA, AUTORIZACAO_DIRETA, RECORRENTE
+    ]
+  }
   # validates string values because false.blank? is true, failing presence validation
   validates :capturar,  presence: true, inclusion: { in: ["true", "false"] }
 
