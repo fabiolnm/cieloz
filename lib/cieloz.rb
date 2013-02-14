@@ -143,4 +143,7 @@ end
 
 require "cieloz/base"
 require "cieloz/requisicao_transacao"
+require "cieloz/requisicao_transacao/dados_portador"
+require "cieloz/requisicao_transacao/dados_pedido"
+require "cieloz/requisicao_transacao/forma_pagamento"
 require "cieloz/requisicao_tid"
