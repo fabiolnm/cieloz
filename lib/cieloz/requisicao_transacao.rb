@@ -13,40 +13,34 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
     RECORRENTE
   ]
 
-  hattr_writer :dados_portador
-  hattr_writer :dados_pedido, :forma_pagamento
-
+  hattr_writer  :dados_portador, :dados_pedido, :forma_pagamento
+  attr_reader   :dados_portador, :dados_pedido, :forma_pagamento
+  attr_reader   :autorizar, :capturar
   attr_accessor :campo_livre, :url_retorno
 
-  attr_reader :dados_portador, :dados_pedido, :forma_pagamento
-  attr_reader :autorizar, :capturar
+  validate :nested_validations
 
   validates :dados_portador, presence: true, if: "Cieloz.store_mode?"
   validates :dados_pedido, :forma_pagamento, presence: true
-
-  validate :parcela_minima?,
-    if: "not @dados_pedido.nil? and not @forma_pagamento.nil?"
-
-  with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
-    txn.validates :url_retorno, presence: true
-    txn.validates :url_retorno, length: { in: 1..1024 }
-  end
-
-  validates :autorizar, presence: true,
-    inclusion: { in: CODIGOS_AUTORIZACAO }
 
   with_options unless: "@forma_pagamento.nil?" do |txn|
     txn.validate :suporta_autorizacao_direta?
     txn.validate :suporta_autenticacao?
   end
 
+  validate :parcela_minima?,
+    if: "not @dados_pedido.nil? and not @forma_pagamento.nil?"
+
+  validates :autorizar, presence: true, inclusion: { in: CODIGOS_AUTORIZACAO }
   # validates string values because false.blank? is true, failing presence validation
-  validates :capturar, presence: true,
-    inclusion: { in: ["true", "false"] }
+  validates :capturar,  presence: true, inclusion: { in: ["true", "false"] }
+
+  with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
+    txn.validates :url_retorno, presence: true
+    txn.validates :url_retorno, length: { in: 1..1024 }
+  end
 
   validates :campo_livre, length: { maximum: 128 }
-
-  validate :nested_validations
 
   def nested_validations
     nested_attrs = [ :dados_ec, :dados_pedido, :forma_pagamento ]
