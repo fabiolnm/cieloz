@@ -2,7 +2,7 @@ describe Cieloz::RequisicaoTransacao do
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-transacao" } }
 
-  let(:ec)        { Cieloz::DadosEc::TEST_MOD_CIELO }
+  let(:ec)        { Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
   let(:portador)  { subject.class::DadosPortador::TEST::VISA }
 
   let(:now)       { Time.now }
@@ -50,7 +50,7 @@ describe Cieloz::RequisicaoTransacao do
 
     before do
       portador.nome_portador = "Jose da Silva"
-      FakeWeb.register_uri :post, Cieloz.test_url, body: fake_response
+      FakeWeb.register_uri :post, Cieloz::Homologacao.url, body: fake_response
     end
 
     after do

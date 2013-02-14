@@ -1,16 +1,16 @@
 require_relative '../minitest_helper'
 
 describe "Integration test" do
-  let(:_)         { Cieloz::RequisicaoTransacao }
-  let(:ec)        { Cieloz::DadosEc::TEST_MOD_CIELO }
-  let(:now)       { Time.now }
+  let(:_)   { Cieloz::RequisicaoTransacao }
+  let(:ec)  { Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
+  let(:now) { Time.now }
 
-  let(:pedido)    {
+  let(:pedido) {
     _::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
       data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "13letterstest"
   }
 
-  let(:pagamento)  { _::FormaPagamento.new.credito "visa" }
+  let(:pagamento) { _::FormaPagamento.new.credito "visa" }
 
   let(:autorizacao) {
     Cieloz::RequisicaoTransacao

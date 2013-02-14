@@ -8,13 +8,6 @@ DIR = File.dirname __FILE__
 I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
 
 module Cieloz
-  TEST_HOST = "qasecommerce.cielo.com.br"
-  WS_PATH   = "/servicos/ecommwsec.do"
-
-  def self.test_url
-    "https://#{TEST_HOST}#{WS_PATH}"
-  end
-
   module Helpers
     module ClassMethods
       def hattr_writer *attrs
@@ -54,12 +47,6 @@ module Cieloz
     def attributes
       { numero: @numero, chave: @chave }
     end
-
-    TEST_MOD_CIELO  = new numero: "1001734898",
-      chave: "e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832"
-
-    TEST_MOD_LOJA   = new numero: "1006993069",
-      chave: "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3"
   end
 
   class Resposta
@@ -125,6 +112,7 @@ module Cieloz
 end
 
 require "cieloz/configuracao"
+require "cieloz/homologacao"
 require "cieloz/requisicao"
 require "cieloz/requisicao_transacao"
 require "cieloz/requisicao_transacao/dados_portador"

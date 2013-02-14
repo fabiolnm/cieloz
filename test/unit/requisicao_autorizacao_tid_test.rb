@@ -3,7 +3,7 @@
 describe Cieloz::RequisicaoAutorizacaoTid do
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-autorizacao-tid" } }
-  let(:ec)    { Cieloz::DadosEc::TEST_MOD_CIELO }
+  let(:ec)    { Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
 
   it "serializes tid" do
     tid = 12345

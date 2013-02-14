@@ -1,5 +1,7 @@
 module Cieloz
   module Configuracao
+    WS_PATH = "/servicos/ecommwsec.do"
+
     def self.reset_mode!
       @mode = nil
     end

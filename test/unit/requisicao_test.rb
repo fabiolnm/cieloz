@@ -65,11 +65,11 @@ describe Cieloz::Requisicao do
     let(:fake_response) { render_template dir, "erro.xml", binding }
 
     before do
-      FakeWeb.register_uri :post, Cieloz.test_url, body: fake_response
+      FakeWeb.register_uri :post, Cieloz::Homologacao.url, body: fake_response
     end
 
     it "sends to test web service" do
-      subject.dados_ec = Cieloz::DadosEc::TEST_MOD_CIELO
+      subject.dados_ec = Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO
       erro = subject.submit
       assert_equal({}, subject.errors.messages)
       assert_equal err, erro.codigo
