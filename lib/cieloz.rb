@@ -8,26 +8,6 @@ DIR = File.dirname __FILE__
 I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
 
 module Cieloz
-  def self.reset_mode!
-    @mode = nil
-  end
-
-  def self.store_mode!
-    @mode = :store
-  end
-
-  def self.store_mode?
-    @mode == :store
-  end
-
-  def self.cielo_mode!
-    @mode = :cielo
-  end
-
-  def self.cielo_mode?
-    @mode.nil? or @mode == :cielo
-  end
-
   TEST_HOST = "qasecommerce.cielo.com.br"
   WS_PATH   = "/servicos/ecommwsec.do"
 
@@ -144,6 +124,7 @@ module Cieloz
   end
 end
 
+require "cieloz/configuracao"
 require "cieloz/requisicao"
 require "cieloz/requisicao_transacao"
 require "cieloz/requisicao_transacao/dados_portador"

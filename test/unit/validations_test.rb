@@ -78,7 +78,7 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   end
 
   it "is validated inside RequisicaoTransacao" do
-    Cieloz.store_mode!
+    Cieloz::Configuracao.store_mode!
     txn = Cieloz::RequisicaoTransacao.new dados_portador: subject
     refute txn.valid?
     refute txn.errors[:dados_portador].empty?
@@ -328,18 +328,18 @@ describe Cieloz::RequisicaoTransacao do
   end
 
   it "validates dados portador on mode Buy Page Loja" do
-    Cieloz.store_mode!
+    Cieloz::Configuracao.store_mode!
     must validate_presence_of :dados_portador
   end
 
   describe "Buy Page Cielo" do
     it "wont validate dados portador if mode is nil" do
-      Cieloz.reset_mode!
+      Cieloz::Configuracao.reset_mode!
       wont validate_presence_of :dados_portador
     end
 
     it "wont validate dados portador on hosted mode" do
-      Cieloz.cielo_mode!
+      Cieloz::Configuracao.cielo_mode!
       wont validate_presence_of :dados_portador
     end
   end

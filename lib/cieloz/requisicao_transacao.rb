@@ -12,7 +12,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
 
   validate :nested_validations
 
-  validates :dados_portador, presence: true, if: "Cieloz.store_mode?"
+  validates :dados_portador, presence: true, if: "Cieloz::Configuracao.store_mode?"
   validates :dados_pedido, :forma_pagamento, presence: true
 
   with_options unless: "@forma_pagamento.nil?" do |txn|
@@ -41,7 +41,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
 
   def nested_validations
     nested_attrs = [ :dados_ec, :dados_pedido, :forma_pagamento ]
-    nested_attrs << :dados_portador if Cieloz.store_mode?
+    nested_attrs << :dados_portador if Cieloz::Configuracao.store_mode?
 
     nested_attrs.each { |attr|
       attr_value = instance_variable_get "@#{attr}"

@@ -58,7 +58,7 @@ describe Cieloz::RequisicaoTransacao do
     end
 
     it "sends to test web service" do
-      Cieloz.reset_mode!
+      Cieloz::Configuracao.reset_mode!
       subject.id              = SecureRandom.uuid
       subject.versao          = "1.2.0"
       subject.dados_ec        = ec
