@@ -10,17 +10,6 @@ I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
 require "cieloz/helpers"
 
 module Cieloz
-  class DadosEc
-    include Helpers
-
-    attr_accessor :numero, :chave
-    validates :numero, :chave, presence: true
-
-    def attributes
-      { numero: @numero, chave: @chave }
-    end
-  end
-
   class Resposta
     include ActiveModel::Serializers::Xml
     include Helpers
@@ -86,6 +75,7 @@ end
 require "cieloz/configuracao"
 require "cieloz/homologacao"
 require "cieloz/requisicao"
+require "cieloz/requisicao/dados_ec"
 require "cieloz/requisicao_transacao"
 require "cieloz/requisicao_transacao/dados_portador"
 require "cieloz/requisicao_transacao/dados_pedido"

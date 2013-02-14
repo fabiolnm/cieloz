@@ -2,7 +2,7 @@ require_relative '../minitest_helper'
 
 describe "Integration test" do
   let(:_)   { Cieloz::RequisicaoTransacao }
-  let(:ec)  { Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
+  let(:ec)  { _::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
   let(:now) { Time.now }
 
   let(:pedido) {

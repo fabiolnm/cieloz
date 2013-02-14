@@ -1,9 +1,10 @@
 # encoding: utf-8
 
 describe Cieloz::RequisicaoAutorizacaoTid do
+  let(:_)     { subject.class }
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-autorizacao-tid" } }
-  let(:ec)    { Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
+  let(:ec)    { _::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
 
   it "serializes tid" do
     tid = 12345

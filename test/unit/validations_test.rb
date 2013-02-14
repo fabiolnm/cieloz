@@ -1,4 +1,4 @@
-describe Cieloz::DadosEc do
+describe Cieloz::Requisicao::DadosEc do
   it { must validate_presence_of :numero }
   it { must validate_presence_of :chave }
 

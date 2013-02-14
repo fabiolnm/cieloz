@@ -1,16 +1,17 @@
 describe Cieloz::RequisicaoTransacao do
+  let(:_)     { subject.class }
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-transacao" } }
 
-  let(:ec)        { Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
-  let(:portador)  { subject.class::DadosPortador::TEST::VISA }
+  let(:ec)        { _::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
+  let(:portador)  { _::DadosPortador::TEST::VISA }
 
   let(:now)       { Time.now }
   let(:pedido)    {
-    subject.class::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
+    _::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
       data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "13letterstest"
   }
-  let(:pagamento)  { subject.class::FormaPagamento.new.credito "visa" }
+  let(:pagamento)  { _::FormaPagamento.new.credito "visa" }
 
   it "serializes dados-ec" do
     subject.dados_ec = ec

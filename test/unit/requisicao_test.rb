@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 describe Cieloz::Requisicao do
+  let(:_)       { subject.class }
   let(:id)      { "1" }
   let(:versao)  { "1.2.0" }
   let(:opts)    { { root: "requisicao", id: id, versao: versao } }
@@ -44,7 +45,7 @@ describe Cieloz::Requisicao do
 
   describe "complex attributes" do
     let(:attributes)  { { numero: 123, chave: "M3str4" } }
-    let(:ec)          { Cieloz::DadosEc.new attributes }
+    let(:ec)          { _::DadosEc.new attributes }
     let(:xml) { expected_xml(opts) { xml_for :ec, dir, binding } }
 
     it "serializes" do
@@ -69,7 +70,7 @@ describe Cieloz::Requisicao do
     end
 
     it "sends to test web service" do
-      subject.dados_ec = Cieloz::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO
+      subject.dados_ec = _::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO
       erro = subject.submit
       assert_equal({}, subject.errors.messages)
       assert_equal err, erro.codigo
