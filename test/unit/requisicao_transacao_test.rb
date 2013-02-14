@@ -73,7 +73,7 @@ describe Cieloz::RequisicaoTransacao do
 
       res = subject.submit
       assert_equal({}, subject.errors.messages)
-      assert_equal Cieloz::Transacao, res.class
+      assert_equal Cieloz::Requisicao::Transacao, res.class
       assert_equal tid,         res.tid
       assert_equal status_txn,  res.status
       assert_equal url_cielo,   res.url_autenticacao

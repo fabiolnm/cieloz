@@ -54,8 +54,8 @@ class Cieloz::Requisicao
   def parse xml
     root = Nokogiri::XML(xml).root
     response_class =  case root.name
-    when 'erro'       then Cieloz::Erro
-    when 'transacao'  then Cieloz::Transacao
+    when 'erro'       then Erro
+    when 'transacao'  then Transacao
     end
     response_class.from xml
   end
