@@ -4,6 +4,9 @@ require 'cieloz/version'
 require 'active_model'
 require 'nokogiri'
 
+DIR = File.dirname __FILE__
+I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
+
 module Cieloz
   def self.reset_mode!
     @mode = nil

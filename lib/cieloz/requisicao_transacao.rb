@@ -54,8 +54,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
   def parcela_minima?
     if @dados_pedido.valid? and @forma_pagamento.valid?
       if @dados_pedido.valor / @forma_pagamento.parcelas < 500
-        errors.add :dados_pedido,
-          "O valor minimo da parcela deve ser R$ 5,00"
+        errors.add :dados_pedido, :minimum_installment_not_satisfied
       end
     end
   end
@@ -101,14 +100,13 @@ class Cieloz::RequisicaoTransacao < Cieloz::Base
 
   def suporta_autorizacao_direta?
     if autorizacao_direta? and @forma_pagamento.debito?
-      errors.add :autorizacao,
-        "Autorizacao Direta disponivel apenas em operacoes de credito"
+      errors.add :autorizar, :direct_auth_available_for_credit_only
     end
   end
 
   def suporta_autenticacao?
     if not autorizacao_direta? and not @forma_pagamento.suporta_autenticacao?
-      errors.add :autorizacao, "Bandeira nao possui programa de autenticacao"
+      errors.add :autorizar, :authentication_not_supported
     end
   end
 

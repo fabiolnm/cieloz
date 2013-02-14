@@ -1,0 +1,11 @@
+en:
+  activemodel:
+    errors:
+      models:
+        cieloz/requisicao_transacao:
+          attributes:
+            autorizar:
+              authentication_not_supported: Authentication not supported
+              direct_auth_available_for_credit_only: Direct auth available for credit only
+            dados_pedido:
+              minimum_installment_not_satisfied: Installment should be greater than or equal to R$ 5,00

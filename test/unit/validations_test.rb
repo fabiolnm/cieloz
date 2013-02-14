@@ -265,14 +265,12 @@ describe Cieloz::RequisicaoTransacao do
     subject.autorizacao_direta
 
     refute subject.valid?
-    assert_equal "Autorizacao Direta disponivel apenas em operacoes de credito",
-      subject.errors[:autorizacao].first
+    assert_equal "Direct auth available for credit only", subject.errors[:autorizar].first
   end
 
   def refute_authentication_supported
     refute subject.valid?
-    assert_equal "Bandeira nao possui programa de autenticacao",
-      subject.errors[:autorizacao].first
+    assert_equal "Authentication not supported", subject.errors[:autorizar].first
   end
 
   it "refute authentication support for DINERS, DISCOVER, ELO and AMEX" do
@@ -354,7 +352,7 @@ describe Cieloz::RequisicaoTransacao do
               .new.parcelado_adm Cieloz::Bandeiras::VISA, 3
 
     refute subject.valid?
-    assert_equal "O valor minimo da parcela deve ser R$ 5,00",
-      subject.errors[:dados_pedido].first
+    msg = "Installment should be greater than or equal to R$ 5,00"
+    assert_equal msg, subject.errors[:dados_pedido].first
   end
 end
