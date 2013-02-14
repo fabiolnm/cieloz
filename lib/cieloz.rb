@@ -8,14 +8,7 @@ DIR = File.dirname __FILE__
 I18n.load_path += Dir.glob "#{DIR}/../config/locales/*.{rb,yml}"
 
 require "cieloz/helpers"
-
-module Cieloz
-  module Bandeiras
-    ALL = %w(amex diners discover elo mastercard visa)
-    AMEX, DINERS, DISCOVER, ELO, MASTERCARD, VISA = ALL
-  end
-end
-
+require "cieloz/bandeiras"
 require "cieloz/configuracao"
 require "cieloz/homologacao"
 require "cieloz/requisicao"
