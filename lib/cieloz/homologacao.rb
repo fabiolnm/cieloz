@@ -2,10 +2,6 @@ module Cieloz
   module Homologacao
     HOST = "qasecommerce.cielo.com.br"
 
-    def self.url
-      "https://#{HOST}#{Cieloz::Configuracao::WS_PATH}"
-    end
-
     module Credenciais
       CIELO = {
         numero: "1001734898",

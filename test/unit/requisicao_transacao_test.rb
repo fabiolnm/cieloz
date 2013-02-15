@@ -51,7 +51,7 @@ describe Cieloz::RequisicaoTransacao do
 
     before do
       portador.nome_portador = "Jose da Silva"
-      FakeWeb.register_uri :post, Cieloz::Homologacao.url, body: fake_response
+      FakeWeb.register_uri :post, Cieloz::Configuracao.url, body: fake_response
     end
 
     after do

@@ -35,18 +35,18 @@ class Cieloz::Requisicao
     end
   end
 
-  def submit host=Cieloz::Homologacao::HOST, path=Cieloz::Configuracao::WS_PATH
+  def submit
     @id     = SecureRandom.uuid if id.blank?
     @versao = "1.2.0"           if versao.blank?
 
     if valid?
-      http = Net::HTTP.new host, 443
+      http = Net::HTTP.new Cieloz::Configuracao.host, 443
       http.use_ssl = true
       http.open_timeout = 5 * 1000
       http.read_timeout = 30 * 1000
       http.ssl_version = :SSLv3 #http://stackoverflow.com/questions/11321403/openssl-trouble-with-ruby-1-9-3
 
-      res = http.post path, "mensagem=#{to_xml}"
+      res = http.post Cieloz::Configuracao.path, "mensagem=#{to_xml}"
       parse res.body.force_encoding("ISO-8859-1").encode "UTF-8"
     end
   end

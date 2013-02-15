@@ -66,7 +66,7 @@ describe Cieloz::Requisicao do
     let(:fake_response) { render_template dir, "erro.xml", binding }
 
     before do
-      FakeWeb.register_uri :post, Cieloz::Homologacao.url, body: fake_response
+      FakeWeb.register_uri :post, Cieloz::Configuracao.url, body: fake_response
     end
 
     it "sends to test web service" do
