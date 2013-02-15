@@ -25,6 +25,10 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "turn"
   gem.add_development_dependency "fakeweb"
   gem.add_development_dependency "debugger"
+
+  # see https://github.com/thoughtbot/shoulda-matchers/issues/235
+  gem.add_development_dependency "bourne", "1.3.0"
+
   gem.add_development_dependency "shoulda-matchers"
   gem.add_development_dependency "minitest-matchers"
 end
