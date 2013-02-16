@@ -6,6 +6,28 @@ describe Cieloz::Configuracao do
     _.reset!
   end
 
+  describe "defaults" do
+    it { _.moeda.must_equal               986   }
+    it { _.idioma.must_equal              "PT"  }
+    it { _.max_parcelas.must_equal        3     }
+    it { _.captura_automatica.must_equal  false }
+  end
+
+  describe "settings" do
+    before do
+      _.moeda               = 123
+      _.idioma              = "EN"
+      _.max_parcelas        = 10
+      _.captura_automatica  = true
+
+    end
+
+    it { _.moeda.must_equal               123   }
+    it { _.idioma.must_equal              "EN"  }
+    it { _.max_parcelas.must_equal        10    }
+    it { _.captura_automatica.must_equal  true  }
+  end
+
   describe "credenciais" do
     describe "not set" do
       it "defaults to Homologacao::Credenciais::CIELO" do
@@ -24,7 +46,7 @@ describe Cieloz::Configuracao do
     end
 
     describe "set" do
-      before { _.credenciais_hash = hash }
+      before { _.credenciais = hash }
 
       it "returns DadosEc with credenciais attributes" do
         _.credenciais.numero.must_equal hash[:numero]
@@ -43,7 +65,7 @@ describe Cieloz::Configuracao do
     end
 
     it "returns production host when credenciais is set" do
-      _.credenciais_hash = hash
+      _.credenciais = hash
       _.host.must_equal Cieloz::Configuracao::HOST
     end
   end

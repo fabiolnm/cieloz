@@ -3,39 +3,49 @@ module Cieloz
     HOST    = "ecommerce.cielo.com.br"
     WS_PATH = "/servicos/ecommwsec.do"
 
-    mattr_accessor :credenciais_hash, :max_parcelas
+    @@mode                = :cielo
+    @@moeda               = 986 # ISO 4217 - Manual Cielo, p 11
+    @@idioma              = "PT"
+    @@max_parcelas        = 3
+    @@captura_automatica  = false
+    @@credenciais         = nil
+    @@dados_ec            = nil
+
+    mattr_writer :credenciais, :captura_automatica
+    mattr_accessor :url_retorno, :soft_descriptor
+    mattr_accessor :max_parcelas, :moeda, :idioma
 
     def self.reset!
-      @mode = nil
-      self.credenciais_hash = nil
+      cielo_mode!
+      @@credenciais = nil
     end
 
     def self.store_mode!
-      @mode = :store
+      @@mode = :store
     end
 
     def self.store_mode?
-      @mode == :store
+      @@mode == :store
     end
 
     def self.cielo_mode!
-      @mode = :cielo
+      @@mode = :cielo
     end
 
     def self.cielo_mode?
-      @mode.nil? or @mode == :cielo
+      @@mode == :cielo
     end
 
     def self.credenciais
-      return @dados_ec if @dados_ec
-      return (@dados_ec = Requisicao::DadosEc.new @@credenciais_hash) if @@credenciais_hash
+      return @@dados_ec if @@dados_ec
+      return (@@dados_ec = Requisicao::DadosEc.new @@credenciais) if @@credenciais
 
       mode = store_mode? ? :LOJA : :CIELO
       Homologacao::Credenciais.const_get mode
     end
 
     def self.host
-      credenciais_hash ? HOST : Homologacao::HOST
+      @@credenciais ? HOST : Homologacao::HOST
     end
 
     def self.path
@@ -44,6 +54,10 @@ module Cieloz
 
     def self.url
       "https://#{host}#{WS_PATH}"
+    end
+
+    def self.captura_automatica
+      !!@@captura_automatica
     end
   end
 end
