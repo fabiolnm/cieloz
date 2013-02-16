@@ -17,8 +17,15 @@ class Cieloz::RequisicaoTransacao
     validates :bandeira, :produto, :parcelas, presence: true
 
     validates :parcelas, numericality: {
-      only_integer: true, greater_than: 0, less_than_or_equal_to: 3
-    }
+      only_integer: true, greater_than: 0,
+      less_than_or_equal_to: Cieloz::Configuracao.max_parcelas
+    }, if: "produto == PARCELADO_LOJA"
+
+    validates :parcelas, numericality: {
+      only_integer: true,
+      greater_than: Cieloz::Configuracao.max_parcelas,
+      less_than_or_equal_to: Cieloz::Configuracao.max_adm_parcelas
+    }, if: "produto == PARCELADO_ADM"
 
     validates :bandeira, inclusion: { in: BANDEIRAS_DEBITO }, if: "@produto == DEBITO"
     validates :bandeira, inclusion: { in: Cieloz::Bandeiras::ALL }, if: "@produto == CREDITO"
@@ -49,12 +56,13 @@ class Cieloz::RequisicaoTransacao
       set_attrs bandeira, CREDITO, 1
     end
 
-    def parcelado_loja bandeira, parcelas
-      parcelar bandeira, parcelas, PARCELADO_LOJA
-    end
-
-    def parcelado_adm bandeira, parcelas
-      parcelar bandeira, parcelas, PARCELADO_ADM
+    def parcelado bandeira, parcelas
+      max, max_adm = Cieloz::Configuracao.max_parcelas, Cieloz::Configuracao.max_adm_parcelas
+      produto = case parcelas
+                when (1..max)         then PARCELADO_LOJA
+                when (max+1..max_adm) then PARCELADO_ADM
+                end
+      parcelar bandeira, parcelas, produto
     end
 
     private

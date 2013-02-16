@@ -155,50 +155,50 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
     it "is not supported by DISCOVER" do
       supported_flags = subject.class::BANDEIRAS_PARCELAMENTO
 
-      subject.parcelado_adm Cieloz::Bandeiras::DISCOVER, 2
-      must ensure_inclusion_of(:bandeira).in_array(supported_flags)
-
-      subject.parcelado_loja Cieloz::Bandeiras::DISCOVER, 2
+      subject.parcelado Cieloz::Bandeiras::DISCOVER, 2
       must ensure_inclusion_of(:bandeira).in_array(supported_flags)
     end
 
     let(:flag) { all_flags.first }
+    let(:max_parcelas) { Cieloz::Configuracao.max_parcelas }
+    let(:max_adm_parcelas) { Cieloz::Configuracao.max_adm_parcelas }
 
     it "converts 1 installment to CREDITO" do
-      pg = subject.parcelado_adm flag, 1
-      assert_equal subject.class::CREDITO, pg.produto
-
-      pg = subject.parcelado_loja flag, 1
+      pg = subject.parcelado flag, 1
       assert_equal subject.class::CREDITO, pg.produto
     end
 
-    it "creates a PARCELADO_LOJA payment" do
-      pg = subject.parcelado_loja flag, 2
-      assert_equal subject.class::PARCELADO_LOJA, pg.produto
-      assert_equal flag, pg.bandeira
-      assert_equal 2, pg.parcelas
+    it "creates a PARCELADO_LOJA payment till max_parcelas" do
+      (2..max_parcelas).each do |n|
+        pg = subject.parcelado flag, n
+        assert_equal subject.class::PARCELADO_LOJA, pg.produto
+        assert_equal flag, pg.bandeira
+        assert_equal n, pg.parcelas
+      end
     end
 
-    it "creates a PARCELADO_ADM payment" do
-      pg = subject.parcelado_adm flag, 2
-      assert_equal subject.class::PARCELADO_ADM, pg.produto
-      assert_equal flag, pg.bandeira
-      assert_equal 2, pg.parcelas
+    it "creates a PARCELADO_ADM payment between max_installments and max_adm_installments" do
+      (max_parcelas+1..max_adm_parcelas).each do |n|
+        pg = subject.parcelado flag, n
+        assert_equal subject.class::PARCELADO_ADM, pg.produto
+        assert_equal flag, pg.bandeira
+        assert_equal n, pg.parcelas
+      end
     end
 
-    it "validates parcelas in range 1..3" do
-      (1..3).each { |i|
-        assert subject.parcelado_loja(flag, i).valid?, subject.errors.messages
+    it "validates parcelas in range 1..max_adm_parcelas" do
+      (1..max_adm_parcelas).each {|i|
+        assert subject.parcelado(flag, i).valid?, subject.errors.messages
       }
       (-10..0).each { |i|
-        refute subject.parcelado_loja(flag, i).valid?, subject.errors.messages
+        refute subject.parcelado(flag, i).valid?, subject.errors.messages
       }
-      (4..10).each { |i|
-        refute subject.parcelado_loja(flag, i).valid?, subject.errors.messages
+      (max_adm_parcelas+1..max_adm_parcelas+3).each { |i|
+        refute subject.parcelado(flag, i).valid?, subject.errors.messages
       }
-      # refute not integers
-      refute subject.parcelado_loja(flag, 1.234).valid?
-      refute subject.parcelado_loja(flag, "abc").valid?
+      # refute not integers parcelas
+      refute subject.parcelado(flag, 1.234).valid?
+      refute subject.parcelado(flag, "abc").valid?
     end
   end
 
@@ -349,7 +349,7 @@ describe Cieloz::RequisicaoTransacao do
       valor: 1400, idioma: "PT", moeda: "986", data_hora: Time.now
 
     subject.forma_pagamento = subject.class::FormaPagamento
-              .new.parcelado_adm Cieloz::Bandeiras::VISA, 3
+              .new.parcelado Cieloz::Bandeiras::VISA, 3
 
     refute subject.valid?
     msg = "Installment should be greater than or equal to R$ 5,00"
