@@ -10,22 +10,35 @@ describe Cieloz::Configuracao do
     it { _.moeda.must_equal               986   }
     it { _.idioma.must_equal              "PT"  }
     it { _.max_parcelas.must_equal        3     }
+    it { _.max_adm_parcelas.must_equal    10    }
     it { _.captura_automatica.must_equal  false }
   end
 
   describe "settings" do
     before do
+      @cur, @lang, @max, @max_adm, @cap = _.moeda, _.idioma,
+        _.max_parcelas, _.max_adm_parcelas, _.captura_automatica
+
       _.moeda               = 123
       _.idioma              = "EN"
-      _.max_parcelas        = 10
+      _.max_parcelas        = 6
+      _.max_adm_parcelas    = 12
       _.captura_automatica  = true
-
     end
 
     it { _.moeda.must_equal               123   }
     it { _.idioma.must_equal              "EN"  }
-    it { _.max_parcelas.must_equal        10    }
+    it { _.max_parcelas.must_equal        6     }
+    it { _.max_adm_parcelas.must_equal    12    }
     it { _.captura_automatica.must_equal  true  }
+
+    after do
+      _.moeda               = @cur
+      _.idioma              = @lang
+      _.max_parcelas        = @max
+      _.max_adm_parcelas    = @max_adm
+      _.captura_automatica  = @cap
+    end
   end
 
   describe "credenciais" do
