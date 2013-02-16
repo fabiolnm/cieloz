@@ -334,7 +334,7 @@ describe Cieloz::RequisicaoTransacao do
 
   describe "Buy Page Cielo" do
     it "wont validate dados portador if mode is nil" do
-      Cieloz::Configuracao.reset_mode!
+      Cieloz::Configuracao.reset!
       wont validate_presence_of :dados_portador
     end
 

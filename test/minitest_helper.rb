@@ -20,7 +20,9 @@ class MiniTest::Spec
       cls = _create name, desc
       begin
         c = eval name
-        cls.subject { c.new } if c.is_a? Class
+        cls.subject {
+          if c.is_a? Class then c.new elsif c.is_a? Module then c end
+        }
       rescue
       end
       cls

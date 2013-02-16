@@ -3,11 +3,11 @@ module Cieloz
     HOST    = "ecommerce.cielo.com.br"
     WS_PATH = "/servicos/ecommwsec.do"
 
-    mattr_writer :credenciais
-    mattr_accessor :max_parcelas
+    mattr_accessor :credenciais_hash, :max_parcelas
 
-    def self.reset_mode!
+    def self.reset!
       @mode = nil
+      self.credenciais_hash = nil
     end
 
     def self.store_mode!
@@ -28,14 +28,14 @@ module Cieloz
 
     def self.credenciais
       return @dados_ec if @dados_ec
-      return (@dados_ec = Requisicao::DadosEc.new @credenciais) if @credenciais
+      return (@dados_ec = Requisicao::DadosEc.new @@credenciais_hash) if @@credenciais_hash
 
       mode = store_mode? ? :LOJA : :CIELO
       Homologacao::Credenciais.const_get mode
     end
 
     def self.host
-      @credenciais ? HOST : Homologacao::HOST
+      credenciais_hash ? HOST : Homologacao::HOST
     end
 
     def self.path
