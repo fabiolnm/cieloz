@@ -10,8 +10,9 @@ module Cieloz
       when :verified_by_visa
         [VISA,            :autorizar_somente_autenticada]
       else
-        if ALL.include?(produto)
-          [produto.to_s,  :autorizacao_direta]
+        produto = produto.to_s
+        if ALL.include? produto
+          [produto,  :autorizacao_direta]
         else
           raise "product_not_supported"
         end
