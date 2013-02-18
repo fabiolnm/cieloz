@@ -4,7 +4,11 @@ module Cieloz
       def hattr_writer *attrs
         attrs.each { |attr|
           define_method "#{attr}=" do |value|
-            value = eval(attr.to_s.constantize).new(value) if value.is_a? Hash
+            if value.is_a? Hash
+              name = attr.to_s.camelize
+              cls = self.class.const_get name
+              value = cls.new(value)
+            end
             instance_variable_set "@#{attr}", value
             yield(value) if block_given?
           end
