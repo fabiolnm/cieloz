@@ -46,18 +46,20 @@ class Cieloz::Requisicao
       http.read_timeout = 30 * 1000
       http.ssl_version = :SSLv3 #http://stackoverflow.com/questions/11321403/openssl-trouble-with-ruby-1-9-3
 
-      res = http.post Cieloz::Configuracao.path, "mensagem=#{to_xml}"
-      parse res.body.force_encoding("ISO-8859-1").encode "UTF-8"
+      parse http.post Cieloz::Configuracao.path, "mensagem=#{to_xml}"
     end
   end
 
-  def parse xml
-    root = Nokogiri::XML(xml).root
+  def parse res
+    body = res.body.force_encoding("ISO-8859-1").encode "UTF-8"
+    return Erro.new(codigo: res.code, mensagem: body) if res.code != "200"
+
+    root = Nokogiri::XML(body).root
     response_class =  case root.name
     when 'erro'       then Erro
     when 'transacao'  then Transacao
     end
-    response_class.from xml
+    response_class.from body
   end
 
   private

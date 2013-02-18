@@ -25,6 +25,7 @@ describe "Integration test" do
     autorizacao.nao_capturar_automaticamente
 
     txn = autorizacao.submit
+    assert_equal _::Transacao, txn.class, "#{txn.codigo}:\n#{txn.mensagem}"
     assert_equal({}, autorizacao.errors.messages)
     assert txn.criada?
 
@@ -52,6 +53,7 @@ describe "Integration test" do
     autorizacao.capturar_automaticamente
 
     txn = autorizacao.submit
+    assert_equal _::Transacao, txn.class, "#{txn.codigo}:\n#{txn.mensagem}"
     assert_equal({}, autorizacao.errors.messages)
     assert txn.criada?
 
