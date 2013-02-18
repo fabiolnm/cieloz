@@ -65,6 +65,16 @@ class Cieloz::RequisicaoTransacao
       parcelar bandeira, parcelas, produto
     end
 
+    # Utility methods that deduces what authorization method should be performed
+    def operacao opr, parcelas
+      bandeira, @metodo_autorizacao = Cieloz::Bandeiras.operacao opr
+      parcelado bandeira, parcelas
+    end
+
+    def metodo_autorizacao
+      @metodo_autorizacao || :autorizacao_direta
+    end
+
     private
     def set_attrs bandeira, produto, parcelas
       @bandeira = bandeira
