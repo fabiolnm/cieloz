@@ -6,6 +6,10 @@ module Cieloz
       def success?
         false
       end
+
+      def status
+        codigo
+      end
     end
   end
 end

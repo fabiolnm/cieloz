@@ -52,7 +52,7 @@ class Cieloz::Requisicao
 
   def parse res
     body = res.body.force_encoding("ISO-8859-1").encode "UTF-8"
-    return Erro.new(codigo: res.code, mensagem: body) if res.code != "200"
+    return Erro.from(body).tap { |e| e.codigo = res.code } if res.code != "200"
 
     root = Nokogiri::XML(body).root
     response_class =  case root.name
