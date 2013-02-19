@@ -7,5 +7,5 @@ pt-BR:
             autorizar:
               authentication_not_supported: Bandeira não possui programa de autenticação
               direct_auth_available_for_credit_only: Autorização Direta disponível apenas em operações de crédito
-            dados_pedido:
+            forma_pagamento:
               minimum_installment_not_satisfied: O valor mínimo da parcela deve ser R$ 5,00
