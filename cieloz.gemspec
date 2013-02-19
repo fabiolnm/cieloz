@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = Cieloz::VERSION
   gem.authors       = ["Fábio Luiz Nery de Miranda"]
   gem.email         = ["fabio@miranti.net.br"]
-  gem.description   = %q{A utility gem for Spree Gateway gem}
+  gem.description   = %q{A utility gem for Cielo Integration}
   gem.summary       = %q{}
   gem.homepage      = "https://github.com/fabiolnm/cieloz"
 
