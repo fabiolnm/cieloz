@@ -1,4 +1,4 @@
-Copyright (c) 2012 Fábio Luiz Nery de Miranda
+Copyright (c) 2012,2013 Fábio Luiz Nery de Miranda <github.com/fabiolnm>
 
 MIT License
 
