@@ -25,9 +25,10 @@ describe "Integration test" do
     autorizacao.nao_capturar_automaticamente
 
     txn = autorizacao.submit
-    assert_equal _::Transacao, txn.class, "#{txn.codigo}:\n#{txn.mensagem}"
+
+    assert_equal _::Transacao, txn.class, "#{txn.status}:\n#{txn.xml}"
     assert_equal({}, autorizacao.errors.messages)
-    assert txn.criada?
+    assert txn.criada?, "#{autorizacao.to_xml}\n#{txn.xml}"
 
     assert_equal "302", post_credit_card_on_cielo_page(txn.url_autenticacao).code
 
@@ -36,26 +37,28 @@ describe "Integration test" do
     consulta = Cieloz::RequisicaoConsulta.new params
     cst = consulta.submit
     assert_equal({}, consulta.errors.messages)
-    assert cst.autorizada?
+    assert cst.autorizada?, "#{consulta.to_xml}\n#{cst.xml}"
 
     captura = Cieloz::RequisicaoCaptura.new params
     cap = captura.submit
     assert_equal({}, captura.errors.messages)
-    assert cap.capturada?
+    assert cap.capturada?, "#{captura.to_xml}\n#{cap.xml}"
 
     cancelar = Cieloz::RequisicaoCancelamento.new params
     cnc = cancelar.submit
     assert_equal({}, cancelar.errors.messages)
-    assert cnc.cancelada?
+    assert cnc.cancelada?, "#{cancelar.to_xml}\n#{cnc.xml}"
   end
 
   it "Captura Automaticamente, Consulta e Cancela" do
     autorizacao.capturar_automaticamente
 
     txn = autorizacao.submit
-    assert_equal _::Transacao, txn.class, "#{txn.codigo}:\n#{txn.mensagem}"
+    p autorizacao.to_xml
+
+    assert_equal _::Transacao, txn.class, "#{txn.status}:\n#{txn.xml}"
     assert_equal({}, autorizacao.errors.messages)
-    assert txn.criada?
+    assert txn.criada?, "#{autorizacao.to_xml}\n#{txn.xml}"
 
     assert_equal "302", post_credit_card_on_cielo_page(txn.url_autenticacao).code
 
@@ -64,12 +67,12 @@ describe "Integration test" do
     consulta = Cieloz::RequisicaoConsulta.new params
     cst = consulta.submit
     assert_equal({}, consulta.errors.messages)
-    assert cst.capturada?
+    assert cst.capturada?, "#{consulta.to_xml}\n#{cst.xml}"
 
     cancelar = Cieloz::RequisicaoCancelamento.new params
     cnc = cancelar.submit
     assert_equal({}, cancelar.errors.messages)
-    assert cnc.cancelada?
+    assert cnc.cancelada?, "#{cancelar.to_xml}\n#{cnc.xml}"
   end
 
   def post_credit_card_on_cielo_page url_cielo, bandeira=:visa,
