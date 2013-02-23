@@ -1,12 +1,10 @@
+describe Cieloz::Requisicao do
+  it { must validate_presence_of :dados_ec }
+end
+
 describe Cieloz::Requisicao::DadosEc do
   it { must validate_presence_of :numero }
   it { must validate_presence_of :chave }
-
-  it "is validated inside RequisicaoTransacao" do
-    txn = Cieloz::RequisicaoTransacao.new dados_ec: subject
-    refute txn.valid?
-    refute txn.errors[:dados_ec].empty?
-  end
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPortador do
@@ -209,16 +207,9 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
   end
 end
 
-describe Cieloz::Requisicao do
-  it { must validate_presence_of :id }
-  it { must validate_presence_of :versao }
-  it { must validate_presence_of :dados_ec }
-end
-
 describe Cieloz::RequisicaoTransacao do
   let(:_) { subject.class }
 
-  it { must validate_presence_of :dados_ec }
   it { must validate_presence_of :dados_pedido }
   it { must validate_presence_of :forma_pagamento }
 

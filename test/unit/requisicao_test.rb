@@ -13,10 +13,6 @@ describe Cieloz::Requisicao do
     subject.versao = versao
   end
 
-  it "serializes" do
-    assert_equal expected_xml(opts), subject.to_xml
-  end
-
   describe "value attributes" do
     before do
       subject.class_eval do
@@ -44,18 +40,11 @@ describe Cieloz::Requisicao do
   end
 
   describe "complex attributes" do
-    let(:attributes)  { { numero: 123, chave: "M3str4" } }
-    let(:ec)          { _::DadosEc.new attributes }
+    let(:ec)          { Cieloz::Configuracao.credenciais }
     let(:xml) { expected_xml(opts) { xml_for :ec, dir, binding } }
 
     it "serializes" do
-      subject.dados_ec = ec
-      assert_equal xml, subject.to_xml
-    end
-
-    it "ignores nils" do
-      attributes.merge! ignore_me: nil
-      subject.dados_ec = ec
+      subject.submit # @dados_ec is set on submission
       assert_equal xml, subject.to_xml
     end
   end
@@ -70,7 +59,6 @@ describe Cieloz::Requisicao do
     end
 
     it "sends to test web service" do
-      subject.dados_ec = _::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO
       erro = subject.submit
       assert_equal({}, subject.errors.messages)
       assert_equal err, erro.codigo

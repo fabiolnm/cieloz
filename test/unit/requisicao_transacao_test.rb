@@ -3,7 +3,7 @@ describe Cieloz::RequisicaoTransacao do
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-transacao" } }
 
-  let(:ec)        { _::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
+  let(:ec)        { Cieloz::Configuracao.credenciais }
   let(:portador)  { _::DadosPortador::TEST::VISA }
 
   let(:now)       { Time.now }
@@ -14,7 +14,7 @@ describe Cieloz::RequisicaoTransacao do
   let(:pagamento)  { _::FormaPagamento.new.credito "visa" }
 
   it "serializes dados-ec" do
-    subject.dados_ec = ec
+    subject.submit # @dados_ec is set on submission
     assert_equal expected_xml(opts) { xml_for :ec, dir, binding }, subject.to_xml
   end
 
@@ -62,7 +62,6 @@ describe Cieloz::RequisicaoTransacao do
       Cieloz::Configuracao.reset!
       subject.id              = SecureRandom.uuid
       subject.versao          = "1.2.0"
-      subject.dados_ec        = ec
       # txn.dados_portador  = portador # buy page loja only!
       subject.dados_pedido    = pedido
       subject.forma_pagamento = pagamento

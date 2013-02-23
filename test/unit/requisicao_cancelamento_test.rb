@@ -4,17 +4,12 @@ describe Cieloz::RequisicaoCancelamento do
   let(:_)     { subject.class }
   let(:dir)   { File.dirname __FILE__ }
   let(:opts)  { { root: "requisicao-cancelamento" } }
-  let(:ec)    { _::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
+  let(:ec)    { Cieloz::Configuracao.credenciais }
 
   it "serializes tid" do
     tid = 12345
     subject.tid = tid
     assert_equal expected_xml(opts) { "<tid>#{tid}</tid>" }, subject.to_xml
-  end
-
-  it "serializes dados-ec" do
-    subject.dados_ec = ec
-    assert_equal expected_xml(opts) { xml_for :ec, dir, binding }, subject.to_xml
   end
 
   it "serializes valor" do

@@ -6,9 +6,8 @@ class Cieloz::Requisicao
 
   attr_accessor :id, :versao
   attr_reader :dados_ec
-  hattr_writer :dados_ec
 
-  validates :id, :versao, :dados_ec, presence: true
+  validates :dados_ec, presence: true
 
   def attributes
     { dados_ec: @dados_ec }
@@ -36,10 +35,12 @@ class Cieloz::Requisicao
   end
 
   def submit
-    @id     = SecureRandom.uuid if id.blank?
-    @versao = "1.2.0"           if versao.blank?
+    @dados_ec = Cieloz::Configuracao.credenciais
 
     if valid?
+      @id     = SecureRandom.uuid if id.blank?
+      @versao = "1.2.0"           if versao.blank?
+
       http = Net::HTTP.new Cieloz::Configuracao.host, 443
       http.use_ssl = true
       http.open_timeout = 5 * 1000
