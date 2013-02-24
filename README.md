@@ -186,9 +186,10 @@ When you provide values.
     p pedido.descricao
     $ Hello Cielo!
 
-### Configuration
+## Configuration
 
-Your application can configure Cieloz::Configuracao default values. It can be done in a config/initializers/cieloz.rb file.
+Your application can configure Cieloz::Configuracao default values.
+In a Rails application, it can be done in a config/initializers/cieloz.rb file.
 
 If you don't provide ```credenciais```, all operations will be requested against Cielo Homologation Environment.
 
