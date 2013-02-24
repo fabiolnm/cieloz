@@ -209,4 +209,26 @@ describe Cieloz::Builder do
       }
     end
   end
+
+  describe "TID ops Building" do
+    before do
+      def @source.tid             ; "A1B2C3" end
+      def @source.transaction_id  ; "Z3Y2X1" end
+    end
+
+    describe "Consulta" do
+      it "from tid when missing opts" do
+        _.consulta(@source).tid.must_equal @source.tid
+      end
+
+      it "from attributes" do
+        _.consulta(@source, tid: :transaction_id).tid.must_equal @source.transaction_id
+      end
+
+      it "from values" do
+        transaction_id = "ABC123"
+        _.consulta(@source, tid: transaction_id).tid.must_equal transaction_id
+      end
+    end
+  end
 end

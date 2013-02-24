@@ -54,9 +54,14 @@ module Cieloz
       txn
     end
 
+    def consulta source, opts={}
+      tid = attrs_from source, opts, :tid
+      RequisicaoConsulta.new tid: tid
+    end
+
     private
     def attrs_from source, opts, *keys
-      keys.map { |k|
+      attrs = keys.map { |k|
         value_or_attr_name = opts[k] || k
         if value_or_attr_name.is_a? Symbol
           source.send value_or_attr_name if source.respond_to? value_or_attr_name
@@ -64,6 +69,7 @@ module Cieloz
           value_or_attr_name
         end
       }
+      attrs.count == 1 ? attrs.first : attrs
     end
   end
 
