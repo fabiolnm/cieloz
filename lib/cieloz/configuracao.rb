@@ -42,7 +42,7 @@ module Cieloz
       return (@@dados_ec = Requisicao::DadosEc.new @@credenciais) if @@credenciais
 
       mode = store_mode? ? :LOJA : :CIELO
-      Homologacao::Credenciais.const_get mode
+      @@dados_ec = Requisicao::DadosEc.new Homologacao::Credenciais.const_get mode
     end
 
     def self.host
