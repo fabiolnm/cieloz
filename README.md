@@ -345,6 +345,8 @@ if supported by the selected credit card (Verified by Visa or MasterCard Secure 
 After authentication/authorization flow, if the user has available credit, the
 transaction assumes Status 4 - AUTHORIZED (Autorizada).
 
+#### RequisicaoCaptura
+
 When the transaction is at AUTHORIZED state, the Store Owner must capture this payment in the
 next five days. This can be done with a CaptureRequest (RequisicaoCaptura)
 
@@ -353,12 +355,16 @@ After capture, the transaction assumes Status 6 - CAPTURED (Capturada).
 
 * Manual Capture can be useful for fraud prevention, but it requires aditional Admin efforts.
 
+#### RequisicaoCancelamento
+
 In the 90 days that follows the Authorization or Capture, the transaction can be fully or
 partially cancelled, assuming state 9 - CANCELLED (Cancelada). This can be done with a
 CancelRequest (RequisicaoCancelamento).
 
 * At any time, a pending request can be expired at Cielo Gateway, that puts the transaction in CANCELLED state.
 * Each state has its own expire time, see the Developer Guide for detailed information.
+
+#### RequisicaoConsulta
 
 At any time, a QueryRequest (RequisicaoConsulta) can be made for a specific transaction
 (identified by its TID) to query about the state of the transaction.
