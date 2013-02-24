@@ -59,6 +59,11 @@ module Cieloz
       RequisicaoConsulta.new tid: tid
     end
 
+    def captura source, opts={}
+      tid, valor = attrs_from source, opts, :tid, :valor
+      RequisicaoCaptura.new tid: tid, valor: valor
+    end
+
     private
     def attrs_from source, opts, *keys
       attrs = keys.map { |k|

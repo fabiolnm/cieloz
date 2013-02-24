@@ -7,6 +7,9 @@ describe Cieloz::Builder do
     @source = Object.new
     def @source.numero  ; 123456  end
     def @source.valor   ; 7890    end
+
+    def @source.number  ; 24680     end
+    def @source.value   ; 13579     end
   end
 
   describe "Pedido building" do
@@ -35,8 +38,6 @@ describe Cieloz::Builder do
 
     describe "opts given" do
       before do
-        def @source.number      ; 24680     end
-        def @source.value       ; 13579     end
         def @source.description ; "abc"     end
         def @source.time        ; Time.at 0 end
         def @source.currency    ; 123       end
@@ -221,13 +222,34 @@ describe Cieloz::Builder do
         _.consulta(@source).tid.must_equal @source.tid
       end
 
-      it "from attributes" do
+      it "from mapped attributes" do
         _.consulta(@source, tid: :transaction_id).tid.must_equal @source.transaction_id
       end
 
       it "from values" do
         transaction_id = "ABC123"
         _.consulta(@source, tid: transaction_id).tid.must_equal transaction_id
+      end
+    end
+
+    describe "Captura" do
+      it "from tid and valor when missing opts" do
+        captura = _.captura @source
+        captura.tid.must_equal @source.tid
+        captura.valor.must_equal @source.valor
+      end
+
+      it "from mapped attributes" do
+        captura = _.captura @source, tid: :transaction_id, valor: :value
+        captura.tid.must_equal @source.transaction_id
+        captura.valor.must_equal @source.value
+      end
+
+      it "from values" do
+        tid, valor = "ABC123", 34567
+        captura = _.captura @source, tid: tid, valor: valor
+        captura.tid.must_equal tid
+        captura.valor.must_equal valor
       end
     end
   end
