@@ -18,11 +18,12 @@ module Cieloz
 
     def self.reset!
       cielo_mode!
-      @@credenciais = nil
     end
 
     def self.store_mode!
       @@mode = :store
+      @@dados_ec = nil
+      @@credenciais = nil
     end
 
     def self.store_mode?
@@ -31,6 +32,8 @@ module Cieloz
 
     def self.cielo_mode!
       @@mode = :cielo
+      @@dados_ec = nil
+      @@credenciais = nil
     end
 
     def self.cielo_mode?

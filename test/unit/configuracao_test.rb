@@ -43,18 +43,24 @@ describe Cieloz::Configuracao do
 
   describe "credenciais" do
     describe "not set" do
+      let(:loja_ec)   { Cieloz::Requisicao::DadosEc.new Cieloz::Homologacao::Credenciais::LOJA  }
+      let(:cielo_ec)  { Cieloz::Requisicao::DadosEc.new Cieloz::Homologacao::Credenciais::CIELO }
+
       it "defaults to Homologacao::Credenciais::CIELO" do
-        _.credenciais.must_equal Cieloz::Homologacao::Credenciais::CIELO
+        _.credenciais.numero.must_equal cielo_ec.numero
+        _.credenciais.chave.must_equal cielo_ec.chave
       end
 
       it "returns Homologacao::LOJA at store_mode" do
         _.store_mode!
-        _.credenciais.must_equal Cieloz::Homologacao::Credenciais::LOJA
+        _.credenciais.numero.must_equal loja_ec.numero
+        _.credenciais.chave.must_equal loja_ec.chave
       end
 
       it "returns Homologacao::CIELO at cielo_mode" do
         _.cielo_mode!
-        _.credenciais.must_equal Cieloz::Homologacao::Credenciais::CIELO
+        _.credenciais.numero.must_equal cielo_ec.numero
+        _.credenciais.chave.must_equal cielo_ec.chave
       end
     end
 
