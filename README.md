@@ -4,6 +4,20 @@
 
 A utility gem for SpreeCielo Gateway gem.
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'cieloz'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install cieloz
+
 # Usage
 
     This is a quick start guide to Cieloz API. 
@@ -368,20 +382,6 @@ CancelRequest (RequisicaoCancelamento).
 
 At any time, a QueryRequest (RequisicaoConsulta) can be made for a specific transaction
 (identified by its TID) to query about the state of the transaction.
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'cieloz'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install cieloz
 
 ## Contributing
 
