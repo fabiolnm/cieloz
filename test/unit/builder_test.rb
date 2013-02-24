@@ -233,6 +233,10 @@ describe Cieloz::Builder do
     end
 
     describe "Captura" do
+      it "is a RequisicaoCaptura" do
+        _.captura(@source).is_a? _::RequisicaoCaptura
+      end
+
       it "from tid and valor when missing opts" do
         captura = _.captura @source
         captura.tid.must_equal @source.tid
@@ -250,6 +254,31 @@ describe Cieloz::Builder do
         captura = _.captura @source, tid: tid, valor: valor
         captura.tid.must_equal tid
         captura.valor.must_equal valor
+      end
+    end
+
+    describe "Cancelamento" do
+      it "is a RequisicaoCaptura" do
+        _.cancelamento(@source).is_a? _::RequisicaoCancelamento
+      end
+
+      it "from tid and valor when missing opts" do
+        cancelamento = _.cancelamento @source
+        cancelamento.tid.must_equal @source.tid
+        cancelamento.valor.must_equal @source.valor
+      end
+
+      it "from mapped attributes" do
+        cancelamento = _.cancelamento @source, tid: :transaction_id, valor: :value
+        cancelamento.tid.must_equal @source.transaction_id
+        cancelamento.valor.must_equal @source.value
+      end
+
+      it "from values" do
+        tid, valor = "ABC123", 34567
+        cancelamento = _.cancelamento @source, tid: tid, valor: valor
+        cancelamento.tid.must_equal tid
+        cancelamento.valor.must_equal valor
       end
     end
   end

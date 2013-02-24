@@ -64,6 +64,11 @@ module Cieloz
       RequisicaoCaptura.new tid: tid, valor: valor
     end
 
+    def cancelamento source, opts={}
+      tid, valor = attrs_from source, opts, :tid, :valor
+      RequisicaoCancelamento.new tid: tid, valor: valor
+    end
+
     private
     def attrs_from source, opts, *keys
       attrs = keys.map { |k|
