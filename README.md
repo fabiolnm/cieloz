@@ -1,4 +1,5 @@
 [<img src="https://secure.travis-ci.org/fabiolnm/cieloz.png"/>](http://travis-ci.org/fabiolnm/cieloz)
+[<img src="https://codeclimate.com/github/fabiolnm/cieloz.png"/>](https://codeclimate.com/github/fabiolnm/cieloz)
 
 # Cieloz
 
