@@ -8,6 +8,12 @@ describe Cieloz::Requisicao::DadosEc do
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPortador do
+  let(:_) { subject.class }
+
+  it "must not override codigo_seguranca if it's given for initializer" do
+    _.new(codigo_seguranca: "123").codigo_seguranca.wont_be_nil
+  end
+
   it { must ensure_length_of(:nome_portador).is_at_most(50) }
 
   it { must validate_presence_of :numero }
@@ -36,7 +42,6 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   end
 
   describe "indicador and codigo_seguranca validation" do
-    let(:_) { subject.class }
     let(:code) { 123 }
 
     before do

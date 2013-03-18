@@ -26,7 +26,7 @@ class Cieloz::RequisicaoTransacao
 
     def initialize attrs={}
       super
-      indicador_nao_informado!
+      indicador_nao_informado! if codigo_seguranca.blank?
     end
 
     def codigo_seguranca= codigo
