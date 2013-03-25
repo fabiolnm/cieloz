@@ -12,14 +12,12 @@ class Cieloz::RequisicaoTransacao
 
     validates :nome_portador, length: { maximum: 50 }
 
-    validates :numero, :validade, :indicador, presence: true
+    validates :numero, :indicador, presence: true
 
     validates :numero, length: { is: 16 }
     validates :numero, numericality: { only_integer: true }
 
-    validates :validade, length: { is: 6 }
     validates :validade, format: { with: /2\d{3}(0[1-9]|1[012])/ }
-    validates :validade, numericality: { only_integer: true }
 
     validates :codigo_seguranca, length: { in: 3..4 }
     validates :codigo_seguranca, numericality: { only_integer: true }

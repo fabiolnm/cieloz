@@ -20,10 +20,6 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   it { must ensure_length_of(:numero).is_equal_to 16 }
   it { must validate_numericality_of(:numero).only_integer }
 
-  it { must validate_presence_of :validade }
-  it { must ensure_length_of(:validade).is_equal_to 6 }
-  it { must validate_numericality_of(:validade).only_integer }
-
   it { must ensure_length_of(:codigo_seguranca)
                               .is_at_least(3)
                               .is_at_most(4) }
