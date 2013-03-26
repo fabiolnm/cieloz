@@ -12,15 +12,19 @@ class Cieloz::RequisicaoTransacao
 
     validates :nome_portador, length: { maximum: 50 }
 
+    set_callback :validate, :before do |portador|
+      [:numero, :validade, :codigo_seguranca].each {|attr|
+        val = portador.send attr
+        portador.instance_variable_set "@#{attr}", val.to_s
+      }
+      portador.numero.gsub! ' ', ''
+    end
+
+    validates :numero, format: { with: /^\d{16}$/ }
+    validates :validade, format: { with: /^2\d{3}(0[1-9]|1[012])$/ }
+    validates :codigo_seguranca, format: { with: /^(\d{3}|\d{4})$/ }
+
     validates :indicador, presence: true
-
-    validates :numero, length: { is: 16 }
-    validates :numero, numericality: { only_integer: true }
-
-    validates :validade, format: { with: /2\d{3}(0[1-9]|1[012])/ }
-
-    validates :codigo_seguranca, length: { in: 3..4 }
-    validates :codigo_seguranca, numericality: { only_integer: true }
 
     def initialize attrs={}
       super

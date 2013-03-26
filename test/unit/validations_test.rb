@@ -16,13 +16,21 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
 
   it { must ensure_length_of(:nome_portador).is_at_most(50) }
 
-  it { must ensure_length_of(:numero).is_equal_to 16 }
-  it { must validate_numericality_of(:numero).only_integer }
+  it { must allow_value(1234567890123456).for(:numero) }
+  it { wont allow_value(123456789012345).for(:numero) }
+  it { wont allow_value(12345678901234567).for(:numero) }
+  it { wont allow_value("ABC4567890123456").for(:numero) }
 
-  it { must ensure_length_of(:codigo_seguranca)
-                              .is_at_least(3)
-                              .is_at_most(4) }
-  it { must validate_numericality_of(:codigo_seguranca).only_integer }
+  it {
+    (100..9999).step(123).each {|val|
+      must allow_value(val).for(:codigo_seguranca)
+    }
+  }
+
+  it { wont allow_value(99).for(:codigo_seguranca) }
+  it { wont allow_value(10000).for(:codigo_seguranca) }
+  it { wont allow_value("ab1").for(:codigo_seguranca) }
+  it { wont allow_value("abc1").for(:codigo_seguranca) }
 
   def mm_values range
     yyyy = 2013
