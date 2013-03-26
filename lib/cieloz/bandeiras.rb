@@ -14,7 +14,7 @@ module Cieloz
         if ALL.include? produto
           [produto,  :autorizacao_direta]
         else
-          raise "product_not_supported"
+          [nil, nil]
         end
       end
     end

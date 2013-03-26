@@ -19,7 +19,6 @@ describe "Bandeiras e Operacoes" do
   end
 
   it "disallows unsupported products" do
-    error = lambda { _.operacao("anything else") }.must_raise RuntimeError
-    error.message.must_match /product_not_supported/
+    assert_equal [nil, nil], _.operacao("anything else")
   end
 end
