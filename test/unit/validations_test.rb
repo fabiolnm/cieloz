@@ -86,15 +86,11 @@ end
 
 describe Cieloz::RequisicaoTransacao::DadosPedido do
   it { must validate_presence_of :numero }
-  it { must ensure_length_of(:numero)
-                            .is_at_least(1)
-                            .is_at_most(20) }
+  it { must ensure_length_of(:numero).is_at_most(20) }
 
   it { must validate_presence_of :valor }
   it { must validate_numericality_of(:valor).only_integer }
-  it { must ensure_length_of(:valor)
-                            .is_at_least(1)
-                            .is_at_most(12) }
+  it { must ensure_length_of(:valor).is_at_most(12) }
 
   it { must validate_presence_of :moeda }
   it { must validate_presence_of :data_hora }

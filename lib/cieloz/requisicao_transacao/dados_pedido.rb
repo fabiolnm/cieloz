@@ -8,14 +8,14 @@ class Cieloz::RequisicaoTransacao
 
     validates :numero, :valor, :moeda, :data_hora, presence: true
 
-    validates :numero, length: { in: 1..20 }
+    validates :numero, length: { maximum: 20 }
 
-    validates :valor, length: { in: 1..12 }
+    validates :valor, length: { maximum: 12 }
     validates :valor, numericality: { only_integer: true }
 
-    validates :descricao, length: { in: 0..1024 }
+    validates :descricao, length: { maximum: 1024 }
     validates :idioma, inclusion: { in: IDIOMAS }
-    validates :soft_descriptor, length: { in: 0..13 }
+    validates :soft_descriptor, length: { maximum: 13 }
 
     def attributes
       {
