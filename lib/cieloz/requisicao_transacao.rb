@@ -52,10 +52,9 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
   end
 
   def parcela_minima?
-    if @dados_pedido.valid? and @forma_pagamento.valid?
-      if @dados_pedido.valor / @forma_pagamento.parcelas < 500
-        errors.add :forma_pagamento, :minimum_installment_not_satisfied
-      end
+    valor, parcelas = @dados_pedido.valor.to_i, @forma_pagamento.parcelas.to_i
+    if parcelas > 0 and valor / parcelas < 500
+      @dados_pedido.errors.add :valor, :minimum_installment_not_satisfied
     end
   end
 

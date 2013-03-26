@@ -356,6 +356,6 @@ describe Cieloz::RequisicaoTransacao do
 
     refute subject.valid?
     msg = "Installment should be greater than or equal to R$ 5,00"
-    assert_equal msg, subject.errors[:forma_pagamento].first
+    assert_equal msg, subject.dados_pedido.errors[:valor].first
   end
 end

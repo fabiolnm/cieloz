@@ -10,8 +10,6 @@ en:
               direct_auth_available_for_credit_only: Direct auth available for credit only
             capturar:
               inclusion: should be true or false
-            forma_pagamento:
-              minimum_installment_not_satisfied: Installment should be greater than or equal to R$ 5,00
         cieloz/requisicao_transacao/dados_portador:
           attributes:
             numero:
@@ -24,3 +22,5 @@ en:
           attributes:
             idioma:
               inclusion: should be PT (Portuguese), EN (English) or ES (Spanish)
+            valor:
+              minimum_installment_not_satisfied: Installment should be greater than or equal to R$ 5,00
