@@ -16,3 +16,7 @@ pt-BR:
           attributes:
             validade:
               invalid: Deve estar no formato YYYYDD
+        cieloz/requisicao_transacao/dados_pedido:
+          attributes:
+            idioma:
+              inclusion: deveria ser PT (Português), EN (Inglês) ou ES (Espanhol)
