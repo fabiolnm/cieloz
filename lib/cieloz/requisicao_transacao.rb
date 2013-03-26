@@ -23,18 +23,18 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
   validate :parcela_minima?,
     if: "not @dados_pedido.nil? and not @forma_pagamento.nil?"
 
-  validates :autorizar, presence: true, inclusion: {
+  validates :autorizar, inclusion: {
     in: [
       SOMENTE_AUTENTICAR, AUTORIZAR_SE_AUTENTICADA,
       AUTORIZAR_NAO_AUTENTICADA, AUTORIZACAO_DIRETA, RECORRENTE
     ]
   }
   # validates string values because false.blank? is true, failing presence validation
-  validates :capturar,  presence: true, inclusion: { in: ["true", "false"] }
+  validates :capturar, inclusion: { in: ["true", "false"] }
 
   with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
     txn.validates :url_retorno, presence: true
-    txn.validates :url_retorno, length: { in: 1..1024 }
+    txn.validates :url_retorno, length: { maximum: 1024 }
   end
 
   validates :campo_livre, length: { maximum: 128 }

@@ -5,8 +5,11 @@ pt-BR:
         cieloz/requisicao_transacao:
           attributes:
             autorizar:
+              inclusion: deveria estar entre [0,1,2,3,4]
               authentication_not_supported: Bandeira não possui programa de autenticação
               direct_auth_available_for_credit_only: Autorização Direta disponível apenas em operações de crédito
+            capturar:
+              inclusion: deveria ser true ou false
             forma_pagamento:
               minimum_installment_not_satisfied: O valor mínimo da parcela deve ser R$ 5,00
         cieloz/requisicao_transacao/dados_portador:

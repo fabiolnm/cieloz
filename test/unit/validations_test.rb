@@ -234,14 +234,13 @@ describe Cieloz::RequisicaoTransacao do
     wont validate_presence_of :url_retorno
   end
 
-  it { must ensure_length_of(:url_retorno).is_at_least(1).is_at_most(1024) }
+  it { must ensure_length_of(:url_retorno).is_at_most(1024) }
 
   it "doesnt validate url_retorno length for autorizacao direta" do
     subject.autorizacao_direta
     wont ensure_length_of(:url_retorno).is_at_least(1).is_at_most(1024)
   end
 
-  it { must validate_presence_of :autorizar }
   it {
     must ensure_inclusion_of(:autorizar).in_array [
       _::SOMENTE_AUTENTICAR, _::AUTORIZAR_SE_AUTENTICADA,
@@ -305,7 +304,6 @@ describe Cieloz::RequisicaoTransacao do
     }
   end
 
-  it { must validate_presence_of :capturar }
   it { must ensure_inclusion_of(:capturar).in_array(["true", "false"]) }
 
   it { must ensure_length_of(:campo_livre).is_at_most(128) }
