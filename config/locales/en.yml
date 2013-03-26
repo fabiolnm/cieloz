@@ -14,8 +14,12 @@ en:
               minimum_installment_not_satisfied: Installment should be greater than or equal to R$ 5,00
         cieloz/requisicao_transacao/dados_portador:
           attributes:
+            numero:
+              invalid: should have 16 digits
             validade:
-              invalid: Should be in YYYYDD format
+              invalid: should be in YYYYDD format
+            codigo_seguranca:
+              invalid: should have 3 or 4 digits
         cieloz/requisicao_transacao/dados_pedido:
           attributes:
             idioma:
