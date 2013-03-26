@@ -89,8 +89,18 @@ describe Cieloz::RequisicaoTransacao::DadosPedido do
   it { must ensure_length_of(:numero).is_at_most(20) }
 
   it { must validate_presence_of :valor }
-  it { must validate_numericality_of(:valor).only_integer }
   it { must ensure_length_of(:valor).is_at_most(12) }
+  it { must validate_numericality_of(:valor).only_integer }
+
+  it "dont validate valor if it's blank" do
+    subject.valor = ""
+    refute subject.valid?
+    assert_equal [I18n.t('errors.messages.blank')], subject.errors[:valor]
+
+    subject.valor = "abc"
+    refute subject.valid?
+    assert_equal [I18n.t('errors.messages.not_a_number')], subject.errors[:valor]
+  end
 
   it { must validate_presence_of :moeda }
   it { must validate_presence_of :data_hora }

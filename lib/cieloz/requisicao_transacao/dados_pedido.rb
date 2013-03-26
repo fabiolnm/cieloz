@@ -11,7 +11,7 @@ class Cieloz::RequisicaoTransacao
     validates :numero, length: { maximum: 20 }
 
     validates :valor, length: { maximum: 12 }
-    validates :valor, numericality: { only_integer: true }
+    validates :valor, numericality: { only_integer: true }, unless: "@valor.blank?"
 
     validates :descricao, length: { maximum: 1024 }
     validates :idioma, inclusion: { in: IDIOMAS }
