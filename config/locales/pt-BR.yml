@@ -24,3 +24,9 @@ pt-BR:
               inclusion: deveria ser PT (Português), EN (Inglês) ou ES (Espanhol)
             valor:
               minimum_installment_not_satisfied: O valor mínimo da parcela deve ser R$ 5,00
+        cieloz/requisicao_transacao/forma_pagamento:
+          attributes:
+            bandeira:
+              blank: escolha a bandeira
+              inclusion: escolha a bandeira
+

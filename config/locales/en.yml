@@ -24,3 +24,9 @@ en:
               inclusion: should be PT (Portuguese), EN (English) or ES (Spanish)
             valor:
               minimum_installment_not_satisfied: Installment should be greater than or equal to R$ 5,00
+        cieloz/requisicao_transacao/forma_pagamento:
+          attributes:
+            bandeira:
+              blank: choose credit card flag
+              inclusion: choose credit card flag
+
