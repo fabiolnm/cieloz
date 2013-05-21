@@ -15,7 +15,8 @@ en:
             numero:
               invalid: should have 16 digits
             validade:
-              invalid: should be in YYYYMM format
+              invalid_year: invalid year
+              invalid_month: invalid month
             codigo_seguranca:
               invalid: should have 3 or 4 digits
         cieloz/requisicao_transacao/dados_pedido:

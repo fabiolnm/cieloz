@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 describe Cieloz::Requisicao do
   it { must validate_presence_of :dados_ec }
 end
@@ -37,11 +39,44 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
     range.map { |i| mm = '%02d' % (i % 100) ; "#{yyyy}#{mm}" }
   end
 
-  it "validates validade as yyyymm" do
-    must allow_value(*mm_values(1..12)).for(:validade)
+  it "validates mês validade" do
+    year = Date.today.year
+    (1..12).each {|mes|
+      subject.validade = "#{year}#{"%02d" % mes}"
+      subject.valid?
+      assert_nil subject.errors.messages[:validade]
+    }
+    ((0..9).to_a + (13..99).to_a).each {|mes|
+      subject.validade = "#{year}#{"%d" % mes}"
+      subject.valid?
+      assert_equal [
+        I18n.t(:invalid_month, scope:
+               [ :activemodel, :errors, :models,
+                 "cieloz/requisicao_transacao/dados_portador",
+                 :attributes, :validade]
+              )
+      ], subject.errors[:validade]
+    }
+  end
 
-    values = mm_values(13..100) << "199911"
-    wont allow_value(*values).for(:validade)
+  it "validates ano validade" do
+    year = Date.today.year
+    (year..year+10).each {|ano|
+      subject.validade = "#{year}01"
+      subject.valid?
+      assert_nil subject.errors.messages[:validade]
+    }
+    (year-10..year-1).each {|ano|
+      subject.validade = "#{ano}01"
+      subject.valid?
+      assert_equal [
+        I18n.t(:invalid_year,
+               scope: [ :activemodel, :errors, :models,
+                        "cieloz/requisicao_transacao/dados_portador",
+                        :attributes, :validade]
+              )
+      ], subject.errors[:validade]
+    }
   end
 
   describe "indicador and codigo_seguranca validation" do

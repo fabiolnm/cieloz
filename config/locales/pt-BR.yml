@@ -15,7 +15,8 @@ pt-BR:
             numero:
               invalid: deve ter 16 dígitos
             validade:
-              invalid: deve estar no formato YYYYMM
+              invalid_year: ano inválido
+              invalid_month: mês inválido
             codigo_seguranca:
               invalid: deve ter 3 ou 4 dígitos
         cieloz/requisicao_transacao/dados_pedido:

@@ -21,8 +21,10 @@ class Cieloz::RequisicaoTransacao
     end
 
     validates :numero, format: { with: /^\d{16}$/ }
-    validates :validade, format: { with: /^2\d{3}(0[1-9]|1[012])$/ }
     validates :codigo_seguranca, format: { with: /^(\d{3}|\d{4})$/ }
+
+    validate :valida_ano_validade, unless: ->{ validade.nil? }
+    validate :valida_mes_validade, unless: ->{ validade.nil? }
 
     validates :indicador, presence: true
 
@@ -76,6 +78,19 @@ class Cieloz::RequisicaoTransacao
         flag.validade = 201805
         flag.codigo_seguranca = 123
       }
+    end
+
+    private
+    def valida_mes_validade
+      if mes = validade[4..5]
+        errors.add :validade, :invalid_month unless mes.length == 2 and mes.to_i.between? 1, 12
+      end
+    end
+
+    def valida_ano_validade
+      if ano = validade[0..3]
+        errors.add :validade, :invalid_year if ano.to_i < Date.today.year
+      end
     end
   end
 end
