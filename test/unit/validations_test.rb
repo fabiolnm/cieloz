@@ -1,9 +1,5 @@
 # encoding: utf-8
 
-describe Cieloz::Requisicao do
-  it { must validate_presence_of :dados_ec }
-end
-
 describe Cieloz::Requisicao::DadosEc do
   it { must validate_presence_of :numero }
   it { must validate_presence_of :chave }

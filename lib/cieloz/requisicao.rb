@@ -7,8 +7,6 @@ class Cieloz::Requisicao
   attr_accessor :id, :versao
   attr_reader :dados_ec
 
-  validates :dados_ec, presence: true
-
   def attributes
     { dados_ec: @dados_ec }
   end
