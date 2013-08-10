@@ -7,8 +7,13 @@ require 'minitest/autorun'
 require 'minitest/matchers'
 require 'shoulda/matchers'
 
-require 'fakeweb'
+require 'vcr'
 require 'erb'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'test/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+end
 
 class MiniTest::Spec
   include Shoulda::Matchers::ActiveModel

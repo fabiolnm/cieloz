@@ -23,7 +23,7 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "turn"
-  gem.add_development_dependency "fakeweb"
+  gem.add_development_dependency "vcr"
   gem.add_development_dependency "debugger"
 
   # see https://github.com/thoughtbot/shoulda-matchers/issues/235
