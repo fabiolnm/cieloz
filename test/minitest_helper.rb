@@ -2,7 +2,7 @@ require 'debugger'
 require 'cieloz'
 
 require 'minitest/autorun'
-require 'turn/autorun'
+# require 'turn/autorun'
 
 require 'minitest/matchers'
 require 'shoulda/matchers'
