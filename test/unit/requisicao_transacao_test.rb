@@ -43,24 +43,19 @@ describe Cieloz::RequisicaoTransacao do
 
   describe "request posting" do
     let(:status_txn)  { "0" }
-    let(:tid)         { "1001734898090FD31001" }
+    let(:id)          { "1001734898090FD31001" }
+    let(:tid)         { "1001734898000E531001" }
     let(:url_cielo)   {
-      "https://qasecommerce.cielo.com.br/web/index.cbmp?id=690ef010bfa77778f23da1a982d5d4cc"
+      "https://cerecommerce.cielo.com.br/web/index.cbmp?id=608c31fb28c54bda159cd46d08766439"
     }
-    let(:fake_response) { render_template dir, "transacao.xml", binding }
 
     before do
       portador.nome_portador = "Jose da Silva"
-      FakeWeb.register_uri :post, Cieloz::Configuracao.url, body: fake_response
-    end
-
-    after do
-      FakeWeb.clean_registry
     end
 
     it "sends to test web service" do
       Cieloz::Configuracao.reset!
-      subject.id              = SecureRandom.uuid
+      subject.id              = tid
       subject.versao          = "1.2.0"
       # txn.dados_portador  = portador # buy page loja only!
       subject.dados_pedido    = pedido
@@ -70,7 +65,11 @@ describe Cieloz::RequisicaoTransacao do
       subject.capturar_automaticamente
       subject.campo_livre = "debug"
 
-      res = subject.submit
+      res = nil
+      VCR.use_cassette("requisicao_transacao_test_request_posting") do
+        res = subject.submit
+      end
+
       assert_equal({}, subject.errors.messages)
       assert_equal Cieloz::Requisicao::Transacao, res.class
       assert_equal tid,         res.tid

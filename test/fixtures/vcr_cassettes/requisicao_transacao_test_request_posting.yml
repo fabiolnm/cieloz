@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://qasecommerce.cielo.com.br/servicos/ecommwsec.do
+    body:
+      encoding: UTF-8
+      string: mensagem=<?xml version="1.0" encoding="UTF-8"?><requisicao-transacao
+        id="1001734898090FD31001" versao="1.2.0"><dados-ec><numero>1001734898</numero><chave>e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832</chave></dados-ec><dados-pedido><numero>123</numero><valor>5000</valor><moeda>986</moeda><data-hora>2013-08-10T14:53:05</data-hora><descricao>teste</descricao><idioma>PT</idioma><soft-descriptor>13letterstest</soft-descriptor></dados-pedido><forma-pagamento><bandeira>visa</bandeira><produto>1</produto><parcelas>1</parcelas></forma-pagamento><url-retorno>http://localhost:3000/cielo/callback</url-retorno><autorizar>3</autorizar><capturar>true</capturar><campo-livre>debug</campo-livre></requisicao-transacao>
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 10 Aug 2013 17:53:04 GMT
+      Server:
+      - Apache/2.2.22 (Unix) mod_ssl/2.2.22 OpenSSL/0.9.8x
+      Content-Length:
+      - '670'
+      Set-Cookie:
+      - JSESSIONID=YfKwSG2QvBm20F6RYBsDcwwLSCw3M4qL7rFQLCkr7F5ytBL91nKy!-1344845050;
+        path=/
+      X-Powered-By:
+      - Servlet/2.5 JSP/2.1
+      Content-Type:
+      - text/xml; charset=ISO-8859-1
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="ISO-8859-1"?>
+        <transacao versao="1.2.0" id="1001734898090FD31001" xmlns="http://ecommerce.cbmp.com.br">
+          <tid>1001734898000E531001</tid>
+          <dados-pedido>
+            <numero>123</numero>
+            <valor>5000</valor>
+            <moeda>986</moeda>
+            <data-hora>2013-08-10T14:53:04.333-03:00</data-hora>
+            <descricao>teste</descricao>
+            <idioma>PT</idioma>
+          </dados-pedido>
+          <forma-pagamento>
+            <bandeira>visa</bandeira>
+            <produto>1</produto>
+            <parcelas>1</parcelas>
+          </forma-pagamento>
+          <status>0</status>
+          <url-autenticacao>https://cerecommerce.cielo.com.br/web/index.cbmp?id=608c31fb28c54bda159cd46d08766439</url-autenticacao>
+        </transacao>
+    http_version: 
+  recorded_at: Sat, 10 Aug 2013 17:53:06 GMT
+recorded_with: VCR 2.5.0
