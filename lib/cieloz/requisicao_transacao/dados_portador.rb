@@ -20,8 +20,8 @@ class Cieloz::RequisicaoTransacao
       portador.numero.gsub! ' ', ''
     end
 
-    validates :numero, format: { with: /^\d{16}$/ }
-    validates :codigo_seguranca, format: { with: /^(\d{3}|\d{4})$/ }
+    validates :numero, format: { with: /\A\d{16}\z/ }
+    validates :codigo_seguranca, format: { with: /\A(\d{3}|\d{4})\z/ }
 
     validate :valida_ano_validade, unless: ->{ validade.nil? }
     validate :valida_mes_validade, unless: ->{ validade.nil? }
