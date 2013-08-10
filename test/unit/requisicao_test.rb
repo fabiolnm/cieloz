@@ -40,33 +40,25 @@ describe Cieloz::Requisicao do
   end
 
   describe "complex attributes" do
-    let(:ec)          { Cieloz::Configuracao.credenciais }
+    let(:ec)  { Cieloz::Configuracao.credenciais }
     let(:xml) { expected_xml(opts) { xml_for :ec, dir, binding } }
 
     it "serializes" do
-      subject.submit # @dados_ec is set on submission
-      assert_equal xml, subject.to_xml
+      VCR.use_cassette("requisicao_test_complex_attributes") do
+        subject.submit # @dados_ec is set on submission
+        assert_equal xml, subject.to_xml
+      end
     end
   end
 
   describe "request posting" do
-    let(:err) { "101" }
-    let(:msg) { "Invalid" }
-    let(:fake_response) { render_template dir, "erro.xml", binding }
-
-    before do
-      FakeWeb.register_uri :post, Cieloz::Configuracao.url, body: fake_response
-    end
-
     it "sends to test web service" do
-      erro = subject.submit
-      assert_equal({}, subject.errors.messages)
-      assert_equal err, erro.codigo
-      assert_equal "Invalid", erro.mensagem
-    end
-
-    after do
-      FakeWeb.clean_registry
+      VCR.use_cassette("requisicao_test_request_posting") do
+        res = subject.submit
+        assert_equal({}, subject.errors.messages)
+        refute_nil res.codigo
+        refute_nil res.mensagem
+      end
     end
   end
 end
