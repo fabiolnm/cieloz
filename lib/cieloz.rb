@@ -1,5 +1,6 @@
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/object/with_options'
+require 'active_support/core_ext/module/attribute_accessors'
 require 'active_model'
 require 'nokogiri'
 
