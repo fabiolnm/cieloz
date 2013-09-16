@@ -4,20 +4,16 @@ require 'cieloz'
 require 'minitest/autorun'
 # require 'turn/autorun'
 
-require 'minitest/matchers'
-require 'shoulda/matchers'
-
 require 'vcr'
 require 'erb'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'test/fixtures/vcr_cassettes'
   c.hook_into :webmock
+  c.debug_logger = File.open('test/tmp/vcr.log', 'w')
 end
 
 class MiniTest::Spec
-  include Shoulda::Matchers::ActiveModel
-
   class << self
     alias :_create :create
 
@@ -31,19 +27,6 @@ class MiniTest::Spec
       rescue
       end
       cls
-    end
-  end
-end
-
-module Shoulda::Matchers::ActiveModel
-  class AllowValueMatcher
-    def matches? instance
-      @instance = instance
-      @values_to_match.none? do |value|
-        @value = value
-        @instance.instance_variable_set "@#{@attribute}", @value
-        errors_match?
-      end
     end
   end
 end
@@ -67,4 +50,83 @@ end
 
 def xml_for type, dir, binding
   render_template dir, "dados-#{type}.xml", binding
+end
+
+module MiniTest::Assertions
+  def must_validate_presence_of(attribute)
+    @attribute = attribute
+    must_be_invalid_with nil, :blank
+  end
+
+  def wont_validate_presence_of(attribute)
+    @attribute = attribute
+    must_be_valid_with nil, :blank
+  end
+
+  def must_allow_value(attribute, value, options={})
+    @attribute = attribute
+    must_be_valid_with value, :invalid, options
+  end
+
+  def wont_allow_value(attribute, value, options={})
+    @attribute = attribute
+    must_be_invalid_with value, :invalid, options
+  end
+
+  def must_ensure_length_of(attribute, options)
+    @attribute = attribute
+    if max = options[:is_at_most]
+      value = (max + 1).times.collect { "a" }.join
+      must_be_invalid_with value, 'too_long', count: max
+    end
+    if min = options[:is_at_least]
+      value = (min - 1).times.collect { "a" }.join
+      must_be_invalid_with value, 'too_short', count: min
+    end
+  end
+
+  def wont_ensure_length_of(attribute, options)
+    @attribute = attribute
+    if max = options[:is_at_most]
+      value = (max + 1).times.collect { "a" }.join
+      must_be_valid_with value, 'too_long', count: max
+    end
+    if min = options[:is_at_least]
+      value = (min - 1).times.collect { "a" }.join
+      must_be_valid_with value, 'too_short', count: min
+    end
+  end
+
+  def must_validate_numericality_of(attribute, options)
+    @attribute = attribute
+    if options[:only_integer]
+      must_be_invalid_with 1.1, :not_an_integer
+    end
+  end
+
+  def must_ensure_inclusion_of(attribute, options)
+    @attribute = attribute
+    if array = options[:in_array]
+      array.each do |value|
+        must_be_valid_with value, options['message']
+      end
+    end
+  end
+
+  private
+  def must_be_valid_with(value, error_key, options={})
+    subject.instance_variable_set "@#{@attribute}", value
+    subject.valid?
+
+    msg = options[:message] || I18n.t("errors.messages.#{error_key}", options)
+    (subject.errors.messages[@attribute] || []).wont_include msg
+  end
+
+  def must_be_invalid_with(value, error_key, options={})
+    subject.instance_variable_set "@#{@attribute}", value
+    subject.valid?
+
+    msg = options[:message] || I18n.t("errors.messages.#{error_key}", options)
+    (subject.errors.messages[@attribute] || []).must_include msg
+  end
 end

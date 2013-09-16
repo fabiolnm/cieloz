@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 describe Cieloz::Requisicao::DadosEc do
-  it { must validate_presence_of :numero }
-  it { must validate_presence_of :chave }
+  it { must_validate_presence_of :numero }
+  it { must_validate_presence_of :chave }
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPortador do
@@ -12,23 +12,29 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
     _.new(codigo_seguranca: "123").codigo_seguranca.wont_be_nil
   end
 
-  it { must ensure_length_of(:nome_portador).is_at_most(50) }
+  it { must_ensure_length_of :nome_portador, is_at_most: 50 }
 
-  it { must allow_value(1234567890123456).for(:numero) }
-  it { wont allow_value(123456789012345).for(:numero) }
-  it { wont allow_value(12345678901234567).for(:numero) }
-  it { wont allow_value("ABC4567890123456").for(:numero) }
+  let(:invalid_number) {
+    I18n.t 'activemodel.errors.models.cieloz/requisicao_transacao/dados_portador.attributes.numero.invalid'
+  }
+  it { must_allow_value :numero, 1234567890123456   }
+  it { wont_allow_value :numero, 123456789012345, message: invalid_number }
+  it { wont_allow_value :numero, 12345678901234567, message: invalid_number }
+  it { wont_allow_value :numero, "ABC4567890123456", message: invalid_number }
 
   it {
     (100..9999).step(123).each {|val|
-      must allow_value(val).for(:codigo_seguranca)
+      must_allow_value :codigo_seguranca, val
     }
   }
 
-  it { wont allow_value(99).for(:codigo_seguranca) }
-  it { wont allow_value(10000).for(:codigo_seguranca) }
-  it { wont allow_value("ab1").for(:codigo_seguranca) }
-  it { wont allow_value("abc1").for(:codigo_seguranca) }
+  let(:invalid_security_number) {
+    I18n.t 'activemodel.errors.models.cieloz/requisicao_transacao/dados_portador.attributes.codigo_seguranca.invalid'
+  }
+  it { wont_allow_value :codigo_seguranca, 99, message: invalid_security_number }
+  it { wont_allow_value :codigo_seguranca, 10000, message: invalid_security_number }
+  it { wont_allow_value :codigo_seguranca, "ab1", message: invalid_security_number }
+  it { wont_allow_value :codigo_seguranca, "abc1", message: invalid_security_number }
 
   def mm_values range
     yyyy = 2013
@@ -38,9 +44,7 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   it "validates mês validade" do
     year = Date.today.year
     (1..12).each {|mes|
-      subject.validade = "#{year}#{"%02d" % mes}"
-      subject.valid?
-      assert_nil subject.errors.messages[:validade]
+      must_allow_value :validade, "#{year}#{"%02d" % mes}"
     }
     ((0..9).to_a + (13..99).to_a).each {|mes|
       subject.validade = "#{year}#{"%d" % mes}"
@@ -58,9 +62,7 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   it "validates ano validade" do
     year = Date.today.year
     (year..year+10).each {|ano|
-      subject.validade = "#{year}01"
-      subject.valid?
-      assert_nil subject.errors.messages[:validade]
+      must_allow_value :validade, "#{year}01"
     }
     (year-10..year-1).each {|ano|
       subject.validade = "#{ano}01"
@@ -123,14 +125,13 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
 end
 
 describe Cieloz::RequisicaoTransacao::DadosPedido do
-  it { must validate_presence_of :numero }
-  it { must ensure_length_of(:numero).is_at_most(20) }
+  it { must_validate_presence_of :numero }
+  it { must_ensure_length_of :numero, is_at_most: 20 }
 
-  it { must validate_presence_of :valor }
-  it { must ensure_length_of(:valor).is_at_most(12) }
-  it { must validate_numericality_of(:valor).only_integer }
+  it { must_validate_presence_of :valor }
+  it { must_validate_numericality_of :valor, only_integer: true }
 
-  it "dont validate valor if it's blank" do
+  it "dont validate valor numericality if it's blank" do
     subject.valor = ""
     refute subject.valid?
     assert_equal [I18n.t('errors.messages.blank')], subject.errors[:valor]
@@ -140,13 +141,13 @@ describe Cieloz::RequisicaoTransacao::DadosPedido do
     assert_equal [I18n.t('errors.messages.not_a_number')], subject.errors[:valor]
   end
 
-  it { must validate_presence_of :moeda }
-  it { must validate_presence_of :data_hora }
+  it { must_validate_presence_of :moeda }
+  it { must_validate_presence_of :data_hora }
 
-  it { must ensure_length_of(:descricao).is_at_most(1024) }
-  it { must ensure_length_of(:soft_descriptor).is_at_most(13) }
+  it { must_ensure_length_of :descricao, is_at_most: 1024 }
+  it { must_ensure_length_of :soft_descriptor, is_at_most: 13 }
 
-  it { must ensure_inclusion_of(:idioma).in_array(subject.class::IDIOMAS) }
+  it { must_ensure_inclusion_of :idioma, in_array: subject.class::IDIOMAS }
 
   it "is validated inside RequisicaoTransacao" do
     txn = Cieloz::RequisicaoTransacao.new dados_pedido: subject
@@ -158,13 +159,17 @@ end
 describe Cieloz::RequisicaoTransacao::FormaPagamento do
   let(:all_flags) { Cieloz::Bandeiras::ALL }
 
+  let(:invalid_flag) {
+    I18n.t 'activemodel.errors.models.cieloz/requisicao_transacao/forma_pagamento.attributes.bandeira.invalid'
+  }
+
   describe "debito validation" do
     let(:supported_flags) { subject.class::BANDEIRAS_DEBITO }
 
     it "validates bandeira is VISA or MASTERCARD" do
       supported_flags.each { |flag|
         subject.debito flag
-        must ensure_inclusion_of(:bandeira).in_array(supported_flags)
+        must_ensure_inclusion_of :bandeira, in_array: supported_flags, message: invalid_flag
       }
     end
 
@@ -181,7 +186,7 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
   it "validates bandeiras for credito" do
     all_flags.each { |flag|
       subject.credito flag
-      must ensure_inclusion_of(:bandeira).in_array(all_flags)
+      must_ensure_inclusion_of :bandeira, in_array: all_flags, message: invalid_flag
     }
   end
 
@@ -199,7 +204,7 @@ describe Cieloz::RequisicaoTransacao::FormaPagamento do
       supported_flags = subject.class::BANDEIRAS_PARCELAMENTO
 
       subject.parcelado Cieloz::Bandeiras::DISCOVER, 2
-      must ensure_inclusion_of(:bandeira).in_array(supported_flags)
+      must_ensure_inclusion_of :bandeira, in_array: supported_flags, message: invalid_flag
     end
 
     let(:flag) { all_flags.first }
@@ -255,41 +260,45 @@ end
 describe Cieloz::RequisicaoTransacao do
   let(:_) { subject.class }
 
-  it { must validate_presence_of :dados_pedido }
-  it { must validate_presence_of :forma_pagamento }
+  it { must_validate_presence_of :dados_pedido }
+  it { must_validate_presence_of :forma_pagamento }
 
   it "somente autenticar requires url_retorno" do
     subject.somente_autenticar
-    must validate_presence_of :url_retorno
+    must_validate_presence_of :url_retorno
   end
 
   it "autorizar somente autenticada requires url_retorno" do
     subject.autorizar_somente_autenticada
-    must validate_presence_of :url_retorno
+    must_validate_presence_of :url_retorno
   end
 
   it "autorizar nao autenticada requires url_retorno" do
     subject.autorizar_nao_autenticada
-    must validate_presence_of :url_retorno
+    must_validate_presence_of :url_retorno
   end
 
   it "autorizacao direta doesnt require url_retorno" do
     subject.autorizacao_direta
-    wont validate_presence_of :url_retorno
+    wont_validate_presence_of :url_retorno
   end
 
-  it { must ensure_length_of(:url_retorno).is_at_most(1024) }
+  it { must_ensure_length_of :url_retorno, is_at_most: 1024 }
 
   it "doesnt validate url_retorno length for autorizacao direta" do
     subject.autorizacao_direta
-    wont ensure_length_of(:url_retorno).is_at_least(1).is_at_most(1024)
+    wont_ensure_length_of :url_retorno, is_at_least: 1, is_at_most: 1024
   end
 
+
+  let(:invalid_auth_mode) {
+    I18n.t 'activemodel.errors.models.cieloz/requisicao_transacao.attributes.autorizar.inclusion'
+  }
   it {
-    must ensure_inclusion_of(:autorizar).in_array [
+    must_ensure_inclusion_of :autorizar, in_array: [
       _::SOMENTE_AUTENTICAR, _::AUTORIZAR_SE_AUTENTICADA,
       _::AUTORIZAR_NAO_AUTENTICADA, _::AUTORIZACAO_DIRETA, _::RECORRENTE
-    ]
+    ], message: invalid_auth_mode
   }
 
   it "doesnt support autorizacao_direta on debito operations" do
@@ -348,9 +357,12 @@ describe Cieloz::RequisicaoTransacao do
     }
   end
 
-  it { must ensure_inclusion_of(:capturar).in_array(["true", "false"]) }
+  it {
+    must_ensure_inclusion_of :capturar, in_array: ["true", "false"], message:
+    I18n.t('activemodel.errors.models.cieloz/requisicao_transacao.attributes.capturar.inclusion')
+  }
 
-  it { must ensure_length_of(:campo_livre).is_at_most(128) }
+  it { must_ensure_length_of :campo_livre, is_at_most: 128 }
 
   it "extracts bin from DadosPortador" do
     # no DadosPortador - bin should be nil
@@ -363,18 +375,18 @@ describe Cieloz::RequisicaoTransacao do
 
   it "validates dados portador on mode Buy Page Loja" do
     Cieloz::Configuracao.store_mode!
-    must validate_presence_of :dados_portador
+    must_validate_presence_of :dados_portador
   end
 
   describe "Buy Page Cielo" do
     it "wont validate dados portador if mode is nil" do
       Cieloz::Configuracao.reset!
-      wont validate_presence_of :dados_portador
+      wont_validate_presence_of :dados_portador
     end
 
     it "wont validate dados portador on hosted mode" do
       Cieloz::Configuracao.cielo_mode!
-      wont validate_presence_of :dados_portador
+      wont_validate_presence_of :dados_portador
     end
   end
 
@@ -382,8 +394,8 @@ describe Cieloz::RequisicaoTransacao do
     subject.dados_pedido = subject.class::DadosPedido.new numero: 123,
       valor: 1400, idioma: "PT", moeda: "986", data_hora: Time.now
 
-    subject.forma_pagamento = subject.class::FormaPagamento
-              .new.parcelado Cieloz::Bandeiras::VISA, 3
+    subject.forma_pagamento = subject
+    .class::FormaPagamento.new.parcelado Cieloz::Bandeiras::VISA, 3
 
     refute subject.valid?
     msg = "Installment should be greater than or equal to R$ 5,00"
