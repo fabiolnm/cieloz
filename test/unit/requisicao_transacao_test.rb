@@ -65,16 +65,15 @@ describe Cieloz::RequisicaoTransacao do
       subject.capturar_automaticamente
       subject.campo_livre = "debug"
 
-      res = nil
-      VCR.use_cassette("requisicao_transacao_test_request_posting") do
+      VCR.use_cassette "requisicao_transacao_test_request_posting" do
         res = subject.submit
-      end
 
-      assert_equal({}, subject.errors.messages)
-      assert_equal Cieloz::Requisicao::Transacao, res.class
-      assert_equal tid,         res.tid
-      assert_equal status_txn,  res.status
-      assert_equal url_cielo,   res.url_autenticacao
+        assert_equal({}, subject.errors.messages)
+        assert_equal Cieloz::Requisicao::Transacao, res.class
+        assert_equal tid,         res.tid
+        assert_equal status_txn,  res.status
+        assert_equal url_cielo,   res.url_autenticacao
+      end
     end
   end
 end

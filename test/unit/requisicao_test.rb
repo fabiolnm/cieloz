@@ -44,17 +44,19 @@ describe Cieloz::Requisicao do
     let(:xml) { expected_xml(opts) { xml_for :ec, dir, binding } }
 
     it "serializes" do
-      VCR.use_cassette("requisicao_test_complex_attributes") do
+      subject.stub :valid?, false do # avoid http request
         subject.submit # @dados_ec is set on submission
-        assert_equal xml, subject.to_xml
       end
+      assert_equal xml, subject.to_xml
     end
   end
 
   describe "request posting" do
     it "sends to test web service" do
-      VCR.use_cassette("requisicao_test_request_posting") do
+      Cieloz::Configuracao.reset!
+      VCR.use_cassette 'requisicao_test_request_posting' do
         res = subject.submit
+
         assert_equal({}, subject.errors.messages)
         refute_nil res.codigo
         refute_nil res.mensagem
