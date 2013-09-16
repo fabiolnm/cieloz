@@ -10,7 +10,7 @@ require 'erb'
 VCR.configure do |c|
   c.cassette_library_dir = 'test/fixtures/vcr_cassettes'
   c.hook_into :webmock
-  c.debug_logger = File.open('test/tmp/vcr.log', 'w')
+  # c.debug_logger = File.open('test/tmp/vcr.log', 'w')
 end
 
 class MiniTest::Spec
