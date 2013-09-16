@@ -21,7 +21,7 @@ Or install it yourself as:
 
 # Usage
 
-    This is a quick start guide to Cieloz API. 
+    This is a quick start guide to Cieloz API.
     If you want to learn deeply about Cielo Gateway, read the Getting Started section.
 
 ## Low Level API: Requisicao objects
@@ -50,16 +50,16 @@ as a xml attribute, so it can be logged.
 
     pedido    = Cieloz::RequisicaoTransacao::DadosPedido.new numero: 123, valor: 5000, moeda: 986,
                 data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "13letterstest"
-                
+
     pagamento = Cieloz::RequisicaoTransacao::FormaPagamento.new.credito "visa"
-    
+
     transacao = Cieloz::RequisicaoTransacao.new dados_ec:         dados_ec,
                                                 dados_pedido:     pedido,
                                                 forma_pagamento:  pagamento,
                                                 url_retorno:      your_callback_url
-                                                
+
     response  = transacao.autorizacao_direta.submit
-    
+
     response.success? # returned Transacao (with status and id for the created Cielo transaction) or Error object?
 
 ### Verify
@@ -100,9 +100,21 @@ The easiest way to use this gem is through the high level API provided by Cieloz
 It provides convenient methods to build the respective Cieloz request objects from your domain model object.
 
 ### Cieloz.transacao - builds a RequisicaoTransacao object for Payment Authorization
-    
-    pd = Cieloz.pedido    order 
-    pg = Cieloz.pagamento payment, operacao: :op, parcelas: :installments
+
+    pd = Cieloz.pedido    order
+
+    pg = Cieloz.debito payment, bandeira: 'visa'  # debit
+
+      or
+
+    pg = Cieloz.credito payment, bandeira: 'visa' # credit with 1 parcel
+
+      or
+
+    # parcelled credit
+    pg = Cieloz.parcelado payment, bandeira: 'visa', parcelas: :installments
+
+
     tx = Cieloz.transacao nil, dados_pedido: pd, forma_pagamento: pg
 
 ### Cieloz.consulta - builds RequisicaoConsulta
@@ -112,23 +124,23 @@ It provides convenient methods to build the respective Cieloz request objects fr
 ### Cieloz.captura - builds RequisicaoCaptura
 
     captura = Cieloz.captura payment # total capture
-    
+
     or
-    
+
     captura = Cieloz.captura payment, value: partial_value
 
 
 ### Cieloz.cancelamento - builds RequisicaoCancelamento
 
     cancelamento = Cieloz.cancelamento payment # total cancel
-    
+
     or
-    
+
     cancelamento = Cieloz.cancelamento payment, value: partial_cancel
-    
+
 ### Domain Model Mapping Startegies
 
-High Level API uses three different strategies to extract the attribute values required to build Cielo object attribute 
+High Level API uses three different strategies to extract the attribute values required to build Cielo object attribute
 values to be serialized in XML format and sent to Cielo Web Service (see Domain Model Mapping Strategies below).
 
 When an attribute cannot be resolved from one mapping strategy, Cieloz::Builder retrieves the default values configured
@@ -147,14 +159,14 @@ When your domain object attribute names are the same as the Cielo Web Service ex
 
     order.numero  = "R123456"
     order.valor   = 12345
-    
+
     # creates Cieloz::RequisicaoTransacao::DadosPedido extracting order attributes
     # that has the same names as DadosPedido attributes
     pedido = Cieloz.pedido order
-    
+
     p pedido.numero
     $ R123456
-    
+
     p pedido.valor
     $ 12345
 
@@ -168,10 +180,10 @@ When you should provide a mapping between your domain model attributes and Cielo
     # maps  order.number  to DadosPedido#numero
     # and   order.value   to DadosPedido#valor
     pedido = Cieloz.pedido order, numero: :number, valor: :value
-    
+
     p pedido.numero
     $ R123456
-    
+
     p pedido.valor
     $ 12345
 
@@ -180,10 +192,10 @@ When you should provide a mapping between your domain model attributes and Cielo
 When you provide values.
 
     pedido = Cieloz.pedido nil, numero: "R123456", valor: 12345
-    
+
     p pedido.numero
     $ R123456
-    
+
     p pedido.valor
     $ 12345
 
@@ -191,10 +203,10 @@ When you provide values.
 
     order.descricao = "Hello Cielo!"
     pedido = Cieloz.pedido source, numero: number, valor: 12345
-    
+
     p pedido.numero
     $ R123456
-    
+
     p pedido.valor
     $ 12345
 

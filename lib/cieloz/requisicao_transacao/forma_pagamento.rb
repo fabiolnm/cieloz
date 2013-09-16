@@ -62,13 +62,7 @@ class Cieloz::RequisicaoTransacao
                 when (1..max)         then PARCELADO_LOJA
                 when (max+1..max_adm) then PARCELADO_ADM
                 end
-      parcelar bandeira, parcelas, produto
-    end
-
-    # Utility methods that deduces what authorization method should be performed
-    def operacao opr, parcelas
-      bandeira, @metodo_autorizacao = Cieloz::Bandeiras.operacao opr
-      parcelado bandeira, parcelas
+      parcelar bandeira, produto, parcelas
     end
 
     def metodo_autorizacao
@@ -77,13 +71,14 @@ class Cieloz::RequisicaoTransacao
 
     private
     def set_attrs bandeira, produto, parcelas
+      @metodo_autorizacao = Cieloz::Bandeiras.operacao bandeira
       @bandeira = bandeira
       @produto  = produto
       @parcelas = parcelas
       self
     end
 
-    def parcelar bandeira, parcelas, produto
+    def parcelar bandeira, produto, parcelas
       if parcelas == 1
         credito bandeira
       else

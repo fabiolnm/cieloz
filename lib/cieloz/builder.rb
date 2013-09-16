@@ -25,9 +25,19 @@ module Cieloz
         descricao: desc, soft_descriptor: soft
     end
 
-    def pagamento source, opts={}
-      opr, parcelas = attrs_from source, opts, :operacao, :parcelas
-      RequisicaoTransacao::FormaPagamento.new.operacao opr, parcelas
+    def debito source, opts={}
+      bandeira = attrs_from source, opts, :bandeira
+      RequisicaoTransacao::FormaPagamento.new.credito bandeira
+    end
+
+    def credito source, opts={}
+      bandeira = attrs_from source, opts, :bandeira
+      RequisicaoTransacao::FormaPagamento.new.credito bandeira
+    end
+
+    def parcelado source, opts={}
+      bandeira, parcelas = attrs_from source, opts, :bandeira, :parcelas
+      RequisicaoTransacao::FormaPagamento.new.parcelado bandeira, parcelas
     end
 
     def transacao source, opts={}

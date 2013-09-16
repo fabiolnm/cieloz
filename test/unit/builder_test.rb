@@ -93,32 +93,32 @@ describe Cieloz::Builder do
 
   describe "Pagamento Building" do
     before do
-      def @source.operacao ; :visa  end
+      def @source.bandeira ; 'visa' end
       def @source.parcelas ; 2      end
     end
 
     it "asks for operacao / parcelas attributes when missing opts" do
-      pg = _.pagamento @source
+      pg = _.parcelado @source
       pg.bandeira.must_equal "visa"
       pg.parcelas.must_equal @source.parcelas
     end
 
     it "maps operacao / numero when opts are given" do
-      def @source.operation     ; :mastercard end
-      def @source.installments  ; 6           end
+      def @source.operation     ; 'mastercard'  end
+      def @source.installments  ; 6             end
 
-      opts = { operacao: :operation, parcelas: :installments }
-      pg = _.pagamento @source, opts
+      opts = { bandeira: :operation, parcelas: :installments }
+      pg = _.parcelado @source, opts
 
       pg.bandeira.must_equal @source.operation.to_s
       pg.parcelas.must_equal @source.installments
     end
 
     it "get given operacao / numero values" do
-      opts = { operacao: "amex", parcelas: 9 }
-      pg = _.pagamento @source, opts
+      opts = { bandeira: "amex", parcelas: 9 }
+      pg = _.parcelado @source, opts
 
-      pg.bandeira.must_equal opts[:operacao]
+      pg.bandeira.must_equal opts[:bandeira]
       pg.parcelas.must_equal opts[:parcelas]
     end
   end
@@ -144,7 +144,7 @@ describe Cieloz::Builder do
 
       @portador   = _.portador(@source)
       @pedido     = _.pedido(@source)
-      @pagamento  = _.pagamento(@source)
+      @pagamento  = _.parcelado(@source)
 
       @source.instance_variable_set :@portador,   @portador
       @source.instance_variable_set :@pedido,     @pedido
@@ -203,8 +203,8 @@ describe Cieloz::Builder do
       _.transacao(@source).autorizar
       .must_equal Cieloz::RequisicaoTransacao::AUTORIZACAO_DIRETA
 
-      ["verified_by_visa", "mastercard_securecode"].each {|opr|
-        pg = _.pagamento @source, operacao: opr, parcelas: 2
+      ["verified_by_visa", "mastercard_securecode"].each {|flag|
+        pg = _.parcelado @source, bandeira: flag, parcelas: 2
         _.transacao(@source, forma_pagamento: pg).autorizar
         .must_equal Cieloz::RequisicaoTransacao::AUTORIZAR_SE_AUTENTICADA
       }
