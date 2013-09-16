@@ -5,7 +5,7 @@ pt-BR:
         cieloz/requisicao_transacao:
           attributes:
             autorizar:
-              inclusion: deveria estar entre [0,1,2,3,4]
+              inclusion: "deveria estar entre [0 (Somente Autenticar), 1 (Autorizar Somente Autenticada), 2 (Autorizar não Autenticada), 3 (Autorização Direta), 4 (Recorrente)]"
               authentication_not_supported: Bandeira não possui programa de autenticação
               direct_auth_available_for_credit_only: Autorização Direta disponível apenas em operações de crédito
             capturar:
