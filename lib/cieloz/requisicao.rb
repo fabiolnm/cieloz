@@ -15,7 +15,7 @@ class Cieloz::Requisicao
     x = Builder::XmlMarkup.new
     x.instruct!
     name = self.class.name.demodulize
-    x.tag! name.underscore.dasherize, id: id, versao: versao do
+    @xml = x.tag! name.underscore.dasherize, id: id, versao: versao do
       attributes.each { |attr, value|
         next if value.nil?
 
@@ -59,6 +59,15 @@ class Cieloz::Requisicao
     when 'transacao'  then Transacao
     end
     response_class.from body
+  end
+
+  def requested_xml
+    if @xml
+      doc = Nokogiri::XML @xml
+      portador = '//requisicao-transacao//dados-portador'
+      doc.xpath(portador).children.each {|node| node.content = "*" }
+      doc.to_xml
+    end
   end
 
   private
