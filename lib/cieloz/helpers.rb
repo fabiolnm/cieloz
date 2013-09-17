@@ -14,6 +14,18 @@ module Cieloz
           end
         }
       end
+
+      def attrs_from source, opts, *keys
+        attrs = keys.map { |k|
+          value_or_attr_name = opts[k] || k
+          if value_or_attr_name.is_a? Symbol
+            source.send value_or_attr_name if source.respond_to? value_or_attr_name
+          else
+            value_or_attr_name
+          end
+        }
+        attrs.count == 1 ? attrs.first : attrs
+      end
     end
 
     def self.included base

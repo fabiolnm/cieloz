@@ -28,6 +28,13 @@ class Cieloz::RequisicaoTransacao
 
     validates :indicador, presence: true
 
+    def self.map(source, opts={})
+      num, val, cod, nome = attrs_from source, opts,
+        :numero, :validade, :codigo_seguranca, :nome_portador
+
+      new numero: num, validade: val, codigo_seguranca: cod, nome_portador: nome
+    end
+
     def initialize attrs={}
       super
       indicador_nao_informado! if codigo_seguranca.blank?

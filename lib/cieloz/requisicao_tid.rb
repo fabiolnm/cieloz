@@ -1,5 +1,16 @@
 module Cieloz
   class RequisicaoTid < Requisicao
+    module ClassMethods
+      def map source, opts={}
+        tid = attrs_from source, opts, :tid
+        new tid: tid
+      end
+    end
+
+    def self.inherited(target)
+      target.extend ClassMethods
+    end
+
     attr_accessor :tid
 
     def attributes
@@ -8,6 +19,17 @@ module Cieloz
   end
 
   class RequisicaoTidValor < RequisicaoTid
+    module ClassMethods
+      def map source, opts={}
+        tid, valor = attrs_from source, opts, :tid, :valor
+        new tid: tid, valor: valor
+      end
+    end
+
+    def self.inherited(target)
+      target.extend ClassMethods
+    end
+
     attr_accessor :valor
 
     def attributes

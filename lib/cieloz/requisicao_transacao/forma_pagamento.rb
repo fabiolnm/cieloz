@@ -32,6 +32,22 @@ class Cieloz::RequisicaoTransacao
     validates :bandeira, inclusion: { in: BANDEIRAS_PARCELAMENTO },
       if: "[ PARCELADO_LOJA, PARCELADO_ADM ].include? @produto"
 
+
+    def self.map_debito(source, opts={})
+      bandeira = attrs_from source, opts, :bandeira
+      new.debito bandeira
+    end
+
+    def self.map_credito(source, opts={})
+      bandeira = attrs_from source, opts, :bandeira
+      new.credito bandeira
+    end
+
+    def self.map_parcelado source, opts={}
+      bandeira, parcelas = attrs_from source, opts, :bandeira, :parcelas
+      new.parcelado bandeira, parcelas
+    end
+
     def attributes
       {
         bandeira: @bandeira,

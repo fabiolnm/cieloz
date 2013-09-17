@@ -39,6 +39,30 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
 
   validates :campo_livre, length: { maximum: 128 }
 
+  def self.map(source, opts={})
+    portador, pedido, pagamento, url, capturar, campo_livre =
+      attrs_from source, opts, :dados_portador, :dados_pedido,
+      :forma_pagamento, :url_retorno, :capturar, :campo_livre
+
+    url ||= Cieloz::Configuracao.url_retorno
+
+    txn = new dados_portador: portador,
+      dados_pedido: pedido, forma_pagamento: pagamento,
+      campo_livre: campo_livre, url_retorno: url,
+      dados_ec: Cieloz::Configuracao.credenciais
+
+    capturar ||= Cieloz::Configuracao.captura_automatica
+
+    case capturar.to_s
+    when 'true' then txn.capturar_automaticamente
+    else        txn.nao_capturar_automaticamente
+    end
+
+    txn.send pagamento.metodo_autorizacao if pagamento
+
+    txn
+  end
+
   def nested_validations
     nested_attrs = [ :dados_ec, :dados_pedido, :forma_pagamento ]
     nested_attrs << :dados_portador if Cieloz::Configuracao.store_mode?

@@ -1,95 +1,39 @@
 module Cieloz
   module Builder
     def portador source, opts={}
-      num, val, cod, nome = attrs_from source, opts,
-        :numero, :validade, :codigo_seguranca, :nome_portador
-
-      RequisicaoTransacao::DadosPortador.new numero: num,
-        validade: val, codigo_seguranca: cod, nome_portador: nome
+      RequisicaoTransacao::DadosPortador.map source, opts
     end
 
     def pedido source, opts={}
-      mappings = attrs_from source, opts, :numero, :valor,
-        :descricao, :data_hora, :moeda, :idioma, :soft_descriptor
-
-      num, val, desc, time, cur, lang, soft = mappings
-      val = (val * 100).round unless val.nil? or val.integer?
-
-      time  ||= Time.now
-      cur   ||= Cieloz::Configuracao.moeda
-      lang  ||= Cieloz::Configuracao.idioma
-      soft  ||= Cieloz::Configuracao.soft_descriptor
-
-      RequisicaoTransacao::DadosPedido.new data_hora: time,
-        numero: num, valor: val, moeda: cur, idioma: lang,
-        descricao: desc, soft_descriptor: soft
+      RequisicaoTransacao::DadosPedido.map source, opts
     end
 
     def debito source, opts={}
-      bandeira = attrs_from source, opts, :bandeira
-      RequisicaoTransacao::FormaPagamento.new.credito bandeira
+      RequisicaoTransacao::FormaPagamento.map_debito source, opts
     end
 
     def credito source, opts={}
-      bandeira = attrs_from source, opts, :bandeira
-      RequisicaoTransacao::FormaPagamento.new.credito bandeira
+      RequisicaoTransacao::FormaPagamento.map_credito source, opts
     end
 
     def parcelado source, opts={}
-      bandeira, parcelas = attrs_from source, opts, :bandeira, :parcelas
-      RequisicaoTransacao::FormaPagamento.new.parcelado bandeira, parcelas
+      RequisicaoTransacao::FormaPagamento.map_parcelado source, opts
     end
 
     def transacao source, opts={}
-      portador, pedido, pagamento, url, capturar, campo_livre =
-        attrs_from source, opts, :dados_portador, :dados_pedido,
-        :forma_pagamento, :url_retorno, :capturar, :campo_livre
-
-      url ||= Cieloz::Configuracao.url_retorno
-
-      txn = RequisicaoTransacao.new dados_portador: portador,
-        dados_pedido: pedido, forma_pagamento: pagamento,
-        campo_livre: campo_livre, url_retorno: url,
-        dados_ec: Cieloz::Configuracao.credenciais
-
-      capturar ||= Cieloz::Configuracao.captura_automatica
-
-      case capturar.to_s
-      when 'true' then txn.capturar_automaticamente
-      else        txn.nao_capturar_automaticamente
-      end
-
-      txn.send pagamento.metodo_autorizacao if pagamento
-
-      txn
+      RequisicaoTransacao.map source, opts
     end
 
     def consulta source, opts={}
-      tid = attrs_from source, opts, :tid
-      RequisicaoConsulta.new tid: tid
+      RequisicaoConsulta.map source, opts
     end
 
     def captura source, opts={}
-      tid, valor = attrs_from source, opts, :tid, :valor
-      RequisicaoCaptura.new tid: tid, valor: valor
+      RequisicaoCaptura.map source, opts
     end
 
     def cancelamento source, opts={}
-      tid, valor = attrs_from source, opts, :tid, :valor
-      RequisicaoCancelamento.new tid: tid, valor: valor
-    end
-
-    private
-    def attrs_from source, opts, *keys
-      attrs = keys.map { |k|
-        value_or_attr_name = opts[k] || k
-        if value_or_attr_name.is_a? Symbol
-          source.send value_or_attr_name if source.respond_to? value_or_attr_name
-        else
-          value_or_attr_name
-        end
-      }
-      attrs.count == 1 ? attrs.first : attrs
+      RequisicaoCancelamento.map source, opts
     end
   end
 

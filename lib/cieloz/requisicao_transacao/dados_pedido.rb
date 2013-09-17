@@ -17,6 +17,22 @@ class Cieloz::RequisicaoTransacao
     validates :idioma, inclusion: { in: IDIOMAS }
     validates :soft_descriptor, length: { maximum: 13 }
 
+    def self.map(source, opts={})
+      mappings = attrs_from source, opts, :numero, :valor,
+        :descricao, :data_hora, :moeda, :idioma, :soft_descriptor
+
+      num, val, desc, time, cur, lang, soft = mappings
+      val = (val * 100).round unless val.nil? or val.integer?
+
+      time  ||= Time.now
+      cur   ||= Cieloz::Configuracao.moeda
+      lang  ||= Cieloz::Configuracao.idioma
+      soft  ||= Cieloz::Configuracao.soft_descriptor
+
+      new data_hora: time, numero: num, valor: val, moeda: cur,
+        idioma: lang, descricao: desc, soft_descriptor: soft
+    end
+
     def attributes
       {
         numero:           @numero,
