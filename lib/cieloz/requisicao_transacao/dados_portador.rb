@@ -71,14 +71,14 @@ class Cieloz::RequisicaoTransacao
     end
 
     module TEST
-      VISA                = DadosPortador.new numero: 4012001037141112
-      MACSTERCARD         = DadosPortador.new numero: 5453010000066167
-      VISA_NO_AUTH        = DadosPortador.new numero: 4012001038443335
-      MASTERCARD_NO_AUTH  = DadosPortador.new numero: 5453010000066167
-      AMEX                = DadosPortador.new numero: 376449047333005
-      ELO                 = DadosPortador.new numero: 6362970000457013
-      DINERS              = DadosPortador.new numero: 36490102462661
-      DISCOVERY           = DadosPortador.new numero: 6011020000245045
+      VISA_AUTH       = DadosPortador.new numero: 4012001037141112
+      MASTERCARD_AUTH = DadosPortador.new numero: 5453010000066167
+      VISA            = DadosPortador.new numero: 4012001038443335
+      MASTERCARD      = DadosPortador.new numero: 5453010000066167
+      AMEX            = DadosPortador.new numero: 376449047333005
+      ELO             = DadosPortador.new numero: 6362970000457013
+      DINERS          = DadosPortador.new numero: 36490102462661
+      DISCOVERY       = DadosPortador.new numero: 6011020000245045
 
       constants.each { |c|
         flag = const_get c
