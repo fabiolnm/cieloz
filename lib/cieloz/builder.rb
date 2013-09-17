@@ -59,7 +59,7 @@ module Cieloz
       else        txn.nao_capturar_automaticamente
       end
 
-      txn.send pagamento.metodo_autorizacao
+      txn.send pagamento.metodo_autorizacao if pagamento
 
       txn
     end
