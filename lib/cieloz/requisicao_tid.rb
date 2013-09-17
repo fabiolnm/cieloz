@@ -3,7 +3,7 @@ module Cieloz
     module ClassMethods
       def map source, opts={}
         tid = attrs_from source, opts, :tid
-        new tid: tid
+        new source: source, opts: opts, tid: tid
       end
     end
 
@@ -22,7 +22,7 @@ module Cieloz
     module ClassMethods
       def map source, opts={}
         tid, valor = attrs_from source, opts, :tid, :valor
-        new tid: tid, valor: valor
+        new source: source, opts: opts, tid: tid, valor: valor
       end
     end
 

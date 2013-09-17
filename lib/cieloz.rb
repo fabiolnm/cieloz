@@ -7,7 +7,6 @@ require 'nokogiri'
 require 'cieloz/version'
 require "cieloz/helpers"
 require 'cieloz/builder'
-require 'cieloz/mapper'
 require "cieloz/bandeiras"
 require "cieloz/configuracao"
 require "cieloz/homologacao"

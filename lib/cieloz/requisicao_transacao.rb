@@ -46,7 +46,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
 
     url ||= Cieloz::Configuracao.url_retorno
 
-    txn = new dados_portador: portador,
+    txn = new source: source, opts: opts, dados_portador: portador,
       dados_pedido: pedido, forma_pagamento: pagamento,
       campo_livre: campo_livre, url_retorno: url,
       dados_ec: Cieloz::Configuracao.credenciais

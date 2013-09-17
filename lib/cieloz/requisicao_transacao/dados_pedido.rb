@@ -29,7 +29,8 @@ class Cieloz::RequisicaoTransacao
       lang  ||= Cieloz::Configuracao.idioma
       soft  ||= Cieloz::Configuracao.soft_descriptor
 
-      new data_hora: time, numero: num, valor: val, moeda: cur,
+      new source: source, opts: opts,
+        data_hora: time, numero: num, valor: val, moeda: cur,
         idioma: lang, descricao: desc, soft_descriptor: soft
     end
 

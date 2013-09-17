@@ -28,9 +28,34 @@ module Cieloz
       end
     end
 
+    module InstanceMethods
+      def valid?
+        valid = _valid?
+        unless @source.nil?
+          unless valid
+            errors.messages.each { |attr,attr_errors|
+              source_attr = @opts[attr]
+              if source_attr.is_a?(Symbol) and @source.respond_to?(source_attr)
+                attr_errors.each {|e| @source.errors.add source_attr, e }
+              else
+                attr_errors.each {|e| @source.errors.add :base, "#{attr}: #{e}" if e.is_a? String }
+              end
+              @source.errors.messages.each {|attr,attr_errors| attr_errors.uniq! }
+            }
+          end
+        end
+        valid
+      end
+    end
+
     def self.included base
-      base.extend ClassMethods
       base.send :include, ActiveModel::Validations
+      base.extend ClassMethods
+      base.class_eval do
+        alias :_valid? :valid?
+        attr_accessor :source, :opts
+      end
+      base.send :include, InstanceMethods
     end
 
     def initialize attrs={}

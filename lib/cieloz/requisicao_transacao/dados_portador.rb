@@ -32,7 +32,8 @@ class Cieloz::RequisicaoTransacao
       num, val, cod, nome = attrs_from source, opts,
         :numero, :validade, :codigo_seguranca, :nome_portador
 
-      new numero: num, validade: val, codigo_seguranca: cod, nome_portador: nome
+      new source: source, opts: opts,
+        numero: num, validade: val, codigo_seguranca: cod, nome_portador: nome
     end
 
     def initialize attrs={}

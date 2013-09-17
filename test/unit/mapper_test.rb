@@ -1,44 +1,37 @@
-describe Cieloz::Mapper do
+describe Cieloz::Helpers do
   class Source
-    attr_reader :errors
-
-    def initialize
-      @errors = Hash.new
-
-      def @errors.add(attr, value)
-        (self[attr] ||= []) << value
-      end
-    end
+    include ActiveModel::Validations
 
     def number ; nil end
   end
 
   let(:order) { Source.new }
-
-  let(:order_mapper) {
-    Cieloz::Mapper.map order, :pedido, numero: :number, valor: :value
-  }
+  let(:pedido) { Cieloz.pedido order, numero: :number, valor: :value }
 
   it "recognizes error for attribute" do
-    order_mapper.wont_be :valid?
-    errors = order.errors[:number]
+    pedido.wont_be :valid?
+    errors = order.errors.messages[:number]
     errors.wont_be_empty
-    errors.must_equal order_mapper.errors[:numero]
+    errors.must_equal pedido.errors[:numero]
   end
 
-  let(:transaction_mapper) {
-    Cieloz::Mapper.map order, :transacao, dados_pedido: order_mapper
-  }
+  let(:txn) { Source.new }
+  let(:transacao) { Cieloz.transacao txn, dados_pedido: pedido }
 
   it "recognizes errors for dependent mappers" do
-    transaction_mapper.wont_be :valid?
-    errors = order.errors[:number]
+    transacao.wont_be :valid?
+    errors = order.errors.messages[:number]
     errors.wont_be_empty
-    errors.must_equal order_mapper.errors[:numero]
+    errors.must_equal pedido.errors[:numero]
   end
 
   it "appends non-dependent errors to root aggregate base" do
-    transaction_mapper.wont_be :valid?
-    order.errors[:base].wont_be_empty
+    transacao.wont_be :valid?
+    transacao.errors.delete :dados_pedido # ignores dependent errors
+    expected_errors = transacao.errors.messages.map { |attr,errors|
+      # errors have theit attributes identified when put on base
+      errors.map { |e| "#{attr}: #{e}" }
+    }.flatten
+    txn.errors.messages[:base].must_equal expected_errors
   end
 end
