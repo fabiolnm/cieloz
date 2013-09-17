@@ -23,8 +23,7 @@ class Cieloz::RequisicaoTransacao
     validates :numero, format: { with: /\A\d{16}\z/ }
     validates :codigo_seguranca, format: { with: /\A(\d{3}|\d{4})\z/ }
 
-    validate :valida_ano_validade, unless: ->{ validade.nil? }
-    validate :valida_mes_validade, unless: ->{ validade.nil? }
+    validate :valida_validade
 
     validates :indicador, presence: true
 
@@ -89,16 +88,11 @@ class Cieloz::RequisicaoTransacao
     end
 
     private
-    def valida_mes_validade
-      if mes = validade[4..5]
-        errors.add :validade, :invalid_month unless mes.length == 2 and mes.to_i.between? 1, 12
-      end
-    end
-
-    def valida_ano_validade
-      if ano = validade[0..3]
-        errors.add :validade, :invalid_year if ano.to_i < Date.today.year
-      end
+    def valida_validade
+      val = validade.to_i
+      min = Date.today.strftime("%Y%m").to_i
+      max = 10.years.from_now.strftime("%Y%m").to_i
+      errors.add :validade, :invalid unless val.between?(min, max) and val % 100 <= 12
     end
   end
 end

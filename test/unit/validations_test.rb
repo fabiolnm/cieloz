@@ -42,38 +42,31 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   end
 
   it "validates mês validade" do
-    year = Date.today.year
-    (1..12).each {|mes|
-      must_allow_value :validade, "#{year}#{"%02d" % mes}"
+    year, month = Date.today.year, Date.today.month
+    (month..12).each {|m|
+      must_allow_value :validade, "#{year}#{"%02d" % m}"
     }
-    ((0..9).to_a + (13..99).to_a).each {|mes|
-      subject.validade = "#{year}#{"%d" % mes}"
+    (0..9).each {|m|
+      subject.validade = "#{year}#{"%d" % m}"
       subject.valid?
-      assert_equal [
-        I18n.t(:invalid_month, scope:
-               [ :activemodel, :errors, :models,
-                 "cieloz/requisicao_transacao/dados_portador",
-                 :attributes, :validade]
-              )
-      ], subject.errors[:validade]
+      subject.errors[:validade].must_equal [ I18n.t(:invalid, scope: [:errors, :messages]) ]
+    }
+    (13..99).each {|m|
+      subject.validade = "#{year}#{"%d" % m}"
+      subject.valid?
+      subject.errors[:validade].must_equal [ I18n.t(:invalid, scope: [:errors, :messages]) ]
     }
   end
 
   it "validates ano validade" do
     year = Date.today.year
-    (year..year+10).each {|ano|
-      must_allow_value :validade, "#{year}01"
+    (year+1..year+10).each {|y|
+      must_allow_value :validade, "#{y}01"
     }
-    (year-10..year-1).each {|ano|
-      subject.validade = "#{ano}01"
+    (year-10..year-1).each {|y|
+      subject.validade = "#{y}01"
       subject.valid?
-      assert_equal [
-        I18n.t(:invalid_year,
-               scope: [ :activemodel, :errors, :models,
-                        "cieloz/requisicao_transacao/dados_portador",
-                        :attributes, :validade]
-              )
-      ], subject.errors[:validade]
+      subject.errors[:validade].must_equal [ I18n.t(:invalid, scope: [:errors, :messages]) ]
     }
   end
 
