@@ -40,6 +40,12 @@ class Cieloz::RequisicaoTransacao
       indicador_nao_informado! if codigo_seguranca.blank?
     end
 
+    def mascara
+      num = numero.to_s
+      mask_size = num.length - 6
+      ("*" * mask_size) + num[mask_size..-1]
+    end
+
     def codigo_seguranca= codigo
       @indicador = INDICADOR_INFORMADO
       @codigo_seguranca = codigo
