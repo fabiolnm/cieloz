@@ -13,6 +13,8 @@ en:
         cieloz/requisicao_transacao/dados_portador:
           attributes:
             numero:
+              invalid_diners: should have 14 digits
+              invalid_amex: should have 15 digits
               invalid: should have 16 digits
             codigo_seguranca:
               invalid: should have 3 or 4 digits

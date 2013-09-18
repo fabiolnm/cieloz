@@ -12,7 +12,11 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
 
   validate :nested_validations
 
-  validates :dados_portador, presence: true, if: "Cieloz::Configuracao.store_mode?"
+  with_options if: "Cieloz::Configuracao.store_mode?" do |c|
+    c.validates :dados_portador, presence: true
+    c.validate :valida_digitos_numero_cartao
+  end
+
   validates :dados_pedido, :forma_pagamento, presence: true
 
   with_options unless: "@forma_pagamento.nil?" do |txn|
@@ -145,5 +149,20 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
       campo_livre:      @campo_livre,
       bin:              (@dados_portador.numero.to_s[0..5] unless @dados_portador.nil?)
     }
+  end
+
+  private
+  def valida_digitos_numero_cartao
+    if dados_portador and forma_pagamento and bandeira = forma_pagamento.bandeira
+      numero = dados_portador.numero.to_s
+      case bandeira.to_s
+      when Cieloz::Bandeiras::DINERS
+        dados_portador.errors.add :numero, :invalid_diners  unless numero =~ /\A\d{14}\z/
+      when Cieloz::Bandeiras::AMEX
+        dados_portador.errors.add :numero, :invalid_amex    unless numero =~ /\A\d{15}\z/
+      else
+        dados_portador.errors.add :numero, :invalid         unless numero =~ /\A\d{16}\z/
+      end
+    end
   end
 end

@@ -17,10 +17,6 @@ describe Cieloz::RequisicaoTransacao::DadosPortador do
   let(:invalid_number) {
     I18n.t 'activemodel.errors.models.cieloz/requisicao_transacao/dados_portador.attributes.numero.invalid'
   }
-  it { must_allow_value :numero, 1234567890123456   }
-  it { wont_allow_value :numero, 123456789012345, message: invalid_number }
-  it { wont_allow_value :numero, 12345678901234567, message: invalid_number }
-  it { wont_allow_value :numero, "ABC4567890123456", message: invalid_number }
 
   it {
     (100..9999).step(123).each {|val|
@@ -393,5 +389,43 @@ describe Cieloz::RequisicaoTransacao do
     refute subject.valid?
     msg = "Installment should be greater than or equal to R$ 5,00"
     assert_equal msg, subject.dados_pedido.errors[:valor].first
+  end
+
+  describe "validates credit card number format" do
+    after do
+      Cieloz::Configuracao.reset!
+    end
+
+    def self.validate_number_of_credit_card_digits_for(flag, digits)
+      describe flag do
+        let(:pg) { subject.class::FormaPagamento.new.credito flag }
+
+        before do
+          Cieloz::Configuracao.store_mode!
+          subject.forma_pagamento = pg
+        end
+
+        it "accepts credit card numbers with #{digits} digits" do
+          subject.dados_portador = subject.class::DadosPortador.new numero: '1' * digits
+          subject.valid?
+          subject.dados_portador.errors[:numero].must_be_empty
+        end
+
+        it "rejects credit card numbers with other formats" do
+          ['1' * (digits - 1), '1' * (digits + 1), 'ABC4567890123456'].each do |number|
+            subject.dados_portador = subject.class::DadosPortador.new numero: number
+            subject.valid?
+            subject.dados_portador.errors[:numero].wont_be_empty
+          end
+        end
+      end
+    end
+
+    validate_number_of_credit_card_digits_for Cieloz::Bandeiras::DINERS,      14
+    validate_number_of_credit_card_digits_for Cieloz::Bandeiras::AMEX,        15
+    validate_number_of_credit_card_digits_for Cieloz::Bandeiras::VISA,        16
+    validate_number_of_credit_card_digits_for Cieloz::Bandeiras::MASTERCARD,  16
+    validate_number_of_credit_card_digits_for Cieloz::Bandeiras::ELO,         16
+    validate_number_of_credit_card_digits_for Cieloz::Bandeiras::DISCOVER,    16
   end
 end

@@ -20,12 +20,9 @@ class Cieloz::RequisicaoTransacao
       portador.numero.gsub! ' ', ''
     end
 
-    validates :numero, format: { with: /\A\d{16}\z/ }
     validates :codigo_seguranca, format: { with: /\A(\d{3}|\d{4})\z/ }
-
-    validate :valida_validade
-
     validates :indicador, presence: true
+    validate :valida_validade
 
     def self.map(source, opts={})
       num, val, cod, nome = attrs_from source, opts,
