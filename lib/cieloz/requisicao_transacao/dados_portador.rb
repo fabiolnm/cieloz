@@ -13,11 +13,9 @@ class Cieloz::RequisicaoTransacao
     validates :nome_portador, length: { maximum: 50 }
 
     set_callback :validate, :before do |portador|
-      [:numero, :validade, :codigo_seguranca].each {|attr|
-        val = portador.send attr
-        portador.instance_variable_set "@#{attr}", val.to_s
-      }
-      portador.numero.gsub! ' ', ''
+      portador.numero   = portador.numero.to_s.gsub ' ', ''
+      portador.codigo_seguranca = portador.codigo_seguranca.to_s
+      portador.validade = portador.validade.to_s
     end
 
     validates :codigo_seguranca, format: { with: /\A(\d{3}|\d{4})\z/ }

@@ -82,7 +82,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
   def parcela_minima?
     valor, parcelas = @dados_pedido.valor.to_i, @forma_pagamento.parcelas.to_i
     if parcelas > 0 and valor / parcelas < 500
-      @dados_pedido.errors.add :valor, :minimum_installment_not_satisfied
+      @dados_pedido.add_error :valor, :minimum_installment_not_satisfied
     end
   end
 
@@ -157,11 +157,11 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
       numero = dados_portador.numero.to_s
       case bandeira.to_s
       when Cieloz::Bandeiras::DINERS
-        dados_portador.errors.add :numero, :invalid_diners  unless numero =~ /\A\d{14}\z/
+        dados_portador.add_error :numero, :invalid_diners  unless numero =~ /\A\d{14}\z/
       when Cieloz::Bandeiras::AMEX
-        dados_portador.errors.add :numero, :invalid_amex    unless numero =~ /\A\d{15}\z/
+        dados_portador.add_error :numero, :invalid_amex    unless numero =~ /\A\d{15}\z/
       else
-        dados_portador.errors.add :numero, :invalid         unless numero =~ /\A\d{16}\z/
+        dados_portador.add_error :numero, :invalid         unless numero =~ /\A\d{16}\z/
       end
     end
   end

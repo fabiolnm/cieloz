@@ -29,6 +29,18 @@ module Cieloz
     end
 
     module InstanceMethods
+      def add_error(attr, message)
+        error_message = errors.add(attr, message).first
+        if @source
+          source_attr = @opts[attr]
+          if source_attr.is_a?(Symbol) and @source.respond_to?(source_attr)
+            @source.errors.add source_attr, error_message
+          else
+            @source.errors.add :base, "#{attr}: #{error_message}"
+          end
+        end
+      end
+
       def valid?
         valid = _valid?
         unless @source.nil?

@@ -34,4 +34,59 @@ describe Cieloz::Helpers do
     }.flatten
     txn.errors.messages[:base].must_equal expected_errors
   end
+
+  describe "errors that parent object injects on dependent objects" do
+    let(:pr) { Cieloz.portador  order, numero:    numero  }
+    let(:pd) { Cieloz.pedido    order, valor:     valor   }
+    let(:pg) { Cieloz.parcelado order, bandeira:  'visa', parcelas: 2 }
+    let(:txn){
+      Cieloz.transacao order, dados_portador: pr,
+                              dados_pedido: pd,
+                              forma_pagamento: pg
+    }
+    let(:err) { "activemodel.errors.models.cieloz/requisicao_transacao" }
+    let(:min_parcel_msg) {
+      I18n.t "#{err}/dados_pedido.attributes.valor.minimum_installment_not_satisfied"
+    }
+    let(:invalid_number_msg) {
+      I18n.t "#{err}/dados_portador.attributes.numero.invalid"
+    }
+
+    before  { Cieloz::Configuracao.store_mode! }
+    after   { Cieloz::Configuracao.reset! }
+
+    describe "to base" do
+      let(:valor)   { 9.00 }
+      let(:numero)  { "1234" }
+
+      before { txn.valid? }
+
+      it "validates parcela minima" do
+        order.errors[:base].must_include "valor: #{min_parcel_msg}"
+      end
+
+      it "validates credit card number" do
+        order.errors[:base].must_include "numero: #{invalid_number_msg}"
+      end
+    end
+
+    describe "to attribute" do
+      let(:valor) { :value }
+      let(:numero) { :number }
+
+      before {
+        def order.value ; 9.00 end
+        def order.number ; "invalid" end
+        txn.valid?
+      }
+
+      it "validates parcela minima" do
+        order.errors[:value].must_include min_parcel_msg
+      end
+
+      it "validates credit card number" do
+        order.errors[:number].must_include invalid_number_msg
+      end
+    end
+  end
 end
