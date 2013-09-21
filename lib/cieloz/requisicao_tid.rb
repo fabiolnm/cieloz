@@ -30,7 +30,11 @@ module Cieloz
       target.extend ClassMethods
     end
 
-    attr_accessor :valor
+    attr_reader :valor
+
+    def valor=(val)
+      @valor = (val.nil? or val.integer?) ? val : (val * 100).round
+    end
 
     def attributes
       { tid: @tid, dados_ec: @dados_ec, valor: @valor }
