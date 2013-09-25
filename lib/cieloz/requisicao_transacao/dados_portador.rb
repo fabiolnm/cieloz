@@ -37,8 +37,9 @@ class Cieloz::RequisicaoTransacao
 
     def mascara
       num = numero.to_s
-      mask_size = num.length - 6
-      ("*" * mask_size) + num[mask_size..-1]
+      digits = num[0..5]
+      mask_size = num.length - digits.length
+      digits + ("*" * mask_size)
     end
 
     def codigo_seguranca= codigo
