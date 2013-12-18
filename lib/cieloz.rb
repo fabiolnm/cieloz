@@ -18,6 +18,7 @@ require "cieloz/requisicao/resposta/transacao"
 require "cieloz/requisicao_transacao"
 require "cieloz/requisicao_transacao/dados_portador"
 require "cieloz/requisicao_transacao/dados_pedido"
+require "cieloz/requisicao_transacao/dados_avs"
 require "cieloz/requisicao_transacao/forma_pagamento"
 require "cieloz/requisicao_tid"
 

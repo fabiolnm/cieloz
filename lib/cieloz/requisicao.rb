@@ -19,14 +19,16 @@ class Cieloz::Requisicao
       attributes.each { |attr, value|
         next if value.nil?
 
-        unless value.respond_to? :attributes
-          x.tag! dash(attr), value
-        else
-          x.tag! dash(attr) do
+        if value.respond_to? :build_xml
+          value.build_xml x
+        elsif value.respond_to? :attributes
+          x.tag! dasherize_attr(attr) do
             value.attributes.each do |attr, value|
-              x.tag!(dash(attr), value) unless value.blank?
+              x.tag!(dasherize_attr(attr), value) unless value.blank?
             end
           end
+        else
+          x.tag! dasherize_attr(attr), value
         end
       }
     end
@@ -37,7 +39,7 @@ class Cieloz::Requisicao
 
     if valid?
       @id     = SecureRandom.uuid if id.blank?
-      @versao = "1.2.0"           if versao.blank?
+      @versao = "1.2.1"           if versao.blank?
 
       http = Net::HTTP.new Cieloz::Configuracao.host, 443
       http.use_ssl = true
@@ -68,10 +70,5 @@ class Cieloz::Requisicao
       doc.xpath(portador).children.each {|node| node.content = "*" }
       doc.to_xml
     end
-  end
-
-  private
-  def dash value
-    value.to_s.gsub("@", "").dasherize
   end
 end

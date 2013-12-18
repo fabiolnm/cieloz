@@ -80,5 +80,10 @@ module Cieloz
         send(m, v) if respond_to? m
       }
     end
+
+    def dasherize_attr value
+      value.to_s.gsub("@", "").dasherize
+    end
+
   end
 end

@@ -20,6 +20,10 @@ module Cieloz
       RequisicaoTransacao::FormaPagamento.map_parcelado source, opts
     end
 
+    def avs source, opts={}
+      RequisicaoTransacao::DadosAvs.map source, opts
+    end
+
     def transacao source, opts={}
       RequisicaoTransacao.map source, opts
     end

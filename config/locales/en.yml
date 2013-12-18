@@ -10,6 +10,8 @@ en:
               direct_auth_available_for_credit_only: Direct auth available for credit only
             capturar:
               inclusion: should be true or false
+            dados_avs:
+              no_capture_with_avs: Automatic capture is not permitted with AVS
         cieloz/requisicao_transacao/dados_portador:
           attributes:
             numero:
@@ -29,4 +31,3 @@ en:
             bandeira:
               blank: choose credit card flag
               inclusion: choose credit card flag
-

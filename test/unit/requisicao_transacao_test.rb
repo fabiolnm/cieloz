@@ -12,6 +12,9 @@ describe Cieloz::RequisicaoTransacao do
       data_hora: now, descricao: "teste", idioma: "PT", soft_descriptor: "13letterstest"
   }
   let(:pagamento)  { _::FormaPagamento.new.credito "visa" }
+  let(:avs)    {
+    _::DadosAvs.new cep: '12345-123', endereco: 'Rua Lala', complemento: 'Casa', numero: '123', bairro: 'Brooklyn'
+  }
 
   it "serializes dados-ec" do
     subject.submit # @dados_ec is set on submission
@@ -33,12 +36,24 @@ describe Cieloz::RequisicaoTransacao do
     assert_equal expected_xml(opts) { xml_for :pagamento, dir, binding }, subject.to_xml
   end
 
+  it "serializes dados-avs" do
+    subject.dados_avs = avs
+    assert_equal expected_xml(opts) { xml_for :avs, dir, binding }, subject.to_xml
+  end
+
   it "serializes simple attributes" do
     subject.url_retorno = "http://callback.acti.on"
     subject.autorizacao_direta
     subject.capturar_automaticamente
     subject.campo_livre = "I want to break free"
     assert_equal expected_xml(opts) { xml_for :simple_attrs, dir, binding }, subject.to_xml
+  end
+
+  it "doesn't permit automatic capture with AVS" do
+    subject.dados_avs = avs
+    subject.capturar_automaticamente
+    assert !subject.valid?
+    assert_equal 'Automatic capture is not permitted with AVS', subject.errors[:dados_avs].first
   end
 
   describe "request posting" do
