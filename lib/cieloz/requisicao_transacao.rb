@@ -8,7 +8,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
   hattr_writer  :dados_portador, :dados_pedido, :forma_pagamento, :dados_avs
   attr_reader   :dados_portador, :dados_pedido, :forma_pagamento, :dados_avs
   attr_reader   :autorizar, :capturar
-  attr_accessor :campo_livre, :url_retorno
+  attr_accessor :campo_livre, :url_retorno, :gerar_token
 
   validate :nested_validations
 
@@ -47,15 +47,16 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
   validates :campo_livre, length: { maximum: 128 }
 
   def self.map(source, opts={})
-    portador, pedido, pagamento, avs, url, capturar, campo_livre =
+    portador, pedido, pagamento, avs, url, capturar, campo_livre, gerar =
       attrs_from source, opts, :dados_portador, :dados_pedido,
-      :forma_pagamento, :dados_avs, :url_retorno, :capturar, :campo_livre
+      :forma_pagamento, :dados_avs, :url_retorno, :capturar, :campo_livre, :gerar_token
 
     url ||= Cieloz::Configuracao.url_retorno
+    gerar ||= false
 
     txn = new source: source, opts: opts, dados_portador: portador,
       dados_pedido: pedido, forma_pagamento: pagamento, dados_avs: avs,
-      campo_livre: campo_livre, url_retorno: url,
+      campo_livre: campo_livre, url_retorno: url, gerar_token: gerar,
       dados_ec: Cieloz::Configuracao.credenciais
 
     capturar ||= Cieloz::Configuracao.captura_automatica
@@ -155,6 +156,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
       capturar:         @capturar,
       campo_livre:      @campo_livre,
       bin:              (@dados_portador.numero.to_s[0..5] unless @dados_portador.nil?),
+      gerar_token:      @gerar_token,
       dados_avs:        @dados_avs
     }
   end
