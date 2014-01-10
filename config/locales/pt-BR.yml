@@ -10,6 +10,8 @@ pt-BR:
               direct_auth_available_for_credit_only: Autorização Direta disponível apenas em operações de crédito
             capturar:
               inclusion: deveria ser true ou false
+            dados_avs:
+              no_capture_with_avs: Captura automática não é permitida em conjunto com AVS
         cieloz/requisicao_transacao/dados_portador:
           attributes:
             numero:
@@ -29,4 +31,3 @@ pt-BR:
             bandeira:
               blank: escolha a bandeira
               inclusion: escolha a bandeira
-

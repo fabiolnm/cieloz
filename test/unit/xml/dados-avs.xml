@@ -1,0 +1,11 @@
+<avs>
+  <![CDATA[
+    <dados-avs>
+      <endereco><%= avs.endereco %></endereco>
+      <complemento><%= avs.complemento %></complemento>
+      <numero><%= avs.numero %></numero>
+      <bairro><%= avs.bairro %></bairro>
+      <cep><%= avs.cep %></cep>
+    </dados-avs>
+  ]]>
+</avs>
