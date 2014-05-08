@@ -39,7 +39,7 @@ class Cieloz::RequisicaoTransacao < Cieloz::Requisicao
   # validates string values because false.blank? is true, failing presence validation
   validates :capturar, inclusion: { in: ["true", "false"] }
 
-  with_options if: "@autorizar != AUTORIZACAO_DIRETA" do |txn|
+  with_options if: -> { @autorizar != AUTORIZACAO_DIRETA } do |txn|
     txn.validates :url_retorno, presence: true
     txn.validates :url_retorno, length: { maximum: 1024 }
   end

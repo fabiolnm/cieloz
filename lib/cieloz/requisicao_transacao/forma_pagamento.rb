@@ -19,18 +19,18 @@ class Cieloz::RequisicaoTransacao
     validates :parcelas, numericality: {
       only_integer: true, greater_than: 0,
       less_than_or_equal_to: Cieloz::Configuracao.max_parcelas
-    }, if: "produto == PARCELADO_LOJA"
+    }, if: -> { produto == PARCELADO_LOJA }
 
     validates :parcelas, numericality: {
       only_integer: true,
       greater_than: Cieloz::Configuracao.max_parcelas,
       less_than_or_equal_to: Cieloz::Configuracao.max_adm_parcelas
-    }, if: "produto == PARCELADO_ADM"
+    }, if: -> { produto == PARCELADO_ADM }
 
-    validates :bandeira, inclusion: { in: BANDEIRAS_DEBITO }, if: "@produto == DEBITO"
-    validates :bandeira, inclusion: { in: Cieloz::Bandeiras::ALL }, if: "@produto == CREDITO"
+    validates :bandeira, inclusion: { in: BANDEIRAS_DEBITO }, if: -> { @produto == DEBITO }
+    validates :bandeira, inclusion: { in: Cieloz::Bandeiras::ALL }, if: -> { @produto == CREDITO }
     validates :bandeira, inclusion: { in: BANDEIRAS_PARCELAMENTO },
-      if: "[ PARCELADO_LOJA, PARCELADO_ADM ].include? @produto"
+      if: -> { [ PARCELADO_LOJA, PARCELADO_ADM ].include? @produto }
 
 
     def self.map_debito(source, opts={})
