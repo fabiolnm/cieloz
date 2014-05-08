@@ -1,6 +1,6 @@
 describe Cieloz::Configuracao do
   let(:_) { Cieloz::Configuracao }
-  let(:hash) { { numero: 123, chave: "abc123" } }
+  let(:_hash) { { numero: 123, chave: "abc123" } }
 
   before do
     _.reset!
@@ -65,11 +65,11 @@ describe Cieloz::Configuracao do
     end
 
     describe "set" do
-      before { _.credenciais = hash }
+      before { _.credenciais = _hash }
 
       it "returns DadosEc with credenciais attributes" do
-        _.credenciais.numero.must_equal hash[:numero]
-        _.credenciais.chave.must_equal  hash[:chave]
+        _.credenciais.numero.must_equal _hash[:numero]
+        _.credenciais.chave.must_equal  _hash[:chave]
       end
 
       it "returns the same DadosEc in subsequent calls" do
@@ -84,7 +84,7 @@ describe Cieloz::Configuracao do
     end
 
     it "returns production host when credenciais is set" do
-      _.credenciais = hash
+      _.credenciais = _hash
       _.host.must_equal Cieloz::Configuracao::HOST
     end
   end
