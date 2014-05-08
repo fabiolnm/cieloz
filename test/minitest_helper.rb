@@ -1,4 +1,3 @@
-require 'debugger'
 require 'cieloz'
 
 require 'minitest/autorun'
