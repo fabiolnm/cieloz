@@ -216,56 +216,30 @@ When you provide values.
 ## Configuration
 
 Your application can configure Cieloz::Configuracao default values.
-In a Rails application, it can be done in a config/initializers/cieloz.rb file.
 
-If you don't provide ```credenciais```, all operations will be requested against Cielo Homologation Environment.
+ * If you don't provide ```credenciais```, all operations will be requested against Cielo Homologation Environment.
+ * When you go to production, you MUST configure ```credenciais``` with your Cielo ```numero``` and ```chave```.
 
-When you go to production, you MUST configure ```credenciais``` with your Cielo ```numero``` and ```chave```.
+General settings can be placed in ```config/application.rb```:
 
-    YourApp::Application.class_eval do
-      # Runs in after initialize block to be able to access url helpers
-      config.after_initialize do
-        # must reload routes to initialize routes.url_helpers
-        reload_routes!
+    module MyStore
+      class Application < Rails::Application
+        # ...
 
-        # These are Global Default Settings, and can be overriden at Bulder / Requisicao method levels
-        Cieloz::Configuracao.tap { |c|
-          # 13 letters descriptor to be printed on the buyer's credit card billing
-          c.soft_descriptor = "Your App name"
-
-          # Callback url: in Cielo Mode this is the location to where Cielo redirects a transaction
-          # after the user types this Credit card data.
-          #
-          # NOTICE: In order to *_url methods to work, it's required to set
-          # in config/application.rb or in one of config/environment initializers:
-          #
-          #   [Rails.application.]routes.default_url_options = { host: "HOSTNAME[:PORT]" }
-          #
-          c.url_retorno     = routes.url_helpers.root_url
-
-          # Credit card data is asked to the user in a page hosted by Cielo. This is the default mode
-          # c.cielo_mode!
-
-          # Your application must provide a view asking credit card data, and provide additional security,
-          # in conformance with PCI Standards: http://www.cielo.com.br/portal/cielo/solucoes-de-tecnologia/o-que-e-ais.html
-          # c.store_mode!
-
-          # default to Cieloz::Homologacao::Credenciais::LOJA if store_mode? and ::CIELO if cielo_mode?
-          # c.credenciais = { numero: "", chave: "" }
-
-          # c.moeda               = 986   # ISO 4217 - Manual Cielo, p 11
-          # c.idioma              = "PT"  # EN and ES available - language to Cielo use in this pages
-
-          # http://www.cielo.com.br/portal/cielo/produtos/cielo/parcelado-loja.html
-          # c.max_parcelas        = 3     # no additional interest rates
-
-          # http://www.cielo.com.br/portal/cielo/produtos/cielo/parcelado-administradora.html
-          # c.max_adm_parcelas    = 10    # available with Cielo interest rate
-
-          # if true, payments are automatically captured by authorization request
-          # c.captura_automatica  = false
-        }
+        Cieloz::Configuracao.tap do |c|
+          c.store_mode!
+          c.soft_descriptor = "My Store Descriptor"
+        end
       end
+    end
+
+and settings specific per environment in respective config at ```config/environments``` directory.
+
+If you configure your server with environment variables, ```config/environments/production.rb``` can configure Cieloz:
+
+    Cieloz::Configuracao.credenciais.tap do |c|
+      c.numero  = ENV["MY_STORE_CIELO_NUMERO"]
+      c.chave   = ENV["MY_STORE_CIELO_CHAVE"]
     end
 
 ## Getting Started
